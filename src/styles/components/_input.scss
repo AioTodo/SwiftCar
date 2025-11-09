@@ -1,0 +1,64 @@
+.input {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  width: 100%;
+
+  &__label {
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  &__required {
+    color: $color-error;
+    margin-left: 2px;
+  }
+
+  &__field {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: $font-size-base;
+    font-family: $font-family-base;
+    color: $text-primary;
+    background-color: $color-white;
+    border: 2px solid $color-gray-300;
+    border-radius: $border-radius-md;
+    @include transition(border-color);
+
+    &::placeholder {
+      color: $text-muted;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+
+    &--error {
+      border-color: $color-error;
+
+      &:focus {
+        border-color: $color-error;
+      }
+    }
+
+    &--disabled {
+      background-color: $color-gray-100;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  &__error {
+    font-size: $font-size-small;
+    color: $color-error;
+    margin-top: -4px;
+  }
+
+  // Textarea variant
+  textarea.input__field {
+    min-height: 120px;
+    resize: vertical;
+  }
+}

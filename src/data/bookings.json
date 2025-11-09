@@ -1,0 +1,40 @@
+[
+  {
+    "id": "booking-1",
+    "userId": "user-1",
+    "carId": "car-1",
+    "agencyId": "agency-1",
+    "bookingDate": "2024-10-15",
+    "pickupDate": "2024-11-01",
+    "returnDate": "2024-11-05",
+    "pickupLocation": "Agadir Airport",
+    "returnLocation": "Agadir Airport",
+    "numberOfDays": 4,
+    "basePrice": 1000,
+    "insurancePrice": 100,
+    "extraFees": 50,
+    "commissionAmount": 69,
+    "totalPrice": 1150,
+    "status": "confirmed",
+    "cancellationReason": null
+  },
+  {
+    "id": "booking-2",
+    "userId": "user-1",
+    "carId": "car-2",
+    "agencyId": "agency-1",
+    "bookingDate": "2024-09-20",
+    "pickupDate": "2024-10-01",
+    "returnDate": "2024-10-08",
+    "pickupLocation": "Agadir City Center",
+    "returnLocation": "Agadir City Center",
+    "numberOfDays": 7,
+    "basePrice": 2450,
+    "insurancePrice": 175,
+    "extraFees": 75,
+    "commissionAmount": 162,
+    "totalPrice": 2700,
+    "status": "completed",
+    "cancellationReason": null
+  }
+]

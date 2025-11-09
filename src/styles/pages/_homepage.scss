@@ -1,0 +1,270 @@
+.home-page {
+  // Remove default page padding
+  padding: 0;
+}
+
+// Hero Section (Turo-style - cleaner, image-focused)
+.hero {
+  background: $color-white;
+  color: $color-primary;
+  padding: $spacing-xxxl $spacing-md;
+  text-align: center;
+  position: relative;
+
+  &__container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__title {
+    font-size: 56px;
+    font-weight: 800;
+    margin-bottom: $spacing-lg;
+    color: $color-primary;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+
+    @include mobile-only {
+      font-size: 36px;
+    }
+  }
+
+  &__subtitle {
+    font-size: 20px;
+    margin-bottom: $spacing-xxl;
+    color: $color-gray-700;
+    font-weight: 400;
+    line-height: 1.6;
+    
+    @include mobile-only {
+      font-size: 18px;
+    }
+  }
+
+  &__search-card {
+    box-shadow: $shadow-lg;
+    border-radius: $border-radius-xl;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+  }
+}
+
+// Search Form
+.search-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    text-align: left;
+  }
+
+  &__label {
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: $font-size-base;
+    font-family: $font-family-base;
+    color: $text-primary;
+    background-color: $color-white;
+    border: 2px solid $color-gray-300;
+    border-radius: $border-radius-md;
+    @include transition(border-color);
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+  }
+}
+
+// Featured Section
+.featured-section {
+  padding: $spacing-xxxl $spacing-md;
+  background-color: $color-white;
+
+  &__title {
+    text-align: center;
+    font-size: $font-size-h1;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__subtitle {
+    text-align: center;
+    color: $text-muted;
+    margin-bottom: $spacing-xl;
+  }
+
+  &__cta {
+    text-align: center;
+    margin-top: $spacing-xl;
+  }
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-lg;
+  margin-bottom: $spacing-lg;
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Car Card
+.car-card {
+  &__image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-md;
+    overflow: hidden;
+    margin-bottom: $spacing-md;
+  }
+
+  &__image-placeholder {
+    width: 100%;
+    height: 100%;
+    @include flex-center;
+    font-size: 80px;
+  }
+
+  &__title {
+    font-size: $font-size-h3;
+    color: $color-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__subtitle {
+    color: $text-muted;
+    font-size: $font-size-small;
+    margin-bottom: $spacing-md;
+  }
+
+  &__features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-md;
+  }
+
+  &__feature {
+    padding: 4px 12px;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-sm;
+    font-size: $font-size-xs;
+    color: $text-secondary;
+  }
+
+  &__footer {
+    @include flex-between;
+    padding-top: $spacing-sm;
+    border-top: 1px solid $color-gray-200;
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+  }
+
+  &__price-amount {
+    font-size: $font-size-h3;
+    font-weight: 700;
+    color: $color-primary;
+  }
+
+  &__price-label {
+    font-size: $font-size-small;
+    color: $text-muted;
+  }
+}
+
+// How It Works Section
+.how-it-works {
+  padding: $spacing-xxxl $spacing-md;
+  background-color: $color-background;
+
+  &__title {
+    text-align: center;
+    font-size: $font-size-h1;
+    color: $color-primary;
+    margin-bottom: $spacing-xxl;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-xl;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__step {
+    text-align: center;
+  }
+
+  &__icon {
+    font-size: 64px;
+    margin-bottom: $spacing-md;
+  }
+
+  &__step-title {
+    font-size: $font-size-h3;
+    color: $color-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__step-desc {
+    color: $text-secondary;
+    margin: 0;
+  }
+}
+
+// CTA Section
+.cta-section {
+  padding: $spacing-xxxl $spacing-md;
+  background-color: $color-white;
+}
+
+.cta-card {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: $spacing-xl;
+  background: linear-gradient(135deg, $color-primary 0%, $color-secondary 100%);
+  border-radius: $border-radius-lg;
+  text-align: center;
+
+  &__title {
+    font-size: $font-size-h2;
+    color: $color-white;
+    margin-bottom: $spacing-md;
+  }
+
+  &__text {
+    font-size: $font-size-base;
+    color: rgba($color-white, 0.9);
+    margin-bottom: $spacing-lg;
+  }
+}

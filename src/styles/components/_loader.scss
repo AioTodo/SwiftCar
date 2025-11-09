@@ -1,0 +1,61 @@
+.loader {
+  @include flex-center;
+  @include flex-column;
+  gap: $spacing-sm;
+
+  &__spinner {
+    border: 3px solid $color-gray-200;
+    border-top: 3px solid $color-primary;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  &__text {
+    color: $text-muted;
+    font-size: $font-size-small;
+    margin: 0;
+  }
+
+  // Sizes
+  &--small &__spinner {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+  }
+
+  &--medium &__spinner {
+    width: 40px;
+    height: 40px;
+  }
+
+  &--large &__spinner {
+    width: 60px;
+    height: 60px;
+    border-width: 4px;
+  }
+}
+
+.loader-container {
+  @include flex-center;
+  width: 100%;
+  padding: $spacing-xl;
+
+  &--fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba($color-white, 0.9);
+    z-index: $z-index-modal;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

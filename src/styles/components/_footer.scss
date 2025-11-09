@@ -1,0 +1,58 @@
+.footer {
+  background-color: $color-primary;
+  color: $color-white;
+  padding: $spacing-xl 0 $spacing-md;
+  margin-top: auto;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 $spacing-md;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: $spacing-lg;
+
+    @include tablet {
+      padding: 0 $spacing-lg;
+    }
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__title {
+    font-size: $font-size-h3;
+    font-weight: 700;
+    margin-bottom: $spacing-sm;
+  }
+
+  &__heading {
+    font-size: $font-size-h4;
+    font-weight: 600;
+    margin-bottom: $spacing-xs;
+    color: $color-accent;
+  }
+
+  &__text {
+    color: $color-gray-300;
+    margin: 0;
+  }
+
+  &__link {
+    color: $color-gray-300;
+    @include transition(color);
+
+    &:hover {
+      color: $color-accent;
+    }
+  }
+
+  &__copyright {
+    color: $color-gray-400;
+    font-size: $font-size-small;
+    margin-top: $spacing-md;
+  }
+}

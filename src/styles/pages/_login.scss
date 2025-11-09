@@ -1,0 +1,75 @@
+.page--login-page {
+  @include flex-center;
+  padding: $spacing-xxl 0;
+}
+
+.login-card {
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+
+  &__title {
+    font-size: $font-size-h2;
+    color: $color-primary;
+    margin-bottom: $spacing-xs;
+    text-align: center;
+  }
+
+  &__subtitle {
+    color: $text-muted;
+    text-align: center;
+    margin: 0;
+  }
+
+  &__footer-text {
+    text-align: center;
+    color: $text-secondary;
+    margin: 0;
+  }
+
+  &__link {
+    color: $color-primary;
+    font-weight: 600;
+    @include transition(color);
+
+    &:hover {
+      color: $color-secondary;
+      text-decoration: underline;
+    }
+  }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__demo {
+    padding: $spacing-sm;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-sm;
+    border-left: 3px solid $color-info;
+
+    p {
+      margin-bottom: $spacing-xs;
+    }
+  }
+
+  &__demo-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    li {
+      font-size: $font-size-small;
+      color: $text-secondary;
+
+      strong {
+        color: $text-primary;
+      }
+    }
+  }
+}

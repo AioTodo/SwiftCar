@@ -1,0 +1,201 @@
+.register-agency-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+}
+
+.register-agency {
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-xxl;
+
+    h1 {
+      font-size: $font-size-h1;
+      color: $color-primary;
+      margin-bottom: $spacing-sm;
+    }
+
+    p {
+      font-size: $font-size-h4;
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+}
+
+// Registration Steps
+.registration-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xxl;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @include mobile-only {
+    overflow-x: auto;
+    justify-content: flex-start;
+    gap: $spacing-sm;
+  }
+}
+
+.registration-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  flex: 0 0 auto;
+
+  &__number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    @include flex-center;
+    font-weight: 700;
+    font-size: $font-size-h4;
+    background-color: $color-gray-200;
+    color: $text-muted;
+    @include transition(all);
+
+    @include mobile-only {
+      width: 36px;
+      height: 36px;
+      font-size: $font-size-base;
+    }
+  }
+
+  &__label {
+    font-size: $font-size-small;
+    color: $text-muted;
+    text-align: center;
+    @include transition(color);
+    white-space: nowrap;
+
+    @include mobile-only {
+      font-size: $font-size-xs;
+    }
+  }
+
+  &--active {
+    .registration-step__number {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+
+    .registration-step__label {
+      color: $text-primary;
+      font-weight: 600;
+    }
+  }
+
+  &--completed {
+    .registration-step__number {
+      background-color: $color-success;
+      color: $color-white;
+    }
+  }
+
+  &__line {
+    flex: 1;
+    height: 2px;
+    background-color: $color-gray-300;
+    margin: 0 $spacing-sm;
+    min-width: 40px;
+
+    @include mobile-only {
+      min-width: 20px;
+    }
+  }
+}
+
+// Registration Form
+.registration-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// File Upload
+.file-upload {
+  margin-bottom: $spacing-md;
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $text-primary;
+  }
+
+  &__input {
+    display: none;
+  }
+
+  &__display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    padding: $spacing-md;
+    border: 2px dashed $color-gray-300;
+    border-radius: $border-radius-md;
+    background-color: $color-gray-100;
+    color: $text-muted;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover {
+      border-color: $color-primary;
+      background-color: lighten($color-primary, 55%);
+    }
+  }
+}
+
+.document-info {
+  padding: $spacing-md;
+  background-color: lighten($color-info, 45%);
+  border-radius: $border-radius-md;
+  border-left: 3px solid $color-info;
+
+  p {
+    margin: $spacing-xs 0;
+  }
+}
+
+// Registration Actions
+.registration-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-xl;
+  padding-top: $spacing-xl;
+  border-top: 1px solid $color-gray-200;
+
+  &__right {
+    display: flex;
+    gap: $spacing-sm;
+  }
+
+  @include mobile-only {
+    flex-direction: column;
+    gap: $spacing-sm;
+
+    &__right {
+      width: 100%;
+      
+      button {
+        width: 100%;
+      }
+    }
+  }
+}

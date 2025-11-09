@@ -1,0 +1,224 @@
+.my-bookings-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+}
+
+.my-bookings {
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-xl;
+
+    h1 {
+      font-size: $font-size-h1;
+      color: $color-primary;
+      margin: 0;
+    }
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-md;
+    }
+  }
+}
+
+// Bookings Tabs
+.bookings-tabs {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xl;
+  border-bottom: 2px solid $color-gray-200;
+  overflow-x: auto;
+
+  @include mobile-only {
+    gap: 4px;
+  }
+}
+
+.bookings-tab {
+  @include button-reset;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: $text-muted;
+  border-bottom: 3px solid transparent;
+  @include transition(all);
+  white-space: nowrap;
+
+  &:hover {
+    color: $text-primary;
+  }
+
+  &--active {
+    color: $color-primary;
+    border-bottom-color: $color-primary;
+  }
+
+  @include mobile-only {
+    font-size: $font-size-small;
+    padding: $spacing-sm;
+  }
+}
+
+// Bookings List
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.bookings-empty {
+  text-align: center;
+  padding: $spacing-xxl;
+
+  h3 {
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    color: $text-muted;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+// Booking Card Item
+.booking-card-item {
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-md;
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-xs;
+    }
+  }
+
+  &__id {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $text-primary;
+    margin-bottom: 4px;
+  }
+
+  &__date {
+    font-size: $font-size-small;
+    color: $text-muted;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-gray-200;
+
+    @include mobile-only {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+// Booking Status
+.booking-status {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.status--confirmed {
+    background-color: lighten($color-success, 45%);
+    color: $color-success;
+  }
+
+  &.status--completed {
+    background-color: lighten($color-info, 40%);
+    color: $color-info;
+  }
+
+  &.status--cancelled {
+    background-color: lighten($color-error, 40%);
+    color: $color-error;
+  }
+}
+
+// Booking Car Info
+.booking-car-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  &__image {
+    font-size: 48px;
+    width: 80px;
+    height: 80px;
+    @include flex-center;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-md;
+
+    @include mobile-only {
+      width: 60px;
+      height: 60px;
+      font-size: 32px;
+    }
+  }
+
+  &__details {
+    h3 {
+      font-size: $font-size-h3;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 4px;
+
+      @include mobile-only {
+        font-size: $font-size-base;
+      }
+    }
+  }
+}
+
+// Booking Details Grid
+.booking-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: $spacing-md;
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booking-detail {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &__label {
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $text-muted;
+    text-transform: uppercase;
+  }
+
+  &__value {
+    font-size: $font-size-base;
+    color: $text-secondary;
+    line-height: 1.5;
+
+    &--price {
+      font-size: $font-size-h3;
+      font-weight: 700;
+      color: $color-primary;
+    }
+  }
+}

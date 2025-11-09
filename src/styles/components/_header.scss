@@ -1,0 +1,55 @@
+.header {
+  background-color: $color-white;
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: $z-index-sticky;
+
+  &__container {
+    @include flex-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: $spacing-sm $spacing-md;
+
+    @include tablet {
+      padding: $spacing-sm $spacing-lg;
+    }
+  }
+
+  &__logo {
+    text-decoration: none;
+  }
+
+  &__brand {
+    font-size: $font-size-h3;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0;
+  }
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__link {
+    color: $text-secondary;
+    font-weight: 500;
+    @include transition(color);
+
+    &:hover {
+      color: $color-primary;
+    }
+
+    &--button {
+      @include button-reset;
+      color: $text-secondary;
+      font-weight: 500;
+
+      &:hover {
+        color: $color-error;
+      }
+    }
+  }
+}

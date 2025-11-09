@@ -1,0 +1,35 @@
+[
+  {
+    "id": "user-1",
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "customer@example.com",
+    "password": "password123",
+    "phone": "+212 600 123456",
+    "role": "customer",
+    "registrationDate": "2024-01-15",
+    "accountStatus": "active"
+  },
+  {
+    "id": "user-2",
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "email": "agency@example.com",
+    "password": "password123",
+    "phone": "+212 600 654321",
+    "role": "agency",
+    "registrationDate": "2024-02-20",
+    "accountStatus": "active"
+  },
+  {
+    "id": "user-3",
+    "firstName": "Admin",
+    "lastName": "User",
+    "email": "admin@swiftcar.com",
+    "password": "admin123",
+    "phone": "+212 600 999999",
+    "role": "admin",
+    "registrationDate": "2024-01-01",
+    "accountStatus": "active"
+  }
+]

@@ -1,0 +1,172 @@
+.payment-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: $spacing-xl;
+
+    @include tablet-only {
+      grid-template-columns: 1fr;
+    }
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__sidebar {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+
+    @include tablet-only {
+      position: static;
+    }
+
+    @include mobile-only {
+      position: static;
+    }
+  }
+}
+
+// Payment Form
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__demo {
+    padding: $spacing-sm;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-sm;
+    text-align: center;
+    margin: $spacing-sm 0;
+
+    p {
+      margin: 0;
+      color: $text-muted;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    gap: $spacing-md;
+    margin-top: $spacing-md;
+
+    @include mobile-only {
+      flex-direction: column;
+    }
+  }
+}
+
+// Security Info
+.security-info {
+  background-color: lighten($color-success, 50%);
+  border-left: 4px solid $color-success;
+}
+
+.security-item {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  padding: $spacing-sm 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $color-gray-200;
+    padding-bottom: $spacing-md;
+    margin-bottom: $spacing-md;
+  }
+
+  &__icon {
+    font-size: 32px;
+  }
+
+  h4 {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 4px;
+  }
+}
+
+// Booking Summary
+.booking-summary {
+  .summary-car {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    margin-bottom: $spacing-md;
+
+    &__image {
+      font-size: 48px;
+    }
+
+    h4 {
+      font-size: $font-size-base;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 4px;
+    }
+  }
+
+  .summary-divider {
+    height: 1px;
+    background-color: $color-gray-200;
+    margin: $spacing-md 0;
+  }
+
+  .summary-details {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  .summary-row {
+    @include flex-between;
+    font-size: $font-size-base;
+    color: $text-secondary;
+  }
+
+  .summary-total {
+    @include flex-between;
+    font-size: $font-size-h3;
+    font-weight: 700;
+    color: $text-primary;
+    padding-top: $spacing-md;
+
+    strong {
+      color: $color-primary;
+    }
+  }
+}
+
+// Payment Processing
+.payment-processing {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($color-white, 0.95);
+  z-index: $z-index-modal;
+  @include flex-center;
+}

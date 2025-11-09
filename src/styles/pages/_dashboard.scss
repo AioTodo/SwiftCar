@@ -1,0 +1,179 @@
+.customer-dashboard,
+.agency-dashboard,
+.admin-dashboard {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+}
+
+.dashboard {
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-xl;
+    align-items: flex-start;
+
+    @include mobile-only {
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+  }
+
+  &__title {
+    font-size: $font-size-h1;
+    color: $color-primary;
+    margin: 0;
+  }
+
+  &__subtitle {
+    color: $text-muted;
+    margin: $spacing-xs 0 0;
+  }
+
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-lg;
+    margin-bottom: $spacing-xl;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__empty {
+    text-align: center;
+    padding: $spacing-xxl;
+
+    p {
+      color: $text-muted;
+      margin-bottom: $spacing-lg;
+    }
+  }
+
+  &__actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: $spacing-lg;
+    margin-top: $spacing-xl;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Stat Card
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  &__icon {
+    font-size: 48px;
+    line-height: 1;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__value {
+    font-size: $font-size-h2;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0 0 $spacing-xs;
+  }
+
+  &__label {
+    font-size: $font-size-small;
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+// Booking List
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.booking-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  background-color: $color-gray-100;
+  border-radius: $border-radius-md;
+
+  @include mobile-only {
+    flex-wrap: wrap;
+  }
+
+  &__icon {
+    font-size: 32px;
+  }
+
+  &__details {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 4px;
+  }
+
+  &__dates {
+    font-size: $font-size-small;
+    color: $text-muted;
+    margin: 0;
+  }
+
+  &__price {
+    font-size: $font-size-h4;
+    font-weight: 700;
+    color: $color-primary;
+    margin-right: $spacing-md;
+
+    @include mobile-only {
+      width: 100%;
+      text-align: right;
+    }
+  }
+}
+
+// Action Card
+.action-card {
+  text-align: center;
+  padding: $spacing-md;
+  cursor: pointer;
+
+  &__icon {
+    font-size: 64px;
+    margin-bottom: $spacing-md;
+  }
+
+  &__title {
+    font-size: $font-size-h3;
+    color: $color-primary;
+    margin: 0 0 $spacing-xs;
+  }
+
+  &__desc {
+    font-size: $font-size-small;
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+// Card Header with Action
+.card-header-with-action {
+  @include flex-between;
+  align-items: center;
+  width: 100%;
+
+  h2 {
+    margin: 0;
+  }
+}

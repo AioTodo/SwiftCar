@@ -1,0 +1,105 @@
+.notification-container {
+  position: fixed;
+  top: $spacing-md;
+  right: $spacing-md;
+  z-index: $z-index-tooltip;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  max-width: 400px;
+  width: 100%;
+
+  @include mobile-only {
+    left: $spacing-md;
+    right: $spacing-md;
+    max-width: none;
+  }
+}
+
+.notification {
+  @include flex-between;
+  padding: $spacing-sm $spacing-md;
+  background-color: $color-white;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-lg;
+  animation: notificationSlideIn 0.3s ease;
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    flex: 1;
+  }
+
+  &__icon {
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  &__message {
+    margin: 0;
+    font-size: $font-size-base;
+    color: $text-primary;
+  }
+
+  &__close {
+    @include button-reset;
+    font-size: 24px;
+    line-height: 1;
+    color: $text-muted;
+    @include transition(color);
+    width: 24px;
+    height: 24px;
+    @include flex-center;
+    margin-left: $spacing-sm;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  // Types
+  &--success {
+    border-left: 4px solid $color-success;
+
+    .notification__icon {
+      color: $color-success;
+    }
+  }
+
+  &--error {
+    border-left: 4px solid $color-error;
+
+    .notification__icon {
+      color: $color-error;
+    }
+  }
+
+  &--warning {
+    border-left: 4px solid $color-warning;
+
+    .notification__icon {
+      color: $color-warning;
+    }
+  }
+
+  &--info {
+    border-left: 4px solid $color-info;
+
+    .notification__icon {
+      color: $color-info;
+    }
+  }
+}
+
+@keyframes notificationSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

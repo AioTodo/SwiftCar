@@ -1,0 +1,119 @@
+.search-results-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+}
+
+.search-results {
+  &__header {
+    margin-bottom: $spacing-xl;
+  }
+
+  &__title {
+    font-size: $font-size-h1;
+    color: $color-primary;
+    margin-bottom: $spacing-xs;
+  }
+
+  &__subtitle {
+    color: $text-secondary;
+    margin-bottom: $spacing-xs;
+
+    strong {
+      color: $color-primary;
+    }
+  }
+
+  &__count {
+    color: $text-muted;
+    font-size: $font-size-small;
+  }
+
+  &__layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: $spacing-xl;
+
+    @include tablet-only {
+      grid-template-columns: 1fr;
+    }
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $spacing-lg;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: $spacing-xxl;
+
+    p {
+      margin-bottom: $spacing-lg;
+      color: $text-muted;
+      font-size: $font-size-h4;
+    }
+  }
+}
+
+// Search Filters
+.search-filters {
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+
+  @include tablet-only {
+    position: static;
+  }
+
+  @include mobile-only {
+    position: static;
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-md;
+}
+
+.filter-label {
+  font-size: $font-size-small;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.filter-select,
+.filter-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: $font-size-base;
+  font-family: $font-family-base;
+  color: $text-primary;
+  background-color: $color-white;
+  border: 2px solid $color-gray-300;
+  border-radius: $border-radius-md;
+  @include transition(border-color);
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+}
+
+// Car Card (additional styles for search page)
+.car-card__location {
+  color: $text-muted;
+  font-size: $font-size-small;
+  margin-bottom: $spacing-sm;
+}

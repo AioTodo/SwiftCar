@@ -1,0 +1,314 @@
+// Add Car Page
+.add-car-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+}
+
+.add-car__header {
+  @include flex-between;
+  margin-bottom: $spacing-xl;
+
+  h1 {
+    font-size: $font-size-h1;
+    color: $color-primary;
+    margin: 0;
+  }
+}
+
+// Car Form
+.car-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: $spacing-xl;
+    padding-top: $spacing-xl;
+    border-top: 1px solid $color-gray-200;
+
+    @include mobile-only {
+      flex-direction: column;
+      gap: $spacing-sm;
+    }
+  }
+}
+
+// Features Grid
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: $spacing-md;
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-checkbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm;
+  background-color: $color-gray-100;
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  @include transition(background-color);
+
+  &:hover {
+    background-color: $color-gray-200;
+  }
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+  }
+
+  span {
+    font-size: $font-size-base;
+    color: $text-primary;
+  }
+}
+
+.selected-features {
+  margin-top: $spacing-md;
+  padding-top: $spacing-md;
+  border-top: 1px solid $color-gray-200;
+}
+
+// Manage Cars Page
+.manage-cars-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+}
+
+.manage-cars__header {
+  @include flex-between;
+  margin-bottom: $spacing-xl;
+
+  h1 {
+    font-size: $font-size-h1;
+    color: $color-primary;
+    margin: 0 0 4px;
+  }
+
+  @include mobile-only {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-md;
+  }
+}
+
+.manage-cars__empty {
+  text-align: center;
+  padding: $spacing-xxl;
+
+  h3 {
+    color: $text-primary;
+    margin-bottom: $spacing-sm;
+  }
+
+  p {
+    color: $text-muted;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+// Fleet Filters
+.fleet-filters {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xl;
+  border-bottom: 2px solid $color-gray-200;
+}
+
+.fleet-filter {
+  @include button-reset;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: $text-muted;
+  border-bottom: 3px solid transparent;
+  @include transition(all);
+
+  &:hover {
+    color: $text-primary;
+  }
+
+  &--active {
+    color: $color-primary;
+    border-bottom-color: $color-primary;
+  }
+}
+
+// Cars Grid
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: $spacing-lg;
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Car Manage Card
+.car-manage-card {
+  &__image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-md $border-radius-md 0 0;
+    overflow: hidden;
+  }
+
+  &__image-placeholder {
+    width: 100%;
+    height: 100%;
+    @include flex-center;
+    font-size: 80px;
+  }
+
+  &__title {
+    font-size: $font-size-h3;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 4px;
+  }
+
+  &__subtitle {
+    font-size: $font-size-small;
+    color: $text-muted;
+    margin: 0 0 $spacing-md;
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    margin-bottom: $spacing-md;
+  }
+
+  &__features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-xs;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+  }
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: $font-size-small;
+
+  &__label {
+    color: $text-muted;
+  }
+
+  &__value {
+    color: $text-primary;
+    font-weight: 600;
+  }
+}
+
+.feature-tag {
+  padding: 4px 8px;
+  background-color: $color-gray-100;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-xs;
+  color: $text-secondary;
+}
+
+// Availability Badge
+.availability-badge {
+  position: absolute;
+  top: $spacing-sm;
+  right: $spacing-sm;
+  padding: 6px 12px;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &--available {
+    background-color: $color-success;
+    color: $color-white;
+  }
+
+  &--unavailable {
+    background-color: $color-gray-600;
+    color: $color-white;
+  }
+}
+
+// Fleet List (for dashboard)
+.fleet-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.fleet-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-sm;
+  background-color: $color-gray-100;
+  border-radius: $border-radius-md;
+
+  &__icon {
+    font-size: 32px;
+  }
+
+  &__details {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 4px;
+  }
+
+  &__info {
+    font-size: $font-size-small;
+    color: $text-muted;
+    margin: 0;
+  }
+}
+
+// Dashboard Grid
+.dashboard__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-xl;
+  margin-bottom: $spacing-xl;
+
+  @include tablet-only {
+    grid-template-columns: 1fr;
+  }
+
+  @include mobile-only {
+    grid-template-columns: 1fr;
+  }
+}

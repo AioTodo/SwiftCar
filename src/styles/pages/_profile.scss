@@ -1,0 +1,154 @@
+.profile-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+
+  &__header {
+    @include flex-between;
+    margin-bottom: $spacing-xl;
+
+    h1 {
+      font-size: $font-size-h1;
+      color: $color-primary;
+      margin: 0;
+    }
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: $spacing-md;
+    }
+  }
+}
+
+// Profile Form
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-sm;
+    margin-top: $spacing-md;
+    padding-top: $spacing-md;
+    border-top: 1px solid $color-gray-200;
+  }
+}
+
+// Account Settings
+.account-settings {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.setting-item {
+  @include flex-between;
+  padding: $spacing-md 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid $color-gray-200;
+  }
+
+  &__info {
+    flex: 1;
+
+    h4 {
+      font-size: $font-size-base;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 4px;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}
+
+// Toggle Switch
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .toggle-slider {
+      background-color: $color-primary;
+
+      &:before {
+        transform: translateX(26px);
+      }
+    }
+
+    &:focus + .toggle-slider {
+      box-shadow: 0 0 1px $color-primary;
+    }
+  }
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $color-gray-300;
+  @include transition(all);
+  border-radius: 24px;
+
+  &:before {
+    position: absolute;
+    content: '';
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: $color-white;
+    @include transition(all);
+    border-radius: 50%;
+  }
+}
+
+// Danger Zone
+.danger-zone {
+  border: 2px solid $color-error;
+
+  &__content {
+    @include flex-between;
+    align-items: flex-start;
+
+    @include mobile-only {
+      flex-direction: column;
+      gap: $spacing-md;
+    }
+
+    h4 {
+      font-size: $font-size-base;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 4px;
+    }
+
+    p {
+      margin: 0;
+    }
+  }
+}

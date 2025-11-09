@@ -1,0 +1,55 @@
+// Abstracts
+@import 'abstracts/variables';
+@import 'abstracts/breakpoints';
+@import 'abstracts/mixins';
+
+// Base
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/utilities';
+
+// Layout
+@import 'layout/containers';
+
+// Components
+@import 'components/header';
+@import 'components/footer';
+@import 'components/button';
+@import 'components/input';
+@import 'components/card';
+@import 'components/modal';
+@import 'components/loader';
+@import 'components/notification';
+
+// Pages
+@import 'pages/page';
+@import 'pages/homepage';
+@import 'pages/login';
+@import 'pages/search-results';
+@import 'pages/car-details';
+@import 'pages/dashboard';
+@import 'pages/booking-process';
+@import 'pages/payment';
+@import 'pages/my-bookings';
+@import 'pages/profile';
+@import 'pages/agency-registration';
+@import 'pages/agency-cars';
+
+// App Layout
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  &__main {
+    flex: 1;
+  }
+}
+
+// Loading container
+.loading-container {
+  @include flex-center;
+  min-height: 50vh;
+  font-size: $font-size-h3;
+  color: $text-muted;
+}

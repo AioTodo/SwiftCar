@@ -1,0 +1,277 @@
+.booking-process-page {
+  padding: $spacing-xl 0;
+  min-height: 70vh;
+}
+
+.booking-process {
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: $spacing-xl;
+
+    @include tablet-only {
+      grid-template-columns: 1fr;
+    }
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__sidebar {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    @include tablet-only {
+      position: static;
+    }
+
+    @include mobile-only {
+      position: static;
+    }
+  }
+}
+
+// Booking Steps
+.booking-steps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-xl;
+}
+
+.booking-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-xs;
+  flex: 0 0 auto;
+
+  &__number {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    @include flex-center;
+    font-weight: 700;
+    font-size: $font-size-h4;
+    background-color: $color-gray-200;
+    color: $text-muted;
+    @include transition(all);
+  }
+
+  &__label {
+    font-size: $font-size-small;
+    color: $text-muted;
+    text-align: center;
+    @include transition(color);
+  }
+
+  &--active {
+    .booking-step__number {
+      background-color: $color-primary;
+      color: $color-white;
+    }
+
+    .booking-step__label {
+      color: $text-primary;
+      font-weight: 600;
+    }
+  }
+
+  &--completed {
+    .booking-step__number {
+      background-color: $color-success;
+      color: $color-white;
+    }
+  }
+
+  &__line {
+    flex: 1;
+    height: 2px;
+    background-color: $color-gray-300;
+    margin: 0 $spacing-sm;
+  }
+}
+
+// Booking Form
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+
+    @include mobile-only {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Booking Extras
+.booking-extras {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.extra-item {
+  &__label {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-md;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-md;
+    border: 2px solid $color-gray-200;
+    cursor: pointer;
+    @include transition(all);
+
+    &:hover {
+      border-color: $color-primary;
+      background-color: lighten($color-primary, 55%);
+    }
+  }
+
+  &__checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    font-size: $font-size-base;
+    font-weight: 600;
+    color: $text-primary;
+    margin: 0 0 4px;
+  }
+
+  &__desc {
+    font-size: $font-size-small;
+    color: $text-muted;
+    margin: 0;
+  }
+
+  &__price {
+    font-size: $font-size-base;
+    font-weight: 700;
+    color: $color-primary;
+  }
+}
+
+// Booking Review
+.booking-review {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.review-section {
+  h3 {
+    font-size: $font-size-h3;
+    color: $color-primary;
+    margin-bottom: $spacing-md;
+    padding-bottom: $spacing-xs;
+    border-bottom: 2px solid $color-gray-200;
+  }
+}
+
+.review-item {
+  @include flex-between;
+  padding: $spacing-sm 0;
+
+  &__label {
+    color: $text-muted;
+    font-size: $font-size-base;
+  }
+
+  &__value {
+    color: $text-primary;
+    font-weight: 600;
+    text-align: right;
+  }
+}
+
+// Booking Actions
+.booking-actions {
+  @include flex-between;
+  gap: $spacing-md;
+
+  &__right {
+    display: flex;
+    gap: $spacing-sm;
+  }
+}
+
+// Price Summary
+.price-summary {
+  .price-item {
+    @include flex-between;
+    padding: $spacing-sm 0;
+
+    &--small {
+      font-size: $font-size-small;
+      color: $text-muted;
+    }
+
+    &--total {
+      font-size: $font-size-h4;
+      font-weight: 700;
+      color: $text-primary;
+      padding-top: $spacing-md;
+
+      strong {
+        color: $color-primary;
+        font-size: $font-size-h3;
+      }
+    }
+  }
+
+  .price-divider {
+    height: 1px;
+    background-color: $color-gray-200;
+    margin: $spacing-sm 0;
+  }
+}
+
+// Car Summary
+.car-summary {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  &__image {
+    font-size: 48px;
+  }
+
+  &__details {
+    h4 {
+      font-size: $font-size-base;
+      font-weight: 600;
+      color: $text-primary;
+      margin: 0 0 4px;
+    }
+
+    p {
+      font-size: $font-size-small;
+      color: $text-muted;
+      margin: 0;
+    }
+  }
+}

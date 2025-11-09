@@ -1,0 +1,66 @@
+[
+  {
+    "id": "car-1",
+    "agencyId": "agency-1",
+    "brand": "Toyota",
+    "model": "Corolla",
+    "year": 2023,
+    "category": "economy",
+    "licensePlate": "A-12345",
+    "pricePerDay": 250,
+    "location": "Agadir",
+    "available": true,
+    "features": ["GPS", "Automatic", "A/C", "Bluetooth"],
+    "photos": [
+      "/images/cars/toyota-corolla-1.jpg",
+      "/images/cars/toyota-corolla-2.jpg"
+    ],
+    "status": "active",
+    "description": "Reliable and fuel-efficient sedan perfect for city driving.",
+    "rating": 4.5,
+    "reviewCount": 23,
+    "createdDate": "2024-03-01"
+  },
+  {
+    "id": "car-2",
+    "agencyId": "agency-1",
+    "brand": "Dacia",
+    "model": "Duster",
+    "year": 2022,
+    "category": "suv",
+    "licensePlate": "B-67890",
+    "pricePerDay": 350,
+    "location": "Agadir",
+    "available": true,
+    "features": ["GPS", "Manual", "A/C", "4WD"],
+    "photos": [
+      "/images/cars/dacia-duster-1.jpg"
+    ],
+    "status": "active",
+    "description": "Spacious SUV ideal for family trips and mountain adventures.",
+    "rating": 4.7,
+    "reviewCount": 18,
+    "createdDate": "2024-03-15"
+  },
+  {
+    "id": "car-3",
+    "agencyId": "agency-2",
+    "brand": "Mercedes-Benz",
+    "model": "E-Class",
+    "year": 2024,
+    "category": "luxury",
+    "licensePlate": "C-11111",
+    "pricePerDay": 800,
+    "location": "Marrakech",
+    "available": true,
+    "features": ["GPS", "Automatic", "A/C", "Leather Seats", "Sunroof"],
+    "photos": [
+      "/images/cars/mercedes-eclass-1.jpg"
+    ],
+    "status": "active",
+    "description": "Luxury sedan with premium comfort and advanced features.",
+    "rating": 4.9,
+    "reviewCount": 12,
+    "createdDate": "2024-04-01"
+  }
+]

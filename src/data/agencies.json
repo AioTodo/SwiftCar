@@ -1,0 +1,42 @@
+[
+  {
+    "id": "agency-1",
+    "ownerId": "user-2",
+    "agencyName": "Agadir Car Rentals",
+    "email": "contact@agadircars.ma",
+    "phone": "+212 528 123456",
+    "address": "123 Avenue Hassan II",
+    "city": "Agadir",
+    "country": "Morocco",
+    "logo": "/images/agencies/agadir-cars-logo.png",
+    "businessLicense": "BL-2024-001",
+    "verificationStatus": "verified",
+    "registrationDate": "2024-02-20",
+    "verificationDate": "2024-02-23",
+    "commissionRate": 0.06,
+    "isActive": true,
+    "description": "Family-owned car rental business serving Agadir for over 10 years.",
+    "rating": 4.6,
+    "totalBookings": 156
+  },
+  {
+    "id": "agency-2",
+    "ownerId": "user-4",
+    "agencyName": "Marrakech Premium Rentals",
+    "email": "info@marrakechpremium.ma",
+    "phone": "+212 524 987654",
+    "address": "45 Boulevard Mohammed V",
+    "city": "Marrakech",
+    "country": "Morocco",
+    "logo": "/images/agencies/marrakech-premium-logo.png",
+    "businessLicense": "BL-2024-002",
+    "verificationStatus": "verified",
+    "registrationDate": "2024-03-10",
+    "verificationDate": "2024-03-13",
+    "commissionRate": 0.05,
+    "isActive": true,
+    "description": "Luxury and premium car rental services in Marrakech.",
+    "rating": 4.8,
+    "totalBookings": 89
+  }
+]

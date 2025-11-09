@@ -1,0 +1,78 @@
+// Primary Colors (Turo-inspired)
+$color-primary: #121214;        // Almost Black
+$color-secondary: #5FCF65;      // Turo Green
+$color-accent: #FF6B6B;         // Coral Red for CTAs
+$color-tertiary: #F7F7F7;       // Light Gray
+$color-background: #FFFFFF;     // Pure White
+
+// Semantic Colors
+$color-success: #5FCF65;        // Green
+$color-warning: #FFB800;        // Amber
+$color-error: #FF4757;          // Red
+$color-info: #3742FA;           // Blue
+
+// Neutral Colors
+$color-white: #FFFFFF;
+$color-black: #000000;
+$color-gray-100: #F8F9FA;
+$color-gray-200: #E9ECEF;
+$color-gray-300: #DEE2E6;
+$color-gray-400: #CED4DA;
+$color-gray-500: #ADB5BD;
+$color-gray-600: #6C757D;
+$color-gray-700: #495057;
+$color-gray-800: #343A40;
+$color-gray-900: #212529;
+
+// Text Colors
+$text-primary: $color-primary;
+$text-secondary: $color-gray-700;
+$text-muted: $color-gray-500;
+$text-disabled: $color-gray-400;
+
+// Typography (Turo-style)
+$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+$font-size-base: 16px;
+$font-size-small: 14px;
+$font-size-xs: 12px;
+$font-size-h1: 48px;          // Larger, bolder headings
+$font-size-h2: 32px;
+$font-size-h3: 24px;
+$font-size-h4: 20px;
+
+// Spacing (8-point grid)
+$spacing-xs: 8px;
+$spacing-sm: 16px;
+$spacing-md: 24px;
+$spacing-lg: 32px;
+$spacing-xl: 40px;
+$spacing-xxl: 48px;
+$spacing-xxxl: 64px;
+
+// Border Radius (Turo-style - more rounded)
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 16px;
+$border-radius-xl: 24px;
+$border-radius-full: 50%;
+
+// Shadows (Turo-style - softer, more subtle)
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0);
+$shadow-xl: 0 16px 48px rgba(0, 0, 0, 0);
+$shadow-hover: 0 12px 32px rgba(49, 49, 49, 0);
+
+// Transitions
+$transition-fast: 0.15s ease;
+$transition-base: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Z-index
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;

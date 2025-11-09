@@ -1,0 +1,63 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: $spacing-md;
+  color: $text-primary;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: $font-size-h1;
+  font-weight: 800;
+  
+  @include mobile-only {
+    font-size: 36px;
+  }
+}
+
+h2 {
+  font-size: $font-size-h2;
+  font-weight: 700;
+  
+  @include mobile-only {
+    font-size: 28px;
+  }
+}
+
+h3 {
+  font-size: $font-size-h3;
+}
+
+h4 {
+  font-size: $font-size-h4;
+}
+
+p {
+  margin-bottom: $spacing-sm;
+  color: $text-secondary;
+}
+
+.text-muted {
+  color: $text-muted;
+}
+
+.text-small {
+  font-size: $font-size-small;
+}
+
+.text-xs {
+  font-size: $font-size-xs;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
