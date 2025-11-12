@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import WriteReviewPage from './WriteReviewPage';
 import { storage } from '../../../services/storageService';
 
@@ -44,14 +44,13 @@ describe('WriteReviewPage', () => {
     jest.restoreAllMocks();
   });
 
-  const renderWriteReviewPage = (bookingId = 'booking-123') => {
+const renderWriteReviewPage = (bookingId = 'booking-123') => {
     return render(
-      <BrowserRouter>
+      <MemoryRouter initialEntries={[`/customer/write-review/${bookingId}`]}>
         <Routes>
           <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
         </Routes>
-      </BrowserRouter>,
-      { initialEntries: [`/customer/write-review/${bookingId}`] }
+      </MemoryRouter>
     );
   };
 
@@ -62,12 +61,12 @@ describe('WriteReviewPage', () => {
       ];
       storage.get.mockReturnValue(existingReviews);
 
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       // Fill in the review form
@@ -115,12 +114,12 @@ describe('WriteReviewPage', () => {
     test('should trim whitespace from title and comment before submission', async () => {
       storage.get.mockReturnValue([]);
 
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       const titleInput = screen.getByLabelText(/title/i);
@@ -145,12 +144,12 @@ describe('WriteReviewPage', () => {
     test('should convert rating to number before storing', async () => {
       storage.get.mockReturnValue([]);
 
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       const ratingSelect = screen.getByLabelText(/rating/i);
@@ -174,12 +173,12 @@ describe('WriteReviewPage', () => {
     test('should store review with empty title when title is not provided', async () => {
       storage.get.mockReturnValue([]);
 
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       // Don't fill in title, only comment
@@ -202,12 +201,12 @@ describe('WriteReviewPage', () => {
 
   describe('Validation', () => {
     test('should show error when comment is empty', async () => {
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       const submitButton = screen.getByRole('button', { name: /submit review/i });
@@ -222,12 +221,12 @@ describe('WriteReviewPage', () => {
     });
 
     test('should show error when comment contains only whitespace', async () => {
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       const commentTextarea = screen.getByLabelText(/your review/i);
@@ -250,12 +249,12 @@ describe('WriteReviewPage', () => {
         throw new Error('Storage error');
       });
 
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       const commentTextarea = screen.getByLabelText(/your review/i);
@@ -274,12 +273,12 @@ describe('WriteReviewPage', () => {
 
   describe('Cancel action', () => {
     test('should navigate back when cancel button is clicked', () => {
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       const cancelButton = screen.getByRole('button', { name: /cancel/i });
@@ -291,12 +290,12 @@ describe('WriteReviewPage', () => {
 
   describe('Default values', () => {
     test('should have default rating of 5 stars', () => {
-      render(
-        <BrowserRouter>
+render(
+        <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
           <Routes>
             <Route path="/customer/write-review/:bookingId" element={<WriteReviewPage />} />
           </Routes>
-        </BrowserRouter>
+        </MemoryRouter>
       );
 
       const ratingSelect = screen.getByLabelText(/rating/i);

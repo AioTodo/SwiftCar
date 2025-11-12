@@ -10,7 +10,9 @@ export const storage = {
   },
   set(key, value) {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      const json = JSON.stringify(value);
+      const toStore = typeof json === 'string' ? json : String(value);
+      localStorage.setItem(key, toStore);
       return true;
     } catch (e) {
       return false;

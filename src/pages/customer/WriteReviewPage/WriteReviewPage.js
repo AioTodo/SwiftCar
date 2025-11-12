@@ -54,19 +54,19 @@ const WriteReviewPage = () => {
             {error && <div className="alert alert--error">{error}</div>}
 
             <div className="form__group">
-              <label className="form__label">Rating</label>
-              <select className="input" value={rating} onChange={(e) => setRating(e.target.value)}>
+              <label className="form__label" htmlFor="rating">Rating</label>
+              <select id="rating" className="input" value={rating} onChange={(e) => setRating(e.target.value)}>
                 {[5, 4, 3, 2, 1].map((r) => (
                   <option key={r} value={r}>{r} stars</option>
                 ))}
               </select>
             </div>
 
-            <Input label="Title (optional)" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <Input name="title" label="Title (optional)" value={title} onChange={(e) => setTitle(e.target.value)} />
 
             <div className="form__group">
-              <label className="form__label">Your review</label>
-              <textarea className="input" rows="6" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Tell us about the car and the agency..." />
+              <label className="form__label" htmlFor="review">Your review</label>
+              <textarea id="review" className="input" rows="6" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Tell us about the car and the agency..." />
             </div>
 
             <div className="form__actions">

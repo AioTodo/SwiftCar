@@ -6,29 +6,34 @@ const Button = ({
   size = 'medium',
   fullWidth = false,
   disabled = false,
+  loading = false,
   type = 'button',
   onClick,
   className = '',
-  ...props
+  ...rest
 }) => {
+  const isDisabled = disabled || loading;
   const buttonClass = [
     'button',
     `button--${variant}`,
     `button--${size}`,
     fullWidth && 'button--full-width',
-    disabled && 'button--disabled',
+    isDisabled && 'button--disabled',
     className,
   ]
     .filter(Boolean)
     .join(' ');
+
+  // Strip non-DOM props from being spread to the button element
+  const { /* strip known custom props */ } = rest;
 
   return (
     <button
       type={type}
       className={buttonClass}
       onClick={onClick}
-      disabled={disabled}
-      {...props}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
     >
       {children}
     </button>

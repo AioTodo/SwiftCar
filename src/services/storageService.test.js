@@ -4,7 +4,8 @@ describe('storageService', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     localStorage.clear();
-    jest.clearAllMocks();
+    // Restore any mocked implementations from previous tests
+    jest.restoreAllMocks();
   });
 
   describe('get', () => {
