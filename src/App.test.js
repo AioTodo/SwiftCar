@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import App from './App';
 import { AuthProvider } from './context/AuthContext';
@@ -17,5 +17,6 @@ test('renders header brand', () => {
       </AuthProvider>
     </NotificationProvider>
   );
-  expect(screen.getByRole('heading', { name: /swiftcar/i })).toBeInTheDocument();
+  const banner = screen.getByRole('banner');
+  expect(within(banner).getByRole('heading', { name: /swiftcar/i })).toBeInTheDocument();
 });

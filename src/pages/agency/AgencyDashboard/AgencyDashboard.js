@@ -17,7 +17,6 @@ const AgencyDashboard = () => {
   const agencyBookings = bookingsData.filter((b) => b.agencyId === agency?.id);
   
   const activeBookings = agencyBookings.filter((b) => b.status === 'confirmed');
-  const completedBookings = agencyBookings.filter((b) => b.status === 'completed');
   const totalRevenue = agencyBookings.reduce((sum, b) => sum + (b.totalPrice - b.commissionAmount), 0);
   const availableCars = agencyCars.filter((c) => c.available).length;
 

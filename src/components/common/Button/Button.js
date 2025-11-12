@@ -25,7 +25,6 @@ const Button = ({
     .join(' ');
 
   // Strip non-DOM props from being spread to the button element
-  const { /* strip known custom props */ } = rest;
 
   return (
     <button

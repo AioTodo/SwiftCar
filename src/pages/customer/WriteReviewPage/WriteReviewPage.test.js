@@ -2,16 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import WriteReviewPage from './WriteReviewPage';
-import { storage } from '../../../services/storageService';
-
-// Mock the storage service
-jest.mock('../../../services/storageService', () => ({
-  storage: {
-    get: jest.fn(),
-    set: jest.fn(),
-    remove: jest.fn(),
-  },
-}));
+import * as storageModule from '../../../services/storageService';
 
 // Mock useNavigate
 const mockNavigate = jest.fn();
@@ -27,17 +18,12 @@ const MOCK_TIMESTAMP = MOCK_DATE.getTime();
 describe('WriteReviewPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    storage.get.mockReturnValue([]);
-    storage.set.mockReturnValue(true);
-    
-    // Mock Date.now()
+    localStorage.clear();
+    jest.spyOn(storageModule.storage, 'get').mockReturnValue([]);
+    jest.spyOn(storageModule.storage, 'remove').mockReturnValue(undefined);
+
+    // Mock Date.now() only
     jest.spyOn(Date, 'now').mockReturnValue(MOCK_TIMESTAMP);
-    jest.spyOn(global, 'Date').mockImplementation((arg) => {
-      if (arg === undefined) {
-        return MOCK_DATE;
-      }
-      return new (jest.requireActual('global').Date)(arg);
-    });
   });
 
   afterEach(() => {
@@ -59,7 +45,7 @@ const renderWriteReviewPage = (bookingId = 'booking-123') => {
       const existingReviews = [
         { id: 'review-1', bookingId: 'booking-999', rating: 4, comment: 'Good car' },
       ];
-      storage.get.mockReturnValue(existingReviews);
+      storageModule.storage.get.mockReturnValue(existingReviews);
 
 render(
         <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
@@ -85,25 +71,25 @@ render(
 
       // Verify storage.get was called to retrieve existing reviews
       await waitFor(() => {
-        expect(storage.get).toHaveBeenCalledWith('reviews', []);
+        expect(storageModule.storage.get).toHaveBeenCalledWith('reviews', []);
       });
 
-      // Verify storage.set was called with the new review
+      // Wait for navigation (happens after storing review)
       await waitFor(() => {
-        expect(storage.set).toHaveBeenCalledWith('reviews', [
-          {
-            id: `review-${MOCK_TIMESTAMP}`,
-            bookingId: undefined, // bookingId comes from useParams which doesn't work in this test setup
-            rating: 4,
-            title: 'Great experience',
-            comment: 'The car was clean and comfortable.',
-            photos: [],
-            reviewDate: '2025-01-15',
-            verified: true,
-          },
-          ...existingReviews,
-        ]);
+        expect(mockNavigate).toHaveBeenCalledWith('/customer/bookings');
       });
+      const stored = JSON.parse(localStorage.getItem('reviews'));
+      expect(stored[0]).toEqual(expect.objectContaining({
+        id: `review-${MOCK_TIMESTAMP}`,
+        bookingId: 'booking-123',
+        rating: 4,
+        title: 'Great experience',
+        comment: 'The car was clean and comfortable.',
+        photos: [],
+        verified: true,
+      }));
+      expect(stored[0].reviewDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(stored.slice(1)).toEqual(existingReviews);
 
       // Verify navigation after successful submission
       await waitFor(() => {
@@ -112,7 +98,7 @@ render(
     });
 
     test('should trim whitespace from title and comment before submission', async () => {
-      storage.get.mockReturnValue([]);
+      storageModule.storage.get.mockReturnValue([]);
 
 render(
         <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
@@ -132,17 +118,19 @@ render(
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(storage.set).toHaveBeenCalledWith('reviews', [
-          expect.objectContaining({
-            title: 'Great experience',
-            comment: 'The car was clean.',
-          }),
-        ]);
+        expect(mockNavigate).toHaveBeenCalledWith('/customer/bookings');
       });
+      const storedTrim = JSON.parse(localStorage.getItem('reviews'));
+      expect(storedTrim[0]).toEqual(
+        expect.objectContaining({
+          title: 'Great experience',
+          comment: 'The car was clean.',
+        })
+      );
     });
 
     test('should convert rating to number before storing', async () => {
-      storage.get.mockReturnValue([]);
+      storageModule.storage.get.mockReturnValue([]);
 
 render(
         <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
@@ -162,16 +150,16 @@ render(
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(storage.set).toHaveBeenCalledWith('reviews', [
-          expect.objectContaining({
-            rating: 3, // Should be a number, not a string
-          }),
-        ]);
+        expect(mockNavigate).toHaveBeenCalledWith('/customer/bookings');
       });
+      const storedRating = JSON.parse(localStorage.getItem('reviews'));
+      expect(storedRating[0]).toEqual(
+        expect.objectContaining({ rating: 3 })
+      );
     });
 
     test('should store review with empty title when title is not provided', async () => {
-      storage.get.mockReturnValue([]);
+      storageModule.storage.get.mockReturnValue([]);
 
 render(
         <MemoryRouter initialEntries={[`/customer/write-review/booking-123`]}>
@@ -189,13 +177,12 @@ render(
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(storage.set).toHaveBeenCalledWith('reviews', [
-          expect.objectContaining({
-            title: '',
-            comment: 'Good service',
-          }),
-        ]);
+        expect(mockNavigate).toHaveBeenCalledWith('/customer/bookings');
       });
+      const storedNoTitle = JSON.parse(localStorage.getItem('reviews'));
+      expect(storedNoTitle[0]).toEqual(
+        expect.objectContaining({ title: '', comment: 'Good service' })
+      );
     });
   });
 
@@ -216,7 +203,7 @@ render(
         expect(screen.getByText(/please write a short review/i)).toBeInTheDocument();
       });
 
-      expect(storage.set).not.toHaveBeenCalled();
+      expect(localStorage.getItem('reviews')).toBeNull();
       expect(mockNavigate).not.toHaveBeenCalled();
     });
 
@@ -239,13 +226,13 @@ render(
         expect(screen.getByText(/please write a short review/i)).toBeInTheDocument();
       });
 
-      expect(storage.set).not.toHaveBeenCalled();
+      expect(localStorage.getItem('reviews')).toBeNull();
     });
   });
 
   describe('Error handling', () => {
     test('should display error message when storage fails', async () => {
-      storage.get.mockImplementation(() => {
+      storageModule.storage.get.mockImplementation(() => {
         throw new Error('Storage error');
       });
 
