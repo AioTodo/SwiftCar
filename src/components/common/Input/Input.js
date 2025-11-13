@@ -12,6 +12,7 @@ const Input = ({
   required = false,
   disabled = false,
   className = '',
+  fullWidth = false,
   ...props
 }) => {
   const inputClass = [
@@ -23,7 +24,7 @@ const Input = ({
     .join(' ');
 
   return (
-    <div className={`input ${className}`}>
+    <div className={`input ${fullWidth ? 'input--full-width' : ''} ${className}`}>
       {label && (
         <label htmlFor={name} className="input__label">
           {label}
@@ -42,7 +43,6 @@ const Input = ({
         disabled={disabled}
         className={inputClass}
         required={required}
-        {...props}
       />
       
       {error && <span className="input__error">{error}</span>}

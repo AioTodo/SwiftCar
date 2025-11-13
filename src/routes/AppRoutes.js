@@ -6,6 +6,10 @@ import HomePage from '../pages/public/HomePage';
 import SearchResultsPage from '../pages/public/SearchResultsPage';
 import CarDetailsPage from '../pages/public/CarDetailsPage';
 import LoginPage from '../pages/public/LoginPage';
+import NotFoundPage from '../pages/public/NotFoundPage';
+import AboutPage from '../pages/public/AboutPage';
+import FAQPage from '../pages/public/FAQPage';
+import ContactPage from '../pages/public/ContactPage';
 
 // Customer Pages
 import CustomerDashboard from '../pages/customer/CustomerDashboard';
@@ -13,12 +17,14 @@ import BookingProcessPage from '../pages/customer/BookingProcessPage';
 import PaymentPage from '../pages/customer/PaymentPage';
 import MyBookingsPage from '../pages/customer/MyBookingsPage';
 import ProfilePage from '../pages/customer/ProfilePage';
+import WriteReviewPage from '../pages/customer/WriteReviewPage';
 
 // Agency Pages
 import AgencyDashboard from '../pages/agency/AgencyDashboard';
 import RegisterAgencyPage from '../pages/agency/RegisterAgencyPage';
 import AddCarPage from '../pages/agency/AddCarPage';
 import ManageCarsPage from '../pages/agency/ManageCarsPage';
+import BookingRequestsPage from '../pages/agency/BookingRequestsPage';
 
 // Admin Pages
 import AdminDashboard from '../pages/admin/AdminDashboard';
@@ -34,6 +40,9 @@ const AppRoutes = () => {
       <Route path="/search" element={<SearchResultsPage />} />
       <Route path="/car/:carId" element={<CarDetailsPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/faq" element={<FAQPage />} />
+      <Route path="/contact" element={<ContactPage />} />
 
       {/* Customer Routes */}
       <Route
@@ -76,6 +85,14 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/customer/write-review/:bookingId"
+        element={
+          <ProtectedRoute requiredRole="customer">
+            <WriteReviewPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Agency Routes */}
       <Route path="/agency/register" element={<RegisterAgencyPage />} />
@@ -103,6 +120,14 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/agency/booking-requests"
+        element={
+          <ProtectedRoute requiredRole="agency">
+            <BookingRequestsPage />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Admin Routes */}
       <Route
@@ -113,6 +138,9 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+
+      {/* Fallback */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

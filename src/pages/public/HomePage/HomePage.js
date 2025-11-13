@@ -115,8 +115,8 @@ const HomePage = () => {
                   </p>
                   
                   <div className="car-card__features">
-                    {car.features.slice(0, 3).map((feature, index) => (
-                      <span key={index} className="car-card__feature">
+{car.features.slice(0, 3).map((feature) => (
+                      <span key={`${car.id}-${feature}`} className="car-card__feature">
                         {feature}
                       </span>
                     ))}

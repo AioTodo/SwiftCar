@@ -5,6 +5,9 @@ import { useNotification } from '../../../context/NotificationContext';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
+import DateRangePicker from '../../../components/booking/DateRangePicker/DateRangePicker';
+import ExtrasSelector from '../../../components/booking/ExtrasSelector/ExtrasSelector';
+import BookingSummary from '../../../components/booking/BookingSummary/BookingSummary';
 
 const BookingProcessPage = () => {
   const navigate = useNavigate();
@@ -160,23 +163,10 @@ const BookingProcessPage = () => {
                     </div>
                     
                     <div className="booking-form__row">
-                      <Input
-                        label="Pickup Date"
-                        type="date"
-                        name="pickupDate"
-                        value={bookingData.pickupDate}
+                      <DateRangePicker
+                        pickupDate={bookingData.pickupDate}
+                        returnDate={bookingData.returnDate}
                         onChange={handleChange}
-                        min={new Date().toISOString().split('T')[0]}
-                        required
-                      />
-                      <Input
-                        label="Return Date"
-                        type="date"
-                        name="returnDate"
-                        value={bookingData.returnDate}
-                        onChange={handleChange}
-                        min={bookingData.pickupDate || new Date().toISOString().split('T')[0]}
-                        required
                       />
                     </div>
                   </div>
@@ -185,73 +175,10 @@ const BookingProcessPage = () => {
                 {/* Step 2: Extras */}
                 {currentStep === 2 && (
                   <div className="booking-extras">
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="insurance"
-                          checked={bookingData.extras.insurance}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">Full Insurance Coverage</h4>
-                          <p className="extra-item__desc">Complete protection with zero excess</p>
-                        </div>
-                        <div className="extra-item__price">+50 MAD/day</div>
-                      </label>
-                    </div>
-
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="gps"
-                          checked={bookingData.extras.gps}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">GPS Navigation</h4>
-                          <p className="extra-item__desc">Latest maps and real-time traffic</p>
-                        </div>
-                        <div className="extra-item__price">+20 MAD/day</div>
-                      </label>
-                    </div>
-
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="childSeat"
-                          checked={bookingData.extras.childSeat}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">Child Seat</h4>
-                          <p className="extra-item__desc">Safety-certified child seat</p>
-                        </div>
-                        <div className="extra-item__price">+15 MAD/day</div>
-                      </label>
-                    </div>
-
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="additionalDriver"
-                          checked={bookingData.extras.additionalDriver}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">Additional Driver</h4>
-                          <p className="extra-item__desc">Add another licensed driver</p>
-                        </div>
-                        <div className="extra-item__price">+30 MAD/day</div>
-                      </label>
-                    </div>
+                    <ExtrasSelector
+                      extras={bookingData.extras}
+                      onToggle={(key, val) => handleChange({ target: { type: 'checkbox', name: key, checked: val } })}
+                    />
                   </div>
                 )}
 
@@ -285,6 +212,18 @@ const BookingProcessPage = () => {
                         <span className="review-item__value">{numberOfDays} day{numberOfDays > 1 ? 's' : ''}</span>
                       </div>
                     </div>
+
+                    <BookingSummary
+                      pricePerDay={car.pricePerDay}
+                      pickup={bookingData.pickupDate}
+                      dropoff={bookingData.returnDate}
+                      extras={{
+                        insurance: bookingData.extras.insurance,
+                        gps: bookingData.extras.gps,
+                        childSeat: bookingData.extras.childSeat,
+                        additionalDriver: bookingData.extras.additionalDriver,
+                      }}
+                    />
 
                     {totalExtras > 0 && (
                       <div className="review-section">

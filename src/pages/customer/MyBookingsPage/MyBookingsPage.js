@@ -4,8 +4,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { useNotification } from '../../../context/NotificationContext';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
-import bookingsData from '../../../data/bookings.json';
-import carsData from '../../../data/cars.json';
+import { bookingsAPI, carsAPI } from '../../../services/api';
 
 const MyBookingsPage = () => {
   const navigate = useNavigate();
@@ -13,23 +12,27 @@ const MyBookingsPage = () => {
   const { showNotification } = useNotification();
   
   const [activeTab, setActiveTab] = useState('all');
+  const [bookings, setBookings] = useState([]);
+  const [cars, setCars] = useState([]);
 
-  // Mock: Filter bookings for current user
-  const userBookings = bookingsData.filter((b) => b.userId === user?.id || b.userId === 'user-1');
-  
-  const filteredBookings = activeTab === 'all' 
-    ? userBookings
+  React.useEffect(() => {
+    if (!user?.id) return;
+    Promise.resolve(bookingsAPI.listByUser(user.id)).then((list) => setBookings(list));
+    Promise.resolve(carsAPI.list()).then((list) => setCars(list));
+  }, [user?.id]);
+
+  const filteredBookings = activeTab === 'all'
+    ? bookings
     : activeTab === 'upcoming'
-    ? userBookings.filter((b) => b.status === 'confirmed')
+    ? bookings.filter((b) => b.status === 'confirmed')
     : activeTab === 'completed'
-    ? userBookings.filter((b) => b.status === 'completed')
-    : userBookings.filter((b) => b.status === 'cancelled');
+    ? bookings.filter((b) => b.status === 'completed')
+    : bookings.filter((b) => b.status === 'cancelled');
 
-  const handleCancelBooking = (bookingId) => {
-    showNotification({
-      type: 'success',
-      message: 'Booking cancelled successfully',
-    });
+  const handleCancelBooking = async (bookingId) => {
+    const updated = await bookingsAPI.cancel(bookingId);
+    setBookings((prev) => prev.map((b) => (b.id === bookingId ? updated : b)));
+    showNotification({ type: 'success', message: 'Booking cancelled successfully' });
   };
 
   const getStatusColor = (status) => {
@@ -61,25 +64,25 @@ const MyBookingsPage = () => {
             className={`bookings-tab ${activeTab === 'all' ? 'bookings-tab--active' : ''}`}
             onClick={() => setActiveTab('all')}
           >
-            All ({userBookings.length})
+            All ({bookings.length})
           </button>
           <button
             className={`bookings-tab ${activeTab === 'upcoming' ? 'bookings-tab--active' : ''}`}
             onClick={() => setActiveTab('upcoming')}
           >
-            Upcoming ({userBookings.filter((b) => b.status === 'confirmed').length})
+            Upcoming ({bookings.filter((b) => b.status === 'confirmed').length})
           </button>
           <button
             className={`bookings-tab ${activeTab === 'completed' ? 'bookings-tab--active' : ''}`}
             onClick={() => setActiveTab('completed')}
           >
-            Completed ({userBookings.filter((b) => b.status === 'completed').length})
+            Completed ({bookings.filter((b) => b.status === 'completed').length})
           </button>
           <button
             className={`bookings-tab ${activeTab === 'cancelled' ? 'bookings-tab--active' : ''}`}
             onClick={() => setActiveTab('cancelled')}
           >
-            Cancelled ({userBookings.filter((b) => b.status === 'cancelled').length})
+            Cancelled ({bookings.filter((b) => b.status === 'cancelled').length})
           </button>
         </div>
 
@@ -99,7 +102,7 @@ const MyBookingsPage = () => {
             </Card>
           ) : (
             filteredBookings.map((booking) => {
-              const car = carsData.find((c) => c.id === booking.carId);
+              const car = cars.find((c) => c.id === booking.carId);
               
               return (
                 <Card key={booking.id} className="booking-card-item">
@@ -110,8 +113,8 @@ const MyBookingsPage = () => {
                         {booking.status}
                       </div>
                     </div>
-                    <div className="booking-card-item__date">
-                      Booked on {booking.bookingDate}
+                      <div className="booking-card-item__date">
+                      {/* Optional: booking.createdAt */}
                     </div>
                   </div>
 
@@ -130,21 +133,19 @@ const MyBookingsPage = () => {
                       <div className="booking-detail">
                         <span className="booking-detail__label">Pickup</span>
                         <span className="booking-detail__value">
-                          📅 {booking.pickupDate}<br />
-                          📍 {booking.pickupLocation}
+                          📅 {booking.pickup || booking.pickupDate}<br />
                         </span>
                       </div>
                       <div className="booking-detail">
                         <span className="booking-detail__label">Return</span>
                         <span className="booking-detail__value">
-                          📅 {booking.returnDate}<br />
-                          📍 {booking.returnLocation}
+                          📅 {booking.dropoff || booking.returnDate}<br />
                         </span>
                       </div>
                       <div className="booking-detail">
                         <span className="booking-detail__label">Duration</span>
                         <span className="booking-detail__value">
-                          {booking.numberOfDays} day{booking.numberOfDays > 1 ? 's' : ''}
+                          {/* Could compute days if needed */}
                         </span>
                       </div>
                       <div className="booking-detail">
@@ -179,7 +180,7 @@ const MyBookingsPage = () => {
                       <Button
                         variant="primary"
                         size="small"
-                        onClick={() => navigate('/customer/write-review')}
+                        onClick={() => navigate(`/customer/write-review/${booking.id}`)}
                       >
                         Write Review
                       </Button>

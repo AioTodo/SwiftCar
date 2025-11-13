@@ -8,6 +8,8 @@ import Card from '../../../components/common/Card';
 import Modal from '../../../components/common/Modal';
 import carsData from '../../../data/cars.json';
 import agenciesData from '../../../data/agencies.json';
+import ReviewList from '../../../components/reviews/ReviewList';
+import { reviewService } from '../../../services/reviewService';
 
 const CarDetailsPage = () => {
   const { carId } = useParams();
@@ -164,6 +166,9 @@ const CarDetailsPage = () => {
                 </Card.Body>
               </Card>
             )}
+
+            {/* Reviews */}
+            <CarReviews carId={car.id} />
           </div>
 
           {/* Booking Sidebar */}
@@ -268,6 +273,20 @@ const CarDetailsPage = () => {
         </div>
       </Modal>
     </div>
+  );
+};
+
+const CarReviews = ({ carId }) => {
+  const { items, average, count } = reviewService.getByCarId(carId);
+  return (
+    <Card>
+      <Card.Header>
+        <h2>Customer Reviews</h2>
+      </Card.Header>
+      <Card.Body>
+        <ReviewList items={items} average={average} count={count} />
+      </Card.Body>
+    </Card>
   );
 };
 

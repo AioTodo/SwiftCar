@@ -182,6 +182,14 @@ const AgencyDashboard = () => {
             </div>
           </Card>
 
+          <Card hoverable onClick={() => navigate('/agency/booking-requests')}>
+            <div className="action-card">
+              <div className="action-card__icon">📝</div>
+              <h3 className="action-card__title">Requests</h3>
+              <p className="action-card__desc">Approve or decline pending bookings</p>
+            </div>
+          </Card>
+
           <Card hoverable onClick={() => navigate('/agency/bookings')}>
             <div className="action-card">
               <div className="action-card__icon">📋</div>
