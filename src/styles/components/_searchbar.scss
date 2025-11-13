@@ -1,0 +1,24 @@
+// Chips and search bar styles for landing page
+
+.chip-row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: $spacing-lg;
+  justify-content: center;
+}
+
+.chip {
+  @include button-reset;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid $color-gray-300;
+  background: $color-white;
+  color: $text-primary;
+  font-size: $font-size-small;
+  @include transition(background-color);
+
+  &--active, &:hover {
+    background: $color-gray-100;
+  }
+}

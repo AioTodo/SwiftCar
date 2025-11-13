@@ -1,0 +1,11 @@
+[
+  {
+    "notificationId": 1,
+    "userId": 1,
+    "type": "booking_confirmation",
+    "title": "Booking Confirmed",
+    "message": "Your booking for Toyota Corolla has been confirmed.",
+    "date": "2024-10-01",
+    "read": false
+  }
+]

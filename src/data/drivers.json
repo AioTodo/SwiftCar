@@ -1,0 +1,18 @@
+[
+  {
+    "driverId": 1,
+    "name": "Alex Johnson",
+    "phone": "+212600200001",
+    "licenseNumber": "DRV-AG-001",
+    "rating": 4.7,
+    "active": true
+  },
+  {
+    "driverId": 2,
+    "name": "Maria Lopez",
+    "phone": "+212600200002",
+    "licenseNumber": "DRV-AG-002",
+    "rating": 4.5,
+    "active": true
+  }
+]
