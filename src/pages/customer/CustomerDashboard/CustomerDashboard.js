@@ -1,21 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
-import bookingsData from '../../../data/bookings.json';
-import carsData from '../../../data/cars.json';
+import { bookingsAPI, carsAPI } from '../../../services/api';
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Mock: Filter bookings for current user
-  const userBookings = bookingsData.filter((b) => b.userId === user?.id || b.userId === 'user-1');
+  const [bookings, setBookings] = useState([]);
+  const [cars, setCars] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      if (!user?.id) {
+        setBookings([]);
+        setCars([]);
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const [userBookings, allCars] = await Promise.all([
+          bookingsAPI.listByUser(user.id),
+          carsAPI.list(),
+        ]);
+        if (cancelled) return;
+        setBookings(userBookings || []);
+        setCars(allCars || []);
+      } finally {
+        if (!cancelled) setIsLoading(false);
+      }
+    };
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
+
+  const userBookings = bookings;
   const upcomingBookings = userBookings.filter((b) => b.status === 'confirmed');
   const pastBookings = userBookings.filter((b) => b.status === 'completed');
-  
-  const totalSpent = userBookings.reduce((sum, b) => sum + b.totalPrice, 0);
+
+  const totalSpent = userBookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
 
   return (
     <div className="customer-dashboard">
@@ -75,7 +108,11 @@ const CustomerDashboard = () => {
             </div>
           </Card.Header>
           <Card.Body>
-            {upcomingBookings.length === 0 ? (
+            {isLoading ? (
+              <div className="dashboard__empty">
+                <p>Loading upcoming bookings...</p>
+              </div>
+            ) : upcomingBookings.length === 0 ? (
               <div className="dashboard__empty">
                 <p>No upcoming bookings</p>
                 <Button variant="primary" onClick={() => navigate('/search')}>
@@ -85,7 +122,7 @@ const CustomerDashboard = () => {
             ) : (
               <div className="booking-list">
                 {upcomingBookings.slice(0, 3).map((booking) => {
-                  const car = carsData.find((c) => c.id === booking.carId);
+                  const car = cars.find((c) => c.id === booking.carId);
                   return (
                     <div key={booking.id} className="booking-item">
                       <div className="booking-item__icon">🚗</div>
@@ -94,7 +131,7 @@ const CustomerDashboard = () => {
                           {car ? `${car.brand} ${car.model}` : 'Car'}
                         </h4>
                         <p className="booking-item__dates">
-                          {booking.pickupDate} to {booking.returnDate}
+                          {(booking.pickup || booking.pickupDate) || ''} to {(booking.dropoff || booking.returnDate) || ''}
                         </p>
                       </div>
                       <div className="booking-item__price">

@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import PaymentPage from './PaymentPage';
 import { BookingProvider, useBooking } from '../../../context/BookingContext';
 import { NotificationProvider } from '../../../context/NotificationContext';
+import { AuthProvider } from '../../../context/AuthContext';
 
 // Mock navigate to assert redirects
 const mockNavigate = jest.fn();
@@ -23,10 +24,12 @@ const StartBooking = ({ car }) => {
 
 const Wrapper = ({ children, car }) => (
   <NotificationProvider>
-    <BookingProvider>
-      <StartBooking car={car} />
-      {children}
-    </BookingProvider>
+    <AuthProvider>
+      <BookingProvider>
+        <StartBooking car={car} />
+        {children}
+      </BookingProvider>
+    </AuthProvider>
   </NotificationProvider>
 );
 
@@ -40,7 +43,7 @@ describe('PaymentPage integration (mock)', () => {
     jest.useRealTimers();
   });
 
-  test('submits payment and navigates to customer dashboard', async () => {
+  test('submits payment and navigates to booking confirmation', async () => {
     const car = { id: 'car-1', brand: 'Toyota', model: 'Corolla', year: 2024, category: 'Economy', pricePerDay: 100 };
 
     render(
@@ -69,7 +72,9 @@ fireEvent.change(screen.getByLabelText(/cvv/i), { target: { name: 'cvv', value: 
     });
 
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/customer/dashboard');
+      expect(mockNavigate).toHaveBeenCalledWith(
+        expect.stringMatching(/^\/booking\/confirmation\/booking-/)
+      );
     });
   });
 });

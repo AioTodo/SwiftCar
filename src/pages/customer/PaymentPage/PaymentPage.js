@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../../../context/BookingContext';
 import { useNotification } from '../../../context/NotificationContext';
+import { useAuth } from '../../../context/AuthContext';
+import { bookingsAPI } from '../../../services/api';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
@@ -11,6 +13,7 @@ const PaymentPage = () => {
   const navigate = useNavigate();
   const { state, resetBooking } = useBooking();
   const { showNotification } = useNotification();
+  const { user } = useAuth();
   
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentData, setPaymentData] = useState({
@@ -68,21 +71,37 @@ const PaymentPage = () => {
     
     setIsProcessing(true);
     
-    // Simulate payment processing
-    setTimeout(() => {
-      setIsProcessing(false);
-      
-      showNotification({
-        type: 'success',
-        message: 'Booking confirmed! Check your email for details.',
-      });
-      
-      resetBooking();
-      navigate('/customer/dashboard');
+    // Simulate payment processing and then create a booking record
+    setTimeout(async () => {
+      try {
+        // Build a minimal booking payload; fall back to demo values if context is incomplete
+        const car = state.selectedCar;
+        const bookingPayload = {
+          userId: user?.id || 'demo-user',
+          agencyId: (car && car.agencyId) || 'agency-demo',
+          carId: car?.id || 'car-demo',
+          pickup: state.pickupDate || '2025-01-10',
+          dropoff: state.returnDate || '2025-01-11',
+          pricePerDay: car?.pricePerDay || 100,
+          extras: state.extras || {},
+        };
+
+        const booking = await bookingsAPI.create(bookingPayload);
+
+        showNotification({
+          type: 'success',
+          message: 'Booking confirmed! Check your email for details.',
+        });
+
+        resetBooking();
+        navigate(`/booking/confirmation/${booking.id}`);
+      } finally {
+        setIsProcessing(false);
+      }
     }, 2500);
   };
 
-  // Mock pricing calculation
+  // Pricing calculation (fallback if booking context is incomplete)
   const basePrice = 1500;
   const extrasPrice = 200;
   const totalPrice = basePrice + extrasPrice;

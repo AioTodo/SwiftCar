@@ -24,10 +24,11 @@ export const AuthProvider = ({ children }) => {
   const login = useCallback((credentials) => {
     const mockUser = {
       id: 'user-1',
-      firstName: 'Demo',
-      lastName: 'User',
+      firstName: credentials.firstName || 'Demo',
+      lastName: credentials.lastName || 'User',
       email: credentials.email,
       role: credentials.role || 'customer',
+      phone: credentials.phone || '',
     };
 
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(mockUser));

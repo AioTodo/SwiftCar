@@ -1,188 +1,121 @@
 # Unit Tests Documentation
 
-This document describes the comprehensive unit tests created for the SwiftCar application.
+This document describes the unit and integration tests currently implemented for the SwiftCar application.
 
-## Test Files Created
+## Test Files & Coverage (Current State)
 
-### 1. SignUpPage Component Tests
-**File**: `src/pages/public/SignUpPage/SignUpPage.test.js`
+### 1. App Shell Tests
 
-Tests cover:
-- ✅ Successfully register a new customer and redirect to `/login`
-- ✅ Successfully register a new agency and redirect to `/agency/register`
-- ✅ Trim whitespace from form fields before submitting
-- ✅ Show error when required fields are missing
-- ✅ Show error when passwords do not match
-- ✅ Display error message when API call fails
-- ✅ Display default error message when API error has no message
-- ✅ Show loading state during submission
+**File**: `src/App.test.js`
 
-**Total Tests**: 8
+- ✅ Renders the application header brand ("SwiftCar") inside the banner region.
+- Wraps `App` with `AuthProvider`, `BookingProvider`, `NotificationProvider`, and `MemoryRouter` to ensure providers compose correctly.
 
-### 2. WriteReviewPage Component Tests
-**File**: `src/pages/customer/WriteReviewPage/WriteReviewPage.test.js`
+### 2. Service Layer Tests
 
-Tests cover:
-- ✅ Allow customer to submit a review and store it in local storage
-- ✅ Trim whitespace from title and comment before submission
-- ✅ Convert rating to number before storing
-- ✅ Store review with empty title when title is not provided
-- ✅ Show error when comment is empty
-- ✅ Show error when comment contains only whitespace
-- ✅ Display error message when storage fails
-- ✅ Navigate back when cancel button is clicked
-- ✅ Have default rating of 5 stars
-
-**Total Tests**: 9
-
-### 3. storageService Utility Tests
+#### 2.1 `storageService`
 **File**: `src/services/storageService.test.js`
 
-Tests cover:
-- ✅ Retrieve and parse stored item from localStorage
-- ✅ Return fallback value when item does not exist
-- ✅ Return null as default fallback
-- ✅ Handle arrays correctly
-- ✅ Handle nested objects correctly
-- ✅ Return fallback when localStorage contains invalid JSON
-- ✅ Return fallback when localStorage throws error
-- ✅ Store item in localStorage with JSON serialization
-- ✅ Store arrays correctly
-- ✅ Store primitive values
-- ✅ Overwrite existing value
-- ✅ Return false when localStorage throws error
-- ✅ Handle null and undefined values
-- ✅ Remove item from localStorage
-- ✅ Not throw error when removing non-existent item
-- ✅ Handle localStorage errors silently
-- ✅ Remove multiple items independently
-- ✅ Support complete workflow: set, get, remove
-- ✅ Handle multiple key-value pairs independently
+Covers the `storage` wrapper around `localStorage`:
+- ✅ `get` retrieves and parses stored items (primitives, arrays, nested objects).
+- ✅ `get` returns fallback values when keys are missing, JSON is invalid, or `getItem` throws.
+- ✅ `set` serializes values correctly (objects, arrays, primitives) and overwrites existing keys.
+- ✅ `set` returns `false` when `setItem` throws.
+- ✅ `remove` deletes items, is safe for missing keys, and swallows storage errors.
+- ✅ Integration: complete workflow for `set → get → remove` across multiple keys.
 
-**Total Tests**: 19
+#### 2.2 `carsAPI`
+**File**: `src/services/carsAPI.test.js`
 
-### 4. priceCalculator Utility Tests
+Covers the storage-backed car API in `src/services/api.js`:
+- ✅ `list` returns an empty array when nothing is stored.
+- ✅ `create` validates required fields and persists a car with generated `id` and timestamps.
+- ✅ `getById` returns a car by id or `null` when not found.
+- ✅ `update` merges patches, bumps `updatedAt`, and updates persisted data.
+- ✅ `update` throws when the car does not exist.
+- ✅ `remove` deletes a car and returns `true`, leaving other cars intact.
+
+#### 2.3 `bookingsAPI`
+**File**: `src/services/bookingsAPI.test.js`
+
+Covers the storage-backed booking API in `src/services/api.js`:
+- ✅ `create` validates required fields and persists a pending booking.
+- ✅ `create` computes total price via `priceCalculator.totalPrice` and stores it.
+- ✅ `listByUser` returns bookings for a specific user, ordered newest-first.
+- ✅ `listByAgency` returns bookings for a specific agency, ordered newest-first.
+- ✅ `updateStatus` updates `status` and `updatedAt` and persists changes.
+- ✅ `cancel` sets status to `cancelled` and updates persisted data.
+
+### 3. Utility Tests
+
+#### 3.1 `priceCalculator`
 **File**: `src/utils/priceCalculator.test.js`
 
-Tests cover:
+Covers:
+- **`rentalDays`** — day count across same day, multiple days, weeks, month/year boundaries, and `Date` object inputs.
+- **`basePrice`** — base rental price over different durations, rounding behavior, zero/negative scenarios.
+- **`extrasCost`** — costs for individual extras (insurance, GPS, child seat, additional driver), combinations, all extras, and unknown/false extras.
+- **`totalPrice`** — aggregation of base price + extras across several scenarios (with/without extras).
+- **`commission`** — commission with default/custom rates, rounding, zero totals/rates, large and decimal amounts.
+- **Integration** — complete booking price calculations with and without extras, including commission.
 
-**rentalDays**:
-- ✅ Calculate rental days for single day
-- ✅ Calculate rental days for multiple days
-- ✅ Calculate rental days for week-long rental
-- ✅ Handle same pickup and dropoff dates
-- ✅ Handle dates across months
-- ✅ Handle dates across years
-- ✅ Handle Date objects as input
-
-**basePrice**:
-- ✅ Calculate base price for single day
-- ✅ Calculate base price for multiple days
-- ✅ Round the base price
-- ✅ Return 0 for same pickup and dropoff dates
-- ✅ Handle zero price per day
-- ✅ Not return negative values
-
-**extrasCost**:
-- ✅ Calculate cost with no extras
-- ✅ Calculate cost for insurance only
-- ✅ Calculate cost for GPS only
-- ✅ Calculate cost for child seat only
-- ✅ Calculate cost for additional driver only
-- ✅ Calculate cost for multiple extras
-- ✅ Calculate cost for all extras
-- ✅ Ignore extras with false value
-- ✅ Handle undefined extras parameter
-- ✅ Ignore unknown extras
-
-**totalPrice**:
-- ✅ Calculate total price without extras
-- ✅ Calculate total price with extras
-- ✅ Calculate total price with all extras
-- ✅ Handle omitted extras parameter
-- ✅ Calculate correctly for single day with extras
-
-**commission**:
-- ✅ Calculate commission with default rate
-- ✅ Calculate commission with custom rate
-- ✅ Round commission to nearest integer
-- ✅ Use default rate from CONSTANTS
-- ✅ Handle zero total
-- ✅ Handle zero rate
-- ✅ Calculate commission for large amounts
-- ✅ Calculate commission for decimal amounts
-
-**Integration**:
-- ✅ Calculate complete booking price with all components
-- ✅ Calculate complete booking price without extras
-
-**Total Tests**: 37
-
-### 5. validators Utility Tests
+#### 3.2 `validators`
 **File**: `src/utils/validators.test.js`
 
-Tests cover:
+Covers form-validation helpers:
+- **`required`** — strings (including whitespace), numbers, booleans, arrays, objects, `null`/`undefined` handling and trimming.
+- **`email`** — valid/invalid addresses, casing, missing parts, extra `@`, spaces, and empty/null/undefined.
+- **`minLength`** — various lengths, empty strings, `null`/`undefined`, numeric coercion, zero/negative minimums.
+- **`passwordMatch`** — matches vs mismatches, empty values, case sensitivity, whitespace, special characters, numeric and long passwords, `null`/`undefined`.
+- **Integration scenarios** — validating a full signup form and edge-case combinations.
 
-**required**:
-- ✅ Return true for non-empty string
-- ✅ Return true for string with spaces
-- ✅ Return false for empty string
-- ✅ Return false for string with only whitespace
-- ✅ Return true for number
-- ✅ Return false for null
-- ✅ Return false for undefined
-- ✅ Return true for boolean false
-- ✅ Return true for boolean true
-- ✅ Return true for arrays
-- ✅ Return true for objects
-- ✅ Trim string before checking length
+### 4. Page & Component Tests
 
-**email**:
-- ✅ Return true for valid email addresses
-- ✅ Return false for invalid email addresses
-- ✅ Return false for empty string
-- ✅ Return false for null
-- ✅ Return false for undefined
-- ✅ Handle lowercase conversion
-- ✅ Return false for email without @ symbol
-- ✅ Return false for email without dot after @
-- ✅ Return false for email with multiple @ symbols
-- ✅ Return false for email with spaces
+These tests exercise higher-level UI behavior using React Testing Library.
 
-**minLength**:
-- ✅ Return true when string length meets minimum
-- ✅ Return true when string length exceeds minimum
-- ✅ Return false when string length is below minimum
-- ✅ Return true for exact minimum length
-- ✅ Return false for empty string with non-zero minimum
-- ✅ Return true for empty string with zero minimum
-- ✅ Handle null value
-- ✅ Handle undefined value
-- ✅ Convert numbers to strings
-- ✅ Handle zero as minimum length
-- ✅ Handle negative minimum length
-- ✅ Count all characters including spaces
+#### 4.1 Public pages
 
-**passwordMatch**:
-- ✅ Return true when passwords match and are non-empty
-- ✅ Return false when passwords do not match
-- ✅ Return false when both passwords are empty
-- ✅ Return false when first password is empty
-- ✅ Return false when second password is empty
-- ✅ Be case-sensitive
-- ✅ Consider whitespace differences
-- ✅ Handle special characters
-- ✅ Handle numeric passwords
-- ✅ Handle very long passwords
-- ✅ Return false for null values
-- ✅ Return false for undefined values
+- **AboutPage** — `src/pages/public/AboutPage/AboutPage.test.js`
+- **CarDetailsPage** — `src/pages/public/CarDetailsPage/CarDetailsPage.test.js`
+- **ContactPage** — `src/pages/public/ContactPage/ContactPage.test.js`
+- **NotFoundPage** — `src/pages/public/NotFoundPage/NotFoundPage.test.js`
+- **SignUpPage** — `src/pages/public/SignUpPage/SignUpPage.test.js`
 
-**Integration**:
-- ✅ Validate complete signup form
-- ✅ Catch validation errors in signup form
-- ✅ Validate form with edge case inputs
+Typical coverage includes:
+- Rendering of page headings and key sections.
+- Presence of core content (copy, call-to-action elements).
+- For `SignUpPage`, basic form rendering and initial UX expectations.
 
-**Total Tests**: 48
+#### 4.2 Customer pages
+
+- **BookingProcessPage** — `src/pages/customer/BookingProcessPage/BookingProcessPage.test.js`
+- **PaymentPage** — `src/pages/customer/PaymentPage/PaymentPage.test.js`
+- **MyBookingsPage** — `src/pages/customer/MyBookingsPage/MyBookingsPage.test.js`
+- **WriteReviewPage** — `src/pages/customer/WriteReviewPage/WriteReviewPage.test.js`
+
+These tests focus on:
+- Rendering of key steps/sections (booking steps, payment summary, bookings list, review form).
+- Interactions such as submitting a review, showing lists of bookings, and basic navigation flows.
+
+#### 4.3 Agency pages
+
+- **ManageCarsPage** — `src/pages/agency/ManageCarsPage/ManageCarsPage.test.js`
+- **BookingRequestsPage** — `src/pages/agency/BookingRequestsPage/BookingRequestsPage.test.js`
+
+Coverage includes:
+- Rendering of tables/lists for cars and booking requests.
+- Approve/decline actions for booking requests and resulting UI updates.
+
+#### 4.4 Shared booking components
+
+- **BookingSummary** — `src/components/booking/BookingSummary/BookingSummary.test.js`
+- **DateRangePicker** — `src/components/booking/DateRangePicker/DateRangePicker.test.js`
+- **ExtrasSelector** — `src/components/booking/ExtrasSelector/ExtrasSelector.test.js`
+
+These tests check:
+- Correct display of booking summary details.
+- Date range selection behavior and callbacks.
+- Extras toggle behavior and price-impact UI.
 
 ## Running the Tests
 
@@ -198,11 +131,26 @@ npm test -- --watch
 
 To run a specific test file:
 ```bash
-npm test -- SignUpPage.test.js
-npm test -- WriteReviewPage.test.js
+npm test -- App.test.js
 npm test -- storageService.test.js
+npm test -- carsAPI.test.js
+npm test -- bookingsAPI.test.js
 npm test -- priceCalculator.test.js
 npm test -- validators.test.js
+npm test -- AboutPage.test.js
+npm test -- BookingProcessPage.test.js
+npm test -- BookingRequestsPage.test.js
+npm test -- CarDetailsPage.test.js
+npm test -- ContactPage.test.js
+npm test -- ManageCarsPage.test.js
+npm test -- MyBookingsPage.test.js
+npm test -- NotFoundPage.test.js
+npm test -- PaymentPage.test.js
+npm test -- SignUpPage.test.js
+npm test -- WriteReviewPage.test.js
+npm test -- BookingSummary.test.js
+npm test -- DateRangePicker.test.js
+npm test -- ExtrasSelector.test.js
 ```
 
 To run tests with coverage:
@@ -212,10 +160,10 @@ npm test -- --coverage --watchAll=false
 
 ## Test Summary
 
-- **Total Test Files**: 5
-- **Total Test Cases**: 121
-- **Components Tested**: 2
-- **Utilities Tested**: 3
+- **Total Test Files**: 20+ (see list above)
+- **Components/Pages Tested**: public pages, customer booking flow, agency management, and shared booking components
+- **Services Tested**: storageService, carsAPI, bookingsAPI
+- **Utilities Tested**: priceCalculator, validators
 
 ## Key Testing Patterns Used
 
@@ -225,14 +173,18 @@ npm test -- --coverage --watchAll=false
 4. **Integration Tests**: Some tests verify multiple functions working together
 5. **Validation**: All validation logic is thoroughly tested with various inputs
 
-## Test Coverage
+## Test Coverage (High Level)
 
-The tests provide comprehensive coverage for:
-- User registration flow with role-based redirection
-- Review submission and local storage persistence
-- Storage service CRUD operations
-- Price calculation including extras and commission
-- Form validation for various input types
+Current tests cover:
+- App shell rendering (header brand) and provider composition.
+- Storage-backed services for cars and bookings (create, list, update, cancel/remove, validation).
+- Storage service CRUD behavior and error handling.
+- Price calculation logic including extras and commission.
+- Form validation helpers for signup and general input validation.
+- Core public pages (about, contact, car details, not-found).
+- Customer booking flow pages (booking process, payment, my bookings, review submission).
+- Agency management pages (manage cars, booking requests).
+- Shared booking UI components (summary, date range picker, extras selector).
 
 ## Dependencies
 
@@ -243,8 +195,8 @@ The tests use:
 
 ## Notes
 
-- All tests follow best practices for React Testing Library
-- Tests are independent and don't rely on execution order
-- Mocks are properly cleaned up between tests
-- Error cases and edge cases are well covered
-- Integration tests verify complete workflows
+- All tests are written in JavaScript using Jest and React Testing Library.
+- Tests are independent and don't rely on execution order.
+- Mocks (localStorage, Date.now, etc.) are reset between tests.
+- Both happy paths and error/edge cases are covered for core utilities and services.
+- Additional tests can be added alongside components as `*.test.js` files.

@@ -6,6 +6,7 @@ import HomePage from '../pages/public/HomePage';
 import SearchResultsPage from '../pages/public/SearchResultsPage';
 import CarDetailsPage from '../pages/public/CarDetailsPage';
 import LoginPage from '../pages/public/LoginPage';
+import SignUpPage from '../pages/public/SignUpPage';
 import NotFoundPage from '../pages/public/NotFoundPage';
 import AboutPage from '../pages/public/AboutPage';
 import FAQPage from '../pages/public/FAQPage';
@@ -18,6 +19,8 @@ import PaymentPage from '../pages/customer/PaymentPage';
 import MyBookingsPage from '../pages/customer/MyBookingsPage';
 import ProfilePage from '../pages/customer/ProfilePage';
 import WriteReviewPage from '../pages/customer/WriteReviewPage';
+import BookingDetailsPage from '../pages/customer/BookingDetailsPage';
+import BookingConfirmationPage from '../pages/customer/BookingConfirmationPage';
 
 // Agency Pages
 import AgencyDashboard from '../pages/agency/AgencyDashboard';
@@ -25,6 +28,10 @@ import RegisterAgencyPage from '../pages/agency/RegisterAgencyPage';
 import AddCarPage from '../pages/agency/AddCarPage';
 import ManageCarsPage from '../pages/agency/ManageCarsPage';
 import BookingRequestsPage from '../pages/agency/BookingRequestsPage';
+import AgencyBookingsPage from '../pages/agency/AgencyBookingsPage/AgencyBookingsPage';
+import AgencyBookingDetailPage from '../pages/agency/AgencyBookingDetailPage/AgencyBookingDetailPage';
+import AgencyEarningsPage from '../pages/agency/AgencyEarningsPage/AgencyEarningsPage';
+import AgencyVerificationStatusPage from '../pages/agency/AgencyVerificationStatusPage/AgencyVerificationStatusPage';
 
 // Admin Pages
 import AdminDashboard from '../pages/admin/AdminDashboard';
@@ -40,6 +47,7 @@ const AppRoutes = () => {
       <Route path="/search" element={<SearchResultsPage />} />
       <Route path="/car/:carId" element={<CarDetailsPage />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/faq" element={<FAQPage />} />
       <Route path="/contact" element={<ContactPage />} />
@@ -78,6 +86,22 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/customer/booking/:bookingId"
+        element={
+          <ProtectedRoute requiredRole="customer">
+            <BookingDetailsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/booking/confirmation/:bookingId"
+        element={
+          <ProtectedRoute requiredRole="customer">
+            <BookingConfirmationPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/customer/profile"
         element={
           <ProtectedRoute requiredRole="customer">
@@ -96,6 +120,14 @@ const AppRoutes = () => {
 
       {/* Agency Routes */}
       <Route path="/agency/register" element={<RegisterAgencyPage />} />
+      <Route
+        path="/agency/verification"
+        element={
+          <ProtectedRoute requiredRole="agency">
+            <AgencyVerificationStatusPage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/agency/dashboard"
         element={
@@ -125,6 +157,30 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute requiredRole="agency">
             <BookingRequestsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/agency/bookings"
+        element={
+          <ProtectedRoute requiredRole="agency">
+            <AgencyBookingsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/agency/booking/:bookingId"
+        element={
+          <ProtectedRoute requiredRole="agency">
+            <AgencyBookingDetailPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/agency/earnings"
+        element={
+          <ProtectedRoute requiredRole="agency">
+            <AgencyEarningsPage />
           </ProtectedRoute>
         }
       />

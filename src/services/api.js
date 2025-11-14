@@ -1,6 +1,23 @@
 // API service for making HTTP requests
 // This is a placeholder that should be implemented based on your backend API
 
+import { storage } from './storageService';
+import { priceCalculator } from '../utils/priceCalculator';
+
+const generateUniqueId = (prefix, existingItems) => {
+  const now = Date.now();
+  const baseId = `${prefix}-${now}`;
+  let candidate = baseId;
+  let seq = 1;
+
+  while (existingItems.some((item) => item.id === candidate)) {
+    candidate = `${baseId}-${seq}`;
+    seq += 1;
+  }
+
+  return candidate;
+};
+
 export const usersAPI = {
   async create(userData) {
     // TODO: Implement actual API call
@@ -40,8 +57,6 @@ export const usersAPI = {
   },
 };
 
-import { storage } from './storageService';
-
 const CARS_KEY = 'cars';
 
 export const carsAPI = {
@@ -59,14 +74,11 @@ export const carsAPI = {
     const missing = required.filter((k) => !payload || payload[k] === undefined || payload[k] === '');
     if (missing.length) throw new Error('Missing required fields');
 
-    const now = Date.now();
-    let id = `car-${now}`;
     const itemsBefore = storage.get(CARS_KEY, []);
-    if (itemsBefore.some((c) => c.id === id)) {
-      let seq = 1;
-      while (itemsBefore.some((c) => c.id === `${id}-${seq}`)) seq++;
-      id = `${id}-${seq}`;
-    }
+    const id = generateUniqueId('car', itemsBefore);
+    const now = Date.now();
+    const timestamp = new Date(now).toISOString();
+
     const newCar = {
       id,
       agencyId: payload.agencyId || null,
@@ -78,8 +90,8 @@ export const carsAPI = {
       features: Array.isArray(payload.features) ? payload.features : [],
       images: Array.isArray(payload.images) ? payload.images : [],
       available: payload.available !== false,
-      createdAt: new Date(now).toISOString(),
-      updatedAt: new Date(now).toISOString(),
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
 
     const items = storage.get(CARS_KEY, []);
@@ -111,8 +123,6 @@ export const carsAPI = {
   },
 };
 
-import { priceCalculator } from '../utils/priceCalculator';
-
 const BOOKINGS_KEY = 'bookings';
 
 export const bookingsAPI = {
@@ -121,14 +131,8 @@ export const bookingsAPI = {
     const missing = required.filter((k) => !payload || payload[k] === undefined || payload[k] === '');
     if (missing.length) throw new Error('Missing required fields');
 
-    const now = Date.now();
-    let id = `booking-${now}`;
     const itemsBefore = storage.get(BOOKINGS_KEY, []);
-    if (itemsBefore.some((b) => b.id === id)) {
-      let seq = 1;
-      while (itemsBefore.some((b) => b.id === `${id}-${seq}`)) seq++;
-      id = `${id}-${seq}`;
-    }
+    const id = generateUniqueId('booking', itemsBefore);
 
     const totalPrice = priceCalculator.totalPrice(
       Number(payload.pricePerDay),
@@ -136,6 +140,9 @@ export const bookingsAPI = {
       payload.dropoff,
       payload.extras || {}
     );
+
+    const now = Date.now();
+    const timestamp = new Date(now).toISOString();
 
     const booking = {
       id,
@@ -148,8 +155,8 @@ export const bookingsAPI = {
       pricePerDay: Number(payload.pricePerDay),
       totalPrice,
       status: 'pending',
-      createdAt: new Date(now).toISOString(),
-      updatedAt: new Date(now).toISOString(),
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
 
     const next = [booking, ...itemsBefore];
@@ -160,6 +167,11 @@ export const bookingsAPI = {
   async listByUser(userId) {
     const items = storage.get(BOOKINGS_KEY, []);
     return items.filter((b) => b.userId === userId);
+  },
+
+  async getById(id) {
+    const items = storage.get(BOOKINGS_KEY, []);
+    return items.find((b) => b.id === id) || null;
   },
 
   async listByAgency(agencyId) {

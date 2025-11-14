@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Container, Grid, Paper, Stack, Title, Text } from '@mantine/core';
 import { useBooking } from '../../../context/BookingContext';
 import { useNotification } from '../../../context/NotificationContext';
 import Button from '../../../components/common/Button';

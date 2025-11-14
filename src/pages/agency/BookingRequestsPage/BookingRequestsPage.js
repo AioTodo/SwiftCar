@@ -23,7 +23,7 @@ const BookingRequestsPage = () => {
   }, [agency?.id]);
 
   const handleApprove = async (id) => {
-    const updated = await bookingsAPI.updateStatus(id, 'confirmed');
+    await bookingsAPI.updateStatus(id, 'confirmed');
     setRequests((prev) => prev.filter((r) => r.id !== id));
     showNotification({ type: 'success', message: 'Booking approved' });
   };
