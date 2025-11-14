@@ -239,12 +239,14 @@ function App() {
 
 ## Part 2: Styling Modifications with Mantine
 
+**Global Styling Rule:** When there is a conflict between existing project styling and the Mantine theme defined in this document, update the code to match the Mantine theme. Legacy styles should be gradually refactored to align with Mantine.
+
 ### Core Principles
 
-1. **Preserve Original Values**: Maintain existing font families and color schemes
-2. **Use Mantine's Theming**: Leverage built-in theming capabilities
-3. **Maintain Consistency**: Ensure new styles align with existing design
-4. **Preserve UX**: Keep layout and structure intact
+1. **Mantine Theme as Source of Truth**: New and existing UI should adopt the Mantine theme values defined in this document (colors, typography, spacing, radius).
+2. **Gradual Migration from Legacy Styles**: When older SCSS/CSS conflicts with Mantine, prefer Mantine-based styling and refactor legacy styles over time.
+3. **Maintain Consistent UX**: Keep layout structure and interaction patterns consistent while updating visuals.
+4. **Use Mantine's Theming APIs**: Prefer theme tokens, style props, and utility components instead of ad-hoc custom CSS.
 
 ### Styling Approaches
 
@@ -359,12 +361,12 @@ import { Box, Text } from '@mantine/core';
 ### Best Practices for Style Modifications
 
 #### ✅ DO:
-- Use theme configuration for global changes
-- Preserve existing font families and colors
-- Test responsiveness after style changes
-- Maintain existing spacing relationships
-- Use Mantine's utility props when possible
-- Document any significant style changes
+- Use theme configuration for global changes and treat the Mantine theme as the canonical design source.
+- Migrate legacy styles to Mantine tokens instead of maintaining parallel design systems.
+- Test responsiveness after style changes.
+- Maintain coherent spacing relationships across components.
+- Use Mantine's utility props when possible.
+- Document any significant style changes and rationale when deviating from the theme.
 
 #### ❌ DON'T:
 - Hardcode colors that differ from the design system
@@ -469,9 +471,9 @@ function ResponsiveComponent() {
 - [ ] Wrap app with MantineProvider
 
 ### Styling Modifications
-- [ ] Preserve original font families
-- [ ] Maintain existing color palette
-- [ ] Update only spacing/sizing/borders as needed
-- [ ] Test responsive behavior
-- [ ] Document changes
-- [ ] Verify accessibility remains intact
+- [ ] Use the Mantine theme as the primary source of colors, typography, and spacing.
+- [ ] Replace legacy styling with Mantine-based styles when touching a component.
+- [ ] Keep layout/UX behavior consistent while updating visuals.
+- [ ] Test responsive behavior.
+- [ ] Document changes.
+- [ ] Verify accessibility remains intact.
