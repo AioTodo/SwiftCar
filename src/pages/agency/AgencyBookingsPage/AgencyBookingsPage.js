@@ -6,6 +6,7 @@ import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
 import { bookingsAPI, carsAPI } from '../../../services/api';
 import agencies from '../../../data/agencies.json';
+import AgencySidebar from '../../../components/layout/AgencySidebar';
 
 const AgencyBookingsPage = () => {
   const navigate = useNavigate();
@@ -55,10 +56,13 @@ const AgencyBookingsPage = () => {
   return (
     <div className="agency-bookings-page">
       <div className="container">
-        <div className="page-header">
-          <h1>All Bookings</h1>
-          <p className="text-muted">View and manage all bookings for your agency</p>
-        </div>
+        <div className="agency-layout">
+          <AgencySidebar />
+          <main className="agency-layout__main">
+            <div className="page-header">
+              <h1>All Bookings</h1>
+              <p className="text-muted">View and manage all bookings for your agency</p>
+            </div>
 
         {/* Filters */}
         <div className="bookings-filters">
@@ -146,6 +150,8 @@ const AgencyBookingsPage = () => {
             })
           )}
         </div>
+          </main>
+      </div>
       </div>
     </div>
   );

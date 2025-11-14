@@ -8,11 +8,14 @@ export const reviewService = {
   getByCarId(carId) {
     const reviews = storage.get(REVIEWS_KEY, []);
     const bookings = storage.get(BOOKINGS_KEY, []);
-    const bookingById = new Map(bookings.map(b => [b.id, b]));
+    const bookingById = new Map(bookings.map((b) => [b.id, b]));
 
+    // Only show reviews tied to this car that have not been removed by admins
     const filtered = reviews.filter((r) => {
       const b = bookingById.get(r.bookingId);
-      return b && b.carId === carId;
+      if (!b || b.carId !== carId) return false;
+      const moderationStatus = r.moderationStatus || 'approved';
+      return moderationStatus !== 'removed';
     });
 
     const avg = filtered.length

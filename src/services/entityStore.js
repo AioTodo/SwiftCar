@@ -50,10 +50,10 @@ function nextId(entity) {
 function inferIdField(entity) {
   switch (entity) {
     case 'cars': return 'carId';
-    case 'users': return 'userId';
-    case 'agencies': return 'agencyId';
+    case 'users': return 'id';
+    case 'agencies': return 'id';
     case 'bookings': return 'bookingId';
-    case 'reviews': return 'reviewId';
+    case 'reviews': return 'id';
     case 'payments': return 'paymentId';
     case 'commissions': return 'commissionId';
     case 'drivers': return 'driverId';

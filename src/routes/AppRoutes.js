@@ -35,6 +35,11 @@ import AgencyVerificationStatusPage from '../pages/agency/AgencyVerificationStat
 
 // Admin Pages
 import AdminDashboard from '../pages/admin/AdminDashboard';
+import AdminAgencyVerificationPage from '../pages/admin/AdminAgencyVerificationPage/AdminAgencyVerificationPage';
+import AdminUsersPage from '../pages/admin/AdminUsersPage/AdminUsersPage';
+import AdminContentModerationPage from '../pages/admin/AdminContentModerationPage/AdminContentModerationPage';
+import AdminSettingsPage from '../pages/admin/AdminSettingsPage/AdminSettingsPage';
+import AdminAnalyticsPage from '../pages/admin/AdminAnalyticsPage/AdminAnalyticsPage';
 
 // Protected Route Component
 import ProtectedRoute from './ProtectedRoute';
@@ -191,6 +196,46 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute requiredRole="admin">
             <AdminDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/agencies"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminAgencyVerificationPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminUsersPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/content"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminContentModerationPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/settings"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminSettingsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/analytics"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminAnalyticsPage />
           </ProtectedRoute>
         }
       />

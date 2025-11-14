@@ -5,6 +5,7 @@ import { bookingsAPI, carsAPI } from '../../../services/api';
 import agencies from '../../../data/agencies.json';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
+import AgencySidebar from '../../../components/layout/AgencySidebar';
 
 const BookingRequestsPage = () => {
   const { user } = useAuth();
@@ -37,9 +38,12 @@ const BookingRequestsPage = () => {
   return (
     <div className="booking-requests-page">
       <div className="container">
-        <div className="page-header">
-          <h1>Booking Requests</h1>
-        </div>
+        <div className="agency-layout">
+          <AgencySidebar />
+          <main className="agency-layout__main">
+            <div className="page-header">
+              <h1>Booking Requests</h1>
+            </div>
 
         {requests.length === 0 ? (
           <Card>
@@ -83,6 +87,8 @@ const BookingRequestsPage = () => {
             })}
           </div>
         )}
+          </main>
+        </div>
       </div>
     </div>
   );

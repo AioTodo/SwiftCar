@@ -5,6 +5,7 @@ import Button from '../../../components/common/Button';
 import { priceCalculator } from '../../../utils/priceCalculator';
 import bookingsSeed from '../../../data/bookings.json';
 import agencies from '../../../data/agencies.json';
+import AgencySidebar from '../../../components/layout/AgencySidebar';
 
 const AgencyEarningsPage = () => {
   const { user } = useAuth();
@@ -41,10 +42,13 @@ const AgencyEarningsPage = () => {
   return (
     <div className="agency-earnings-page">
       <div className="container">
-        <div className="page-header">
-          <h1>Earnings</h1>
-          <p className="text-muted">Overview of revenue, commissions, and net earnings for your agency.</p>
-        </div>
+        <div className="agency-layout">
+          <AgencySidebar />
+          <main className="agency-layout__main">
+            <div className="page-header">
+              <h1>Earnings</h1>
+              <p className="text-muted">Overview of revenue, commissions, and net earnings for your agency.</p>
+            </div>
 
         {/* Summary cards */}
         <div className="dashboard__stats">
@@ -144,6 +148,8 @@ const AgencyEarningsPage = () => {
             )}
           </Card.Body>
         </Card>
+          </main>
+      </div>
       </div>
     </div>
   );

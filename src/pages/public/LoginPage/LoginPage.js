@@ -5,7 +5,7 @@ import { useNotification } from '../../../context/NotificationContext';
 import Input from '../../../components/common/Input';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
-import usersData from '../../../data/users.json';
+import { entityStore } from '../../../services/entityStore';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -54,45 +54,63 @@ const LoginPage = () => {
     
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      // Find user in mock data
-      const user = usersData.find(
+    try {
+      const users = await entityStore.getAll('users');
+      const user = (users || []).find(
         (u) => u.email === formData.email && u.password === formData.password
       );
-      
-      if (user) {
-        login({ email: user.email, role: user.role });
-        
-        showNotification({
-          type: 'success',
-          message: `Welcome back, ${user.firstName}!`,
-        });
-        
-        // Redirect based on role
-        switch (user.role) {
-          case 'customer':
-            navigate('/customer/dashboard');
-            break;
-          case 'agency':
-            navigate('/agency/dashboard');
-            break;
-          case 'admin':
-            navigate('/admin/dashboard');
-            break;
-          default:
-            navigate('/');
-        }
-      } else {
+
+      if (!user) {
         showNotification({
           type: 'error',
           message: 'Invalid email or password',
         });
         setErrors({ password: 'Invalid credentials' });
+        return;
       }
-      
+
+      const status = user.accountStatus || 'active';
+      if (status === 'suspended') {
+        showNotification({
+          type: 'error',
+          message: 'Your account is suspended. Please contact support.',
+        });
+        setErrors({ password: 'Account suspended' });
+        return;
+      }
+      if (status === 'deleted') {
+        showNotification({
+          type: 'error',
+          message: 'This account has been deactivated.',
+        });
+        setErrors({ password: 'Account deactivated' });
+        return;
+      }
+
+      login({ email: user.email, role: user.role });
+
+      showNotification({
+        type: 'success',
+        message: `Welcome back, ${user.firstName}!`,
+      });
+
+      // Redirect based on role
+      switch (user.role) {
+        case 'customer':
+          navigate('/customer/dashboard');
+          break;
+        case 'agency':
+          navigate('/agency/dashboard');
+          break;
+        case 'admin':
+          navigate('/admin/dashboard');
+          break;
+        default:
+          navigate('/');
+      }
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (

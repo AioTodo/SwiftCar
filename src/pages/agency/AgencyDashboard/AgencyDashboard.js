@@ -6,6 +6,7 @@ import Card from '../../../components/common/Card';
 import bookingsData from '../../../data/bookings.json';
 import carsData from '../../../data/cars.json';
 import agenciesData from '../../../data/agencies.json';
+import AgencySidebar from '../../../components/layout/AgencySidebar';
 
 const AgencyDashboard = () => {
   const navigate = useNavigate();
@@ -23,19 +24,22 @@ const AgencyDashboard = () => {
   return (
     <div className="agency-dashboard">
       <div className="container">
-        {/* Header */}
-        <div className="dashboard__header">
-          <div>
-            <h1 className="dashboard__title">Welcome back, {agency?.agencyName}!</h1>
-            <p className="dashboard__subtitle">Manage your fleet and bookings</p>
-          </div>
-          <Button variant="primary" onClick={() => navigate('/agency/add-car')}>
-            Add New Car
-          </Button>
-        </div>
+        <div className="agency-layout">
+          <AgencySidebar />
+          <main className="agency-layout__main">
+            {/* Header */}
+            <div className="dashboard__header">
+              <div>
+                <h1 className="dashboard__title">Welcome back, {agency?.agencyName}!</h1>
+                <p className="dashboard__subtitle">Manage your fleet and bookings</p>
+              </div>
+              <Button variant="primary" onClick={() => navigate('/agency/add-car')}>
+                Add New Car
+              </Button>
+            </div>
 
-        {/* Stats Grid */}
-        <div className="dashboard__stats">
+            {/* Stats Grid */}
+            <div className="dashboard__stats">
           <Card>
             <div className="stat-card">
               <div className="stat-card__icon">🚗</div>
@@ -75,9 +79,9 @@ const AgencyDashboard = () => {
               </div>
             </div>
           </Card>
-        </div>
+            </div>
 
-        <div className="dashboard__grid">
+            <div className="dashboard__grid">
           {/* Recent Bookings */}
           <Card>
             <Card.Header>
@@ -164,8 +168,8 @@ const AgencyDashboard = () => {
           </Card>
         </div>
 
-        {/* Quick Actions */}
-        <div className="dashboard__actions">
+            {/* Quick Actions */}
+            <div className="dashboard__actions">
           <Card hoverable onClick={() => navigate('/agency/add-car')}>
             <div className="action-card">
               <div className="action-card__icon">➕</div>
@@ -205,6 +209,8 @@ const AgencyDashboard = () => {
               <p className="action-card__desc">View revenue and payouts</p>
             </div>
           </Card>
+        </div>
+          </main>
         </div>
       </div>
     </div>
