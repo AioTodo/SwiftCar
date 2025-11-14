@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import carsData from '../../../data/cars.json';
+import { DashboardIcon, DrawingPinIcon } from '@radix-ui/react-icons';
 
 const SearchResultsPage = () => {
   const navigate = useNavigate();
@@ -134,7 +135,9 @@ const SearchResultsPage = () => {
               filteredCars.map((car) => (
                 <Card key={car.id} hoverable className="car-card">
                   <div className="car-card__image-wrapper">
-                    <div className="car-card__image-placeholder">🚗</div>
+                    <div className="car-card__image-placeholder">
+                      <DashboardIcon aria-hidden="true" />
+                    </div>
                   </div>
 
                   <Card.Body>
@@ -144,7 +147,9 @@ const SearchResultsPage = () => {
                     <p className="car-card__subtitle">
                       {car.year} • {car.category}
                     </p>
-                    <p className="car-card__location">📍 {car.location}</p>
+                    <p className="car-card__location">
+                      <DrawingPinIcon aria-hidden="true" /> {car.location}
+                    </p>
 
                     <div className="car-card__features">
                       {car.features.slice(0, 3).map((feature, index) => (

@@ -1,9 +1,12 @@
 import React from 'react';
+import { StarFilledIcon } from '@radix-ui/react-icons';
 
 const ReviewItem = ({ review }) => (
   <div className="review-item">
     <div className="review-item__header">
-      <span className="review-item__rating">⭐ {review.rating}</span>
+      <span className="review-item__rating">
+        <StarFilledIcon aria-hidden="true" /> {review.rating}
+      </span>
       <span className="review-item__date">{review.reviewDate}</span>
     </div>
     {review.title && <h4 className="review-item__title">{review.title}</h4>}

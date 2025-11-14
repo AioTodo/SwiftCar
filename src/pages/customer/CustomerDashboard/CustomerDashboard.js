@@ -4,6 +4,15 @@ import { useAuth } from '../../../context/AuthContext';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import { bookingsAPI, carsAPI } from '../../../services/api';
+import {
+  CalendarIcon,
+  CheckIcon,
+  TokensIcon,
+  DashboardIcon,
+  MagnifyingGlassIcon,
+  ClipboardIcon,
+  PersonIcon,
+} from '@radix-ui/react-icons';
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -68,7 +77,9 @@ const CustomerDashboard = () => {
         <div className="dashboard__stats">
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">📅</div>
+              <div className="stat-card__icon">
+                <CalendarIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{upcomingBookings.length}</h3>
                 <p className="stat-card__label">Upcoming Bookings</p>
@@ -78,7 +89,9 @@ const CustomerDashboard = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">✓</div>
+              <div className="stat-card__icon">
+                <CheckIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{pastBookings.length}</h3>
                 <p className="stat-card__label">Completed Trips</p>
@@ -88,7 +101,9 @@ const CustomerDashboard = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">💰</div>
+              <div className="stat-card__icon">
+                <TokensIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{totalSpent} MAD</h3>
                 <p className="stat-card__label">Total Spent</p>
@@ -125,7 +140,9 @@ const CustomerDashboard = () => {
                   const car = cars.find((c) => c.id === booking.carId);
                   return (
                     <div key={booking.id} className="booking-item">
-                      <div className="booking-item__icon">🚗</div>
+                      <div className="booking-item__icon">
+                        <DashboardIcon aria-hidden="true" />
+                      </div>
                       <div className="booking-item__details">
                         <h4 className="booking-item__title">
                           {car ? `${car.brand} ${car.model}` : 'Car'}
@@ -156,7 +173,9 @@ const CustomerDashboard = () => {
         <div className="dashboard__actions">
           <Card hoverable onClick={() => navigate('/search')}>
             <div className="action-card">
-              <div className="action-card__icon">🔍</div>
+              <div className="action-card__icon">
+                <MagnifyingGlassIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">Search Cars</h3>
               <p className="action-card__desc">Find your perfect rental</p>
             </div>
@@ -164,7 +183,9 @@ const CustomerDashboard = () => {
 
           <Card hoverable onClick={() => navigate('/customer/bookings')}>
             <div className="action-card">
-              <div className="action-card__icon">📋</div>
+              <div className="action-card__icon">
+                <ClipboardIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">My Bookings</h3>
               <p className="action-card__desc">View all your reservations</p>
             </div>
@@ -172,7 +193,9 @@ const CustomerDashboard = () => {
 
           <Card hoverable onClick={() => navigate('/customer/profile')}>
             <div className="action-card">
-              <div className="action-card__icon">👤</div>
+              <div className="action-card__icon">
+                <PersonIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">Profile</h3>
               <p className="action-card__desc">Manage your account</p>
             </div>

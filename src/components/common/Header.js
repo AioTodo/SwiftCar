@@ -41,7 +41,7 @@ const Header = () => {
       <Container size="lg" className="header__container">
         <Group justify="space-between" align="center">
           <Anchor component={Link} to="/" className="header__logo" underline="never">
-            <Text component="span" fw={700} fz="lg" c="dark" className="header__brand">
+            <Text component="h1" fw={700} fz="lg" c="dark" className="header__brand">
               SwiftCar
             </Text>
           </Anchor>

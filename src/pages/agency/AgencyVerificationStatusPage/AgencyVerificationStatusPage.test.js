@@ -5,9 +5,25 @@ import AgencyVerificationStatusPage from './AgencyVerificationStatusPage';
 import { AuthProvider } from '../../../context/AuthContext';
 
 jest.mock('../../../data/agencies.json', () => [
-  { id: 'agency-pending', ownerId: 'user-pending', agencyName: 'Pending Cars', status: 'pending' },
-  { id: 'agency-approved', ownerId: 'user-approved', agencyName: 'Approved Cars', status: 'approved' },
-  { id: 'agency-rejected', ownerId: 'user-rejected', agencyName: 'Rejected Cars', status: 'rejected', rejectionReason: 'Blurry documents' },
+  {
+    id: 'agency-pending',
+    ownerId: 'user-pending',
+    agencyName: 'Pending Cars',
+    verificationStatus: 'pending',
+  },
+  {
+    id: 'agency-approved',
+    ownerId: 'user-approved',
+    agencyName: 'Approved Cars',
+    verificationStatus: 'verified',
+  },
+  {
+    id: 'agency-rejected',
+    ownerId: 'user-rejected',
+    agencyName: 'Rejected Cars',
+    verificationStatus: 'rejected',
+    rejectionReason: 'Blurry documents',
+  },
 ]);
 
 const renderWithUser = (userId) => {
@@ -27,23 +43,28 @@ describe('AgencyVerificationStatusPage', () => {
     localStorage.clear();
   });
 
-  test('shows pending status message', () => {
+  test('shows pending status message', async () => {
     renderWithUser('user-pending');
 
-    expect(screen.getByText(/verification status/i)).toBeInTheDocument();
-    expect(screen.getByText(/pending review/i)).toBeInTheDocument();
+    await screen.findByText(/pending review/i);
+
+    expect(screen.getAllByText(/verification status/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/under review/i)).toBeInTheDocument();
   });
 
-  test('shows approved/verified status message and dashboard button', () => {
+  test('shows approved/verified status message and dashboard button', async () => {
     renderWithUser('user-approved');
+
+    await screen.findByText(/your agency is verified/i);
 
     expect(screen.getByText(/your agency is verified/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /go to dashboard/i })).toBeInTheDocument();
   });
 
-  test('shows rejected status and notes', () => {
+  test('shows rejected status and notes', async () => {
     renderWithUser('user-rejected');
+
+    await screen.findByText(/your verification was rejected/i);
 
     expect(screen.getByText(/your verification was rejected/i)).toBeInTheDocument();
     expect(screen.getByText(/review notes/i)).toBeInTheDocument();

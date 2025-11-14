@@ -7,6 +7,7 @@ import Button from '../../../components/common/Button';
 import { bookingsAPI, carsAPI } from '../../../services/api';
 import agencies from '../../../data/agencies.json';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
+import { DashboardIcon } from '@radix-ui/react-icons';
 
 const AgencyBookingsPage = () => {
   const navigate = useNavigate();
@@ -104,7 +105,9 @@ const AgencyBookingsPage = () => {
                 <Card key={booking.id} className="booking-row">
                   <div className="booking-row__main">
                     <div className="booking-row__left">
-                      <div className="booking-row__icon">🚗</div>
+                      <div className="booking-row__icon">
+                        <DashboardIcon aria-hidden="true" />
+                      </div>
                       <div className="booking-row__info">
                         <div className="booking-row__id">Booking #{booking.id}</div>
                         <div className="booking-row__car">

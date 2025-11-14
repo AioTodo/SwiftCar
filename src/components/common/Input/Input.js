@@ -1,5 +1,8 @@
 import React from 'react';
+import { TextInput } from '@mantine/core';
 
+// Mantine-based Input wrapper. Uses TextInput for all field types and
+// keeps the existing prop signature used across the project.
 const Input = ({
   label,
   type = 'text',
@@ -15,38 +18,23 @@ const Input = ({
   fullWidth = false,
   ...props
 }) => {
-  const inputClass = [
-    'input__field',
-    error && 'input__field--error',
-    disabled && 'input__field--disabled',
-  ]
-    .filter(Boolean)
-    .join(' ');
-
   return (
-    <div className={`input ${fullWidth ? 'input--full-width' : ''} ${className}`}>
-      {label && (
-        <label htmlFor={name} className="input__label">
-          {label}
-          {required && <span className="input__required">*</span>}
-        </label>
-      )}
-      
-      <input
-        id={name}
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
-        placeholder={placeholder}
-        disabled={disabled}
-        className={inputClass}
-        required={required}
-      />
-      
-      {error && <span className="input__error">{error}</span>}
-    </div>
+    <TextInput
+      label={label}
+      type={type}
+      name={name}
+      id={name}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      placeholder={placeholder}
+      error={error}
+      required={required}
+      disabled={disabled}
+      className={className}
+      w={fullWidth ? '100%' : undefined}
+      {...props}
+    />
   );
 };
 

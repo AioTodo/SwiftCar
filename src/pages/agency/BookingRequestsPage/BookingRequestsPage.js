@@ -6,6 +6,7 @@ import agencies from '../../../data/agencies.json';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
+import { DashboardIcon } from '@radix-ui/react-icons';
 
 const BookingRequestsPage = () => {
   const { user } = useAuth();
@@ -66,7 +67,9 @@ const BookingRequestsPage = () => {
                   </div>
                   <div className="request-item__body">
                     <div className="request-car">
-                      <div className="request-car__image">🚗</div>
+                      <div className="request-car__image">
+                        <DashboardIcon aria-hidden="true" />
+                      </div>
                       <div className="request-car__details">
                         <h3>{car ? `${car.brand} ${car.model}` : 'Car'}</h3>
                         <p className="text-small text-muted">{r.pickup} → {r.dropoff}</p>

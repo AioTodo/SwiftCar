@@ -7,6 +7,15 @@ import bookingsData from '../../../data/bookings.json';
 import carsData from '../../../data/cars.json';
 import agenciesData from '../../../data/agencies.json';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
+import {
+  DashboardIcon,
+  CheckIcon,
+  CalendarIcon,
+  TokensIcon,
+  PlusCircledIcon,
+  ClipboardIcon,
+  FileTextIcon,
+} from '@radix-ui/react-icons';
 
 const AgencyDashboard = () => {
   const navigate = useNavigate();
@@ -42,7 +51,9 @@ const AgencyDashboard = () => {
             <div className="dashboard__stats">
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">🚗</div>
+              <div className="stat-card__icon">
+                <DashboardIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{agencyCars.length}</h3>
                 <p className="stat-card__label">Total Vehicles</p>
@@ -52,7 +63,9 @@ const AgencyDashboard = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">✓</div>
+              <div className="stat-card__icon">
+                <CheckIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{availableCars}</h3>
                 <p className="stat-card__label">Available Now</p>
@@ -62,7 +75,9 @@ const AgencyDashboard = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">📅</div>
+              <div className="stat-card__icon">
+                <CalendarIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{activeBookings.length}</h3>
                 <p className="stat-card__label">Active Bookings</p>
@@ -72,7 +87,9 @@ const AgencyDashboard = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">💰</div>
+              <div className="stat-card__icon">
+                <TokensIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{totalRevenue} MAD</h3>
                 <p className="stat-card__label">Total Earnings</p>
@@ -103,7 +120,9 @@ const AgencyDashboard = () => {
                     const car = carsData.find((c) => c.id === booking.carId);
                     return (
                       <div key={booking.id} className="booking-item">
-                        <div className="booking-item__icon">🚗</div>
+                        <div className="booking-item__icon">
+                          <DashboardIcon aria-hidden="true" />
+                        </div>
                         <div className="booking-item__details">
                           <h4 className="booking-item__title">
                             {car ? `${car.brand} ${car.model}` : 'Car'}
@@ -148,7 +167,9 @@ const AgencyDashboard = () => {
                 <div className="fleet-list">
                   {agencyCars.slice(0, 3).map((car) => (
                     <div key={car.id} className="fleet-item">
-                      <div className="fleet-item__icon">🚗</div>
+                      <div className="fleet-item__icon">
+                        <DashboardIcon aria-hidden="true" />
+                      </div>
                       <div className="fleet-item__details">
                         <h4 className="fleet-item__title">
                           {car.brand} {car.model}
@@ -172,7 +193,9 @@ const AgencyDashboard = () => {
             <div className="dashboard__actions">
           <Card hoverable onClick={() => navigate('/agency/add-car')}>
             <div className="action-card">
-              <div className="action-card__icon">➕</div>
+              <div className="action-card__icon">
+                <PlusCircledIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">Add Vehicle</h3>
               <p className="action-card__desc">Add a new car to your fleet</p>
             </div>
@@ -180,7 +203,9 @@ const AgencyDashboard = () => {
 
           <Card hoverable onClick={() => navigate('/agency/manage-cars')}>
             <div className="action-card">
-              <div className="action-card__icon">🚗</div>
+              <div className="action-card__icon">
+                <DashboardIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">Manage Fleet</h3>
               <p className="action-card__desc">View and edit your vehicles</p>
             </div>
@@ -188,7 +213,9 @@ const AgencyDashboard = () => {
 
           <Card hoverable onClick={() => navigate('/agency/booking-requests')}>
             <div className="action-card">
-              <div className="action-card__icon">📝</div>
+              <div className="action-card__icon">
+                <FileTextIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">Requests</h3>
               <p className="action-card__desc">Approve or decline pending bookings</p>
             </div>
@@ -196,7 +223,9 @@ const AgencyDashboard = () => {
 
           <Card hoverable onClick={() => navigate('/agency/bookings')}>
             <div className="action-card">
-              <div className="action-card__icon">📋</div>
+              <div className="action-card__icon">
+                <ClipboardIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">Bookings</h3>
               <p className="action-card__desc">Manage customer reservations</p>
             </div>
@@ -204,7 +233,9 @@ const AgencyDashboard = () => {
 
           <Card hoverable onClick={() => navigate('/agency/earnings')}>
             <div className="action-card">
-              <div className="action-card__icon">💰</div>
+              <div className="action-card__icon">
+                <TokensIcon aria-hidden="true" />
+              </div>
               <h3 className="action-card__title">Earnings</h3>
               <p className="action-card__desc">View revenue and payouts</p>
             </div>

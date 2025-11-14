@@ -1,36 +1,50 @@
 import React from 'react';
+import { Alert, Stack } from '@mantine/core';
 import { useNotification } from '../../../context/NotificationContext';
 
+// Mantine-based notification stack rendered in the top-right corner.
 const Notification = () => {
   const { notifications, hideNotification } = useNotification();
 
   if (notifications.length === 0) return null;
 
+  const typeToColor = (type) => {
+    switch (type) {
+      case 'success':
+        return 'green';
+      case 'error':
+        return 'red';
+      case 'warning':
+        return 'yellow';
+      case 'info':
+      default:
+        return 'blue';
+    }
+  };
+
   return (
-    <div className="notification-container">
-      {notifications.map((notification) => (
-        <div
-          key={notification.id}
-          className={`notification notification--${notification.type}`}
-        >
-          <div className="notification__content">
-            <span className="notification__icon">
-              {notification.type === 'success' && '✓'}
-              {notification.type === 'error' && '✕'}
-              {notification.type === 'warning' && '⚠'}
-              {notification.type === 'info' && 'ℹ'}
-            </span>
-            <p className="notification__message">{notification.message}</p>
-          </div>
-          <button
-            className="notification__close"
-            onClick={() => hideNotification(notification.id)}
-            aria-label="Close notification"
+    <div
+      style={{
+        position: 'fixed',
+        top: 16,
+        right: 16,
+        zIndex: 2000,
+        maxWidth: '360px',
+      }}
+    >
+      <Stack gap="sm">
+        {notifications.map((notification) => (
+          <Alert
+            key={notification.id}
+            color={typeToColor(notification.type)}
+            variant="filled"
+            withCloseButton
+            onClose={() => hideNotification(notification.id)}
           >
-            ×
-          </button>
-        </div>
-      ))}
+            {notification.message}
+          </Alert>
+        ))}
+      </Stack>
     </div>
   );
 };

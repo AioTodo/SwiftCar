@@ -8,6 +8,7 @@ import agenciesData from '../../../data/agencies.json';
 import Modal from '../../../components/common/Modal';
 import CarForm from '../../../components/cars/CarForm/CarForm';
 import { carsAPI } from '../../../services/api';
+import { DashboardIcon, StarFilledIcon } from '@radix-ui/react-icons';
 
 const ManageCarsPage = () => {
   const navigate = useNavigate();
@@ -118,7 +119,9 @@ const ManageCarsPage = () => {
             {filteredCars.map((car) => (
               <Card key={car.id} className="car-manage-card">
                 <div className="car-manage-card__image">
-                  <div className="car-manage-card__image-placeholder">🚗</div>
+                  <div className="car-manage-card__image-placeholder">
+                    <DashboardIcon aria-hidden="true" />
+                  </div>
                   <span className={`availability-badge ${car.available ? 'availability-badge--available' : 'availability-badge--unavailable'}`}>
                     {car.available ? 'Available' : 'Rented'}
                   </span>
@@ -147,7 +150,9 @@ const ManageCarsPage = () => {
                     </div>
                     <div className="detail-item">
                       <span className="detail-item__label">Rating:</span>
-                      <span className="detail-item__value">⭐ {car.rating} ({car.reviewCount})</span>
+                      <span className="detail-item__value">
+                        <StarFilledIcon aria-hidden="true" /> {car.rating} ({car.reviewCount})
+                      </span>
                     </div>
                   </div>
 

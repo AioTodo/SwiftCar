@@ -4,6 +4,7 @@ import { useNotification } from '../../../context/NotificationContext';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
+import { CheckIcon } from '@radix-ui/react-icons';
 
 const RegisterAgencyPage = () => {
   const navigate = useNavigate();
@@ -121,17 +122,23 @@ const RegisterAgencyPage = () => {
         {/* Progress Steps */}
         <div className="registration-steps">
           <div className={`registration-step ${currentStep >= 1 ? 'registration-step--active' : ''} ${currentStep > 1 ? 'registration-step--completed' : ''}`}>
-            <div className="registration-step__number">{currentStep > 1 ? '✓' : '1'}</div>
+            <div className="registration-step__number">
+              {currentStep > 1 ? <CheckIcon aria-hidden="true" /> : '1'}
+            </div>
             <div className="registration-step__label">Business Info</div>
           </div>
           <div className="registration-step__line"></div>
           <div className={`registration-step ${currentStep >= 2 ? 'registration-step--active' : ''} ${currentStep > 2 ? 'registration-step--completed' : ''}`}>
-            <div className="registration-step__number">{currentStep > 2 ? '✓' : '2'}</div>
+            <div className="registration-step__number">
+              {currentStep > 2 ? <CheckIcon aria-hidden="true" /> : '2'}
+            </div>
             <div className="registration-step__label">Address</div>
           </div>
           <div className="registration-step__line"></div>
           <div className={`registration-step ${currentStep >= 3 ? 'registration-step--active' : ''} ${currentStep > 3 ? 'registration-step--completed' : ''}`}>
-            <div className="registration-step__number">{currentStep > 3 ? '✓' : '3'}</div>
+            <div className="registration-step__number">
+              {currentStep > 3 ? <CheckIcon aria-hidden="true" /> : '3'}
+            </div>
             <div className="registration-step__label">Owner Info</div>
           </div>
           <div className="registration-step__line"></div>

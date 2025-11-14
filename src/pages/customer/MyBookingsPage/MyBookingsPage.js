@@ -5,6 +5,7 @@ import { useNotification } from '../../../context/NotificationContext';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import { bookingsAPI, carsAPI } from '../../../services/api';
+import { DashboardIcon, CalendarIcon } from '@radix-ui/react-icons';
 
 const MyBookingsPage = () => {
   const navigate = useNavigate();
@@ -120,7 +121,9 @@ const MyBookingsPage = () => {
 
                   <div className="booking-card-item__body">
                     <div className="booking-car-info">
-                      <div className="booking-car-info__image">🚗</div>
+                      <div className="booking-car-info__image">
+                        <DashboardIcon aria-hidden="true" />
+                      </div>
                       <div className="booking-car-info__details">
                         <h3>{car ? `${car.brand} ${car.model}` : 'Car'}</h3>
                         <p className="text-small text-muted">
@@ -133,13 +136,15 @@ const MyBookingsPage = () => {
                       <div className="booking-detail">
                         <span className="booking-detail__label">Pickup</span>
                         <span className="booking-detail__value">
-                          📅 {booking.pickup || booking.pickupDate}<br />
+                          <CalendarIcon aria-hidden="true" /> {booking.pickup || booking.pickupDate}
+                          <br />
                         </span>
                       </div>
                       <div className="booking-detail">
                         <span className="booking-detail__label">Return</span>
                         <span className="booking-detail__value">
-                          📅 {booking.dropoff || booking.returnDate}<br />
+                          <CalendarIcon aria-hidden="true" /> {booking.dropoff || booking.returnDate}
+                          <br />
                         </span>
                       </div>
                       <div className="booking-detail">

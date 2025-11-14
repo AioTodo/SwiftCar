@@ -8,6 +8,12 @@ import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
 import Loader from '../../../components/common/Loader';
+import {
+  LockClosedIcon,
+  CheckIcon,
+  EnvelopeClosedIcon,
+  DashboardIcon,
+} from '@radix-ui/react-icons';
 
 const PaymentPage = () => {
   const navigate = useNavigate();
@@ -198,21 +204,27 @@ const PaymentPage = () => {
             {/* Security Info */}
             <Card className="security-info">
               <div className="security-item">
-                <span className="security-item__icon">🔒</span>
+                <span className="security-item__icon">
+                  <LockClosedIcon aria-hidden="true" />
+                </span>
                 <div>
                   <h4>Secure Payment</h4>
                   <p className="text-small text-muted">Your payment information is encrypted and secure</p>
                 </div>
               </div>
               <div className="security-item">
-                <span className="security-item__icon">✓</span>
+                <span className="security-item__icon">
+                  <CheckIcon aria-hidden="true" />
+                </span>
                 <div>
                   <h4>Instant Confirmation</h4>
                   <p className="text-small text-muted">Receive booking confirmation immediately</p>
                 </div>
               </div>
               <div className="security-item">
-                <span className="security-item__icon">📧</span>
+                <span className="security-item__icon">
+                  <EnvelopeClosedIcon aria-hidden="true" />
+                </span>
                 <div>
                   <h4>Email Receipt</h4>
                   <p className="text-small text-muted">Booking details sent to your email</p>
@@ -229,7 +241,9 @@ const PaymentPage = () => {
               </Card.Header>
               <Card.Body>
                 <div className="summary-car">
-                  <div className="summary-car__image">🚗</div>
+                  <div className="summary-car__image">
+                    <DashboardIcon aria-hidden="true" />
+                  </div>
                   <div>
                     <h4>{car.brand} {car.model}</h4>
                     <p className="text-small text-muted">{car.year} • {car.category}</p>

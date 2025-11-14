@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import carsData from '../../../data/cars.json';
+import { DashboardIcon, MagnifyingGlassIcon, CheckIcon } from '@radix-ui/react-icons';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -102,7 +103,7 @@ const HomePage = () => {
               <Card key={car.id} hoverable className="car-card">
                 <div className="car-card__image-wrapper">
                   <div className="car-card__image-placeholder">
-                    🚗
+                    <DashboardIcon aria-hidden="true" />
                   </div>
                 </div>
                 
@@ -156,7 +157,9 @@ const HomePage = () => {
           
           <div className="how-it-works__grid">
             <div className="how-it-works__step">
-              <div className="how-it-works__icon">🔍</div>
+              <div className="how-it-works__icon">
+                <MagnifyingGlassIcon aria-hidden="true" />
+              </div>
               <h3 className="how-it-works__step-title">1. Search</h3>
               <p className="how-it-works__step-desc">
                 Find the perfect car by location, dates, and preferences
@@ -164,7 +167,9 @@ const HomePage = () => {
             </div>
             
             <div className="how-it-works__step">
-              <div className="how-it-works__icon">✓</div>
+              <div className="how-it-works__icon">
+                <CheckIcon aria-hidden="true" />
+              </div>
               <h3 className="how-it-works__step-title">2. Book</h3>
               <p className="how-it-works__step-desc">
                 Choose your car and complete the booking in 3 easy steps
@@ -172,7 +177,9 @@ const HomePage = () => {
             </div>
             
             <div className="how-it-works__step">
-              <div className="how-it-works__icon">🚗</div>
+              <div className="how-it-works__icon">
+                <DashboardIcon aria-hidden="true" />
+              </div>
               <h3 className="how-it-works__step-title">3. Drive</h3>
               <p className="how-it-works__step-desc">
                 Pick up your car and enjoy your journey with peace of mind

@@ -6,6 +6,12 @@ import { priceCalculator } from '../../../utils/priceCalculator';
 import bookingsSeed from '../../../data/bookings.json';
 import agencies from '../../../data/agencies.json';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
+import {
+  TokensIcon,
+  BarChartIcon,
+  HomeIcon,
+  ClipboardIcon,
+} from '@radix-ui/react-icons';
 
 const AgencyEarningsPage = () => {
   const { user } = useAuth();
@@ -54,7 +60,9 @@ const AgencyEarningsPage = () => {
         <div className="dashboard__stats">
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">💰</div>
+              <div className="stat-card__icon">
+                <TokensIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{summary.totalNet} MAD</h3>
                 <p className="stat-card__label">Net Earnings</p>
@@ -64,7 +72,9 @@ const AgencyEarningsPage = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">📈</div>
+              <div className="stat-card__icon">
+                <BarChartIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{summary.totalGross} MAD</h3>
                 <p className="stat-card__label">Gross Revenue</p>
@@ -74,7 +84,9 @@ const AgencyEarningsPage = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">🏦</div>
+              <div className="stat-card__icon">
+                <HomeIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{summary.totalCommission} MAD</h3>
                 <p className="stat-card__label">Commission Paid</p>
@@ -84,7 +96,9 @@ const AgencyEarningsPage = () => {
 
           <Card>
             <div className="stat-card">
-              <div className="stat-card__icon">📋</div>
+              <div className="stat-card__icon">
+                <ClipboardIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{summary.totalBookings}</h3>
                 <p className="stat-card__label">Total Bookings</p>

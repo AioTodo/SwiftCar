@@ -9,6 +9,7 @@ import Input from '../../../components/common/Input';
 import DateRangePicker from '../../../components/booking/DateRangePicker/DateRangePicker';
 import ExtrasSelector from '../../../components/booking/ExtrasSelector/ExtrasSelector';
 import BookingSummary from '../../../components/booking/BookingSummary/BookingSummary';
+import { CheckIcon, DashboardIcon } from '@radix-ui/react-icons';
 
 const BookingProcessPage = () => {
   const navigate = useNavigate();
@@ -113,12 +114,16 @@ const BookingProcessPage = () => {
             {/* Progress Steps */}
             <div className="booking-steps">
               <div className={`booking-step ${currentStep >= 1 ? 'booking-step--active' : ''} ${currentStep > 1 ? 'booking-step--completed' : ''}`}>
-                <div className="booking-step__number">{currentStep > 1 ? '✓' : '1'}</div>
+                <div className="booking-step__number">
+                  {currentStep > 1 ? <CheckIcon aria-hidden="true" /> : '1'}
+                </div>
                 <div className="booking-step__label">Dates & Location</div>
               </div>
               <div className="booking-step__line"></div>
               <div className={`booking-step ${currentStep >= 2 ? 'booking-step--active' : ''} ${currentStep > 2 ? 'booking-step--completed' : ''}`}>
-                <div className="booking-step__number">{currentStep > 2 ? '✓' : '2'}</div>
+                <div className="booking-step__number">
+                  {currentStep > 2 ? <CheckIcon aria-hidden="true" /> : '2'}
+                </div>
                 <div className="booking-step__label">Extras</div>
               </div>
               <div className="booking-step__line"></div>
@@ -311,7 +316,9 @@ const BookingProcessPage = () => {
 
             {/* Car Info */}
             <Card className="car-summary">
-              <div className="car-summary__image">🚗</div>
+              <div className="car-summary__image">
+                <DashboardIcon aria-hidden="true" />
+              </div>
               <div className="car-summary__details">
                 <h4>{car.brand} {car.model}</h4>
                 <p>{car.year} • {car.category}</p>

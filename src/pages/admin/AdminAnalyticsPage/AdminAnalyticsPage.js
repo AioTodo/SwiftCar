@@ -4,6 +4,7 @@ import bookings from '../../../data/bookings.json';
 import agencies from '../../../data/agencies.json';
 import cars from '../../../data/cars.json';
 import AdminSidebar from '../../../components/layout/AdminSidebar';
+import { CalendarIcon, TokensIcon } from '@radix-ui/react-icons';
 
 const groupBy = (list, getKey) => {
   return list.reduce((acc, item) => {
@@ -83,7 +84,9 @@ const AdminAnalyticsPage = () => {
         <div className="admin-dashboard__stats-grid">
           <Card>
             <Card.Body className="stat-card">
-              <div className="stat-card__icon">📅</div>
+              <div className="stat-card__icon">
+                <CalendarIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <div className="stat-card__label">Total Bookings</div>
                 <div className="stat-card__value">{metrics.totalBookings}</div>
@@ -93,7 +96,9 @@ const AdminAnalyticsPage = () => {
 
           <Card>
             <Card.Body className="stat-card">
-              <div className="stat-card__icon">💰</div>
+              <div className="stat-card__icon">
+                <TokensIcon aria-hidden="true" />
+              </div>
               <div className="stat-card__content">
                 <div className="stat-card__label">Total Revenue</div>
                 <div className="stat-card__value">{metrics.totalRevenue} MAD</div>

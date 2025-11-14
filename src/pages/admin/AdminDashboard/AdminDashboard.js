@@ -7,6 +7,14 @@ import agencies from '../../../data/agencies.json';
 import bookings from '../../../data/bookings.json';
 import cars from '../../../data/cars.json';
 import AdminSidebar from '../../../components/layout/AdminSidebar';
+import {
+  PersonIcon,
+  HomeIcon,
+  DashboardIcon,
+  CalendarIcon,
+  TokensIcon,
+  StarFilledIcon,
+} from '@radix-ui/react-icons';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -69,7 +77,9 @@ const AdminDashboard = () => {
             <div className="admin-dashboard__stats-grid">
               <Card>
                 <Card.Body className="stat-card">
-                  <div className="stat-card__icon">👥</div>
+                  <div className="stat-card__icon">
+                    <PersonIcon aria-hidden="true" />
+                  </div>
                   <div className="stat-card__content">
                     <div className="stat-card__label">Total Users</div>
                     <div className="stat-card__value">{stats.totalUsers}</div>
@@ -80,7 +90,9 @@ const AdminDashboard = () => {
 
               <Card>
                 <Card.Body className="stat-card">
-                  <div className="stat-card__icon">🏢</div>
+                  <div className="stat-card__icon">
+                    <HomeIcon aria-hidden="true" />
+                  </div>
                   <div className="stat-card__content">
                     <div className="stat-card__label">Agencies</div>
                     <div className="stat-card__value">{stats.totalAgencies}</div>
@@ -94,7 +106,9 @@ const AdminDashboard = () => {
 
               <Card>
                 <Card.Body className="stat-card">
-                  <div className="stat-card__icon">🚗</div>
+                  <div className="stat-card__icon">
+                    <DashboardIcon aria-hidden="true" />
+                  </div>
                   <div className="stat-card__content">
                     <div className="stat-card__label">Vehicles</div>
                     <div className="stat-card__value">{stats.totalCars}</div>
@@ -105,7 +119,9 @@ const AdminDashboard = () => {
 
               <Card>
                 <Card.Body className="stat-card">
-                  <div className="stat-card__icon">📅</div>
+                  <div className="stat-card__icon">
+                    <CalendarIcon aria-hidden="true" />
+                  </div>
                   <div className="stat-card__content">
                     <div className="stat-card__label">Total Bookings</div>
                     <div className="stat-card__value">{stats.totalBookings}</div>
@@ -116,7 +132,9 @@ const AdminDashboard = () => {
 
               <Card>
                 <Card.Body className="stat-card">
-                  <div className="stat-card__icon">💰</div>
+                  <div className="stat-card__icon">
+                    <TokensIcon aria-hidden="true" />
+                  </div>
                   <div className="stat-card__content">
                     <div className="stat-card__label">Total Revenue (mock)</div>
                     <div className="stat-card__value">{stats.totalRevenue} MAD</div>
@@ -191,7 +209,9 @@ const AdminDashboard = () => {
                             <span className="admin-list__metric">
                               {agency.totalBookings} bookings
                             </span>
-                            <span className="admin-list__rating">⭐ {agency.rating}</span>
+                            <span className="admin-list__rating">
+                              <StarFilledIcon aria-hidden="true" /> {agency.rating}
+                            </span>
                           </div>
                         </li>
                       ))}
