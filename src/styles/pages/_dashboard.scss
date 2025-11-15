@@ -177,3 +177,146 @@
     margin: 0;
   }
 }
+/* Admin & agency layout - flex with left sidebar */
+.admin-dashboard__layout,
+.agency-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-xl;
+  margin-top: $spacing-lg;
+}
+
+/* Sidebar containers */
+.admin-dashboard__sidebar,
+.agency-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 80px; // adjust if your global header height differs
+  align-self: flex-start;
+}
+
+/* Main content area */
+.admin-dashboard__main,
+.agency-layout__main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Shared sidebar styling */
+.sidebar {
+  background-color: $color-gray-100;
+  border-radius: $border-radius-lg;
+  border: 1px solid $color-gray-200;
+  padding: $spacing-md;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  min-height: 300px;
+}
+
+.sidebar__header {
+  padding-bottom: $spacing-sm;
+  border-bottom: 1px solid $color-gray-200;
+  margin-bottom: $spacing-sm;
+}
+
+.sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xs;
+}
+
+.sidebar__logo-mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background-color: $color-primary;
+  color: $color-white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-xs;
+  font-weight: 700;
+}
+
+.sidebar__logo-text {
+  font-size: $font-size-base;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+}
+
+/* Works for both <button> and <Link> since both get class sidebar__item */
+.sidebar__item {
+  @include button-reset;
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-md;
+  font-size: $font-size-small;
+  color: $text-secondary;
+  text-decoration: none;
+  cursor: pointer;
+  // Smooth hover transitions for background and text color
+  @include transition(background-color);
+
+  &:hover {
+    background-color: $color-gray-100;
+    color: $text-primary;
+  }
+}
+
+.sidebar__item-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: $text-muted;
+}
+
+.sidebar__item-label {
+  flex: 1;
+  text-align: left;
+}
+
+/* Active nav item */
+.sidebar__item--active {
+  background-color: rgba($color-primary, 0.08);
+  color: $color-primary;
+  font-weight: 600;
+
+  .sidebar__item-icon {
+    color: $color-primary;
+  }
+}
+
+.sidebar__footer {
+  margin-top: auto;
+  padding-top: $spacing-sm;
+  border-top: 1px solid $color-gray-200;
+}
+
+.sidebar__footer-text {
+  font-size: $font-size-xs;
+  color: $text-muted;
+}
+
+/* Responsive: collapse sidebar on small screens if needed */
+@media (max-width: $breakpoint-tablet) {
+  .admin-dashboard__layout,
+  .agency-layout {
+    flex-direction: column;
+  }
+
+  .admin-dashboard__sidebar,
+  .agency-sidebar {
+    position: static;
+    width: 100%;
+  }
+}

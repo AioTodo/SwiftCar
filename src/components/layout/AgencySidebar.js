@@ -1,74 +1,106 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  BadgeCheck,
+  CarFront,
+  Wrench,
+  ClipboardList,
+  CalendarRange,
+  WalletCards,
+} from 'lucide-react';
 
 const AgencySidebar = () => {
   const location = useLocation();
 
-  const isActive = (path) => {
-    return location.pathname.startsWith(path);
-  };
+  const isActive = (path) => location.pathname.startsWith(path);
 
   return (
     <aside className="agency-sidebar">
-      <nav className="agency-sidebar__nav">
-        <div className="agency-sidebar__section-title">Agency Navigation</div>
-        <Link
-          to="/agency/dashboard"
-          className={`agency-sidebar__link ${
-            isActive('/agency/dashboard') ? 'agency-sidebar__link--active' : ''
-          }`}
-        >
-          Dashboard
-        </Link>
-        <Link
-          to="/agency/verification"
-          className={`agency-sidebar__link ${
-            isActive('/agency/verification') ? 'agency-sidebar__link--active' : ''
-          }`}
-        >
-          Verification Status
-        </Link>
-        <Link
-          to="/agency/add-car"
-          className={`agency-sidebar__link ${
-            isActive('/agency/add-car') ? 'agency-sidebar__link--active' : ''
-          }`}
-        >
-          Add Car
-        </Link>
-        <Link
-          to="/agency/manage-cars"
-          className={`agency-sidebar__link ${
-            isActive('/agency/manage-cars') ? 'agency-sidebar__link--active' : ''
-          }`}
-        >
-          Manage Cars
-        </Link>
-        <Link
-          to="/agency/booking-requests"
-          className={`agency-sidebar__link ${
-            isActive('/agency/booking-requests') ? 'agency-sidebar__link--active' : ''
-          }`}
-        >
-          Booking Requests
-        </Link>
-        <Link
-          to="/agency/bookings"
-          className={`agency-sidebar__link ${
-            isActive('/agency/bookings') ? 'agency-sidebar__link--active' : ''
-          }`}
-        >
-          Bookings
-        </Link>
-        <Link
-          to="/agency/earnings"
-          className={`agency-sidebar__link ${
-            isActive('/agency/earnings') ? 'agency-sidebar__link--active' : ''
-          }`}
-        >
-          Earnings
-        </Link>
-      </nav>
+      <div className="sidebar">
+        <div className="sidebar__header">
+          <div className="sidebar__logo">
+            <span className="sidebar__logo-mark">SC</span>
+            <span className="sidebar__logo-text">Agency</span>
+          </div>
+        </div>
+
+        <nav className="sidebar__nav" aria-label="Agency navigation">
+          <Link
+            to="/agency/dashboard"
+            className={`sidebar__item ${isActive('/agency/dashboard') ? 'sidebar__item--active' : ''}`}
+          >
+            <span className="sidebar__item-icon">
+              <LayoutDashboard size={18} strokeWidth={1.8} />
+            </span>
+            <span className="sidebar__item-label">Dashboard</span>
+          </Link>
+
+          <Link
+            to="/agency/verification"
+            className={`sidebar__item ${isActive('/agency/verification') ? 'sidebar__item--active' : ''}`}
+          >
+            <span className="sidebar__item-icon">
+              <BadgeCheck size={18} strokeWidth={1.8} />
+            </span>
+            <span className="sidebar__item-label">Verification Status</span>
+          </Link>
+
+          <Link
+            to="/agency/add-car"
+            className={`sidebar__item ${isActive('/agency/add-car') ? 'sidebar__item--active' : ''}`}
+          >
+            <span className="sidebar__item-icon">
+              <CarFront size={18} strokeWidth={1.8} />
+            </span>
+            <span className="sidebar__item-label">Add Car</span>
+          </Link>
+
+          <Link
+            to="/agency/manage-cars"
+            className={`sidebar__item ${isActive('/agency/manage-cars') ? 'sidebar__item--active' : ''}`}
+          >
+            <span className="sidebar__item-icon">
+              <Wrench size={18} strokeWidth={1.8} />
+            </span>
+            <span className="sidebar__item-label">Manage Cars</span>
+          </Link>
+
+          <Link
+            to="/agency/booking-requests"
+            className={`sidebar__item ${isActive('/agency/booking-requests') ? 'sidebar__item--active' : ''}`}
+          >
+            <span className="sidebar__item-icon">
+              <ClipboardList size={18} strokeWidth={1.8} />
+            </span>
+            <span className="sidebar__item-label">Booking Requests</span>
+          </Link>
+
+          <Link
+            to="/agency/bookings"
+            className={`sidebar__item ${isActive('/agency/bookings') ? 'sidebar__item--active' : ''}`}
+          >
+            <span className="sidebar__item-icon">
+              <CalendarRange size={18} strokeWidth={1.8} />
+            </span>
+            <span className="sidebar__item-label">Bookings</span>
+          </Link>
+
+          <Link
+            to="/agency/earnings"
+            className={`sidebar__item ${isActive('/agency/earnings') ? 'sidebar__item--active' : ''}`}
+          >
+            <span className="sidebar__item-icon">
+              <WalletCards size={18} strokeWidth={1.8} />
+            </span>
+            <span className="sidebar__item-label">Earnings</span>
+          </Link>
+        </nav>
+
+        <div className="sidebar__footer">
+          <span className="sidebar__footer-text">© 2025 SwiftCar</span>
+        </div>
+      </div>
     </aside>
   );
 };

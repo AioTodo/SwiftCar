@@ -1418,6 +1418,8 @@ Use React Context API for global state (or Redux if preferred):
 ## STYLING GUIDELINES
 -------------------
 
+> **Mantine + SCSS:** Mantine UI (`@mantine/core`, `@mantine/hooks`) is the primary UI library for components (buttons, cards, modals, loaders, badges). SCSS is used mainly for design tokens (colors, spacing, typography), global/layout styles (e.g., dashboards), and minimal overrides where Mantine cannot cover a use case. Avoid building a separate, parallel design system purely in SCSS when a Mantine component can express the same UI.
+
 ### Color Palette (src/styles/abstracts/_variables.scss)
 ```scss
 // Primary Colors

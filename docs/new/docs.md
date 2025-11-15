@@ -34,8 +34,12 @@ SwiftCar is a car rental booking platform designed to connect travelers with loc
 ### Core Technologies
 - **React 18.x** - UI library (Create React App)
 - **React Router DOM 6.x** - Client-side routing
-- **Sass/SCSS** - CSS preprocessor
+- **Mantine UI** (`@mantine/core`, `@mantine/hooks`) - component library and theming
+- **Sass/SCSS** - CSS preprocessor for design tokens, global layouts, and minimal overrides
 - **CSS Grid & Flexbox** - Layout systems
+- **Chart.js + react-chartjs-2** - analytics and dashboard charts
+- **react-table** - data tables for dashboards and management views
+- **lucide-react** - icon library for navigation and UI accents
 
 ### Development Tools
 - **Node.js 18+** - JavaScript runtime
