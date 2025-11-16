@@ -136,8 +136,7 @@ swiftcar/
 │   └── utils/                    # dateHelpers, validators, formatters, priceCalculator, constants
 ├── docs/
 │   └── new/                      # Product docs, UX guidelines, feature specs, and roadmap
-├── README.md
-└── UPDATES_2025-11-10.md         # Recent changes and Node/tooling guidance
+└── README.md
 ```
 
 ---
