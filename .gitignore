@@ -22,12 +22,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-COMPLETION_SUMMARY.md
-DESIGN_UPDATE.md
-DEVELOPMENT_GUIDE.md
-LATEST_UPDATE.md
-PROJECT_STATUS.md
-SESSION_3_SUMMARY.md
+TEST_SUMMARY.md
+TESTS_README.md
+UPDATES_2025-11-10.md
+UPDATES_2025-11-14.md
 
 WARP.md
 mantine-warp-rule.md
