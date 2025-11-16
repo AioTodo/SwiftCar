@@ -17,14 +17,101 @@
   }
 
   &__logo {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
     text-decoration: none;
   }
 
+  &__logo-image {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
+
   &__brand {
+    font-family: $font-family-logo;
     font-size: $font-size-h3;
-    font-weight: 700;
+    font-weight: 400;
     color: $color-primary;
     margin: 0;
+  }
+  
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-lg;
+    flex: 1;
+  }
+
+  &__nav-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__nav-right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+  }
+
+  &__user-menu {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    position: relative;
+  }
+
+  &__user-icon {
+    @include button-reset;
+    width: 36px;
+    height: 36px;
+    border-radius: $border-radius-full;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $color-gray-100;
+    color: $text-secondary;
+    @include transition(background-color, color);
+
+    &:hover {
+      background-color: $color-gray-200;
+      color: $color-primary;
+    }
+  }
+  
+  &__user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: $border-radius-full;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid $color-gray-200;
+    @include transition(border-color);
+    
+    &:hover {
+      border-color: $color-primary;
+    }
+  }
+  
+  &__user-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: $border-radius-full;
+    background-color: $color-gray-200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $text-muted;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition(background-color);
+    
+    &:hover {
+      background-color: $color-gray-300;
+    }
   }
 
   &__nav {

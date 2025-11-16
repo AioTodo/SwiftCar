@@ -1,26 +1,41 @@
 .footer {
-  background-color: $color-primary;
-  color: $color-white;
+  position: relative;
+  background: linear-gradient(135deg, #000000 0%, #1b1c1f 40%, #160329 100%);
+  color: $color-tertiary;
   padding: $spacing-xl 0 $spacing-md;
   margin-top: auto;
+  overflow: hidden;
+  border-top: 1px solid $color-gray-200;
+
+  &__overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(circle at top left, rgba($color-primary, 0.05), transparent 55%);
+  }
 
   &__container {
+    position: relative;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 $spacing-md;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: $spacing-lg;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: $spacing-xl;
 
     @include tablet {
       padding: 0 $spacing-lg;
     }
   }
 
-  &__section {
+  &__column {
     display: flex;
     flex-direction: column;
     gap: $spacing-xs;
+  }
+
+  &__column--contact {
+    min-width: 220px;
   }
 
   &__title {
@@ -33,26 +48,115 @@
     font-size: $font-size-h4;
     font-weight: 600;
     margin-bottom: $spacing-xs;
-    color: $color-accent;
-  }
-
-  &__text {
-    color: $color-gray-300;
-    margin: 0;
+    color: $color-tertiary;
   }
 
   &__link {
-    color: $color-gray-300;
+    color: $color-tertiary;
+    font-size: $font-size-small;
+    text-decoration: none;
     @include transition(color);
 
     &:hover {
-      color: $color-accent;
+      color: $color-primary;
     }
   }
 
-  &__copyright {
-    color: $color-gray-400;
-    font-size: $font-size-small;
-    margin-top: $spacing-md;
+  /* Contact list */
+  &__contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
   }
+
+  &__contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-sm;
+    font-size: $font-size-small;
+    color: $color-tertiary;
+  }
+
+  &__contact-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, $color-primary, $color-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: $color-white;
+    flex-shrink: 0;
+  }
+
+  &__contact-text {
+    line-height: 1.5;
+  }
+
+  /* Bottom bar */
+  &__bottom {
+    position: relative;
+    max-width: 1200px;
+    margin: $spacing-xl auto 0;
+    padding: $spacing-md $spacing-md 0;
+    border-top: 1px solid $color-gray-200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-md;
+
+    @include tablet {
+      padding: $spacing-md $spacing-lg 0;
+    }
+
+    @include mobile-only {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__bottom-text {
+    font-size: $font-size-xs;
+    color: $text-muted;
+    margin: 0;
+  }
+
+  &__brand {
+    font-weight: 600;
+    color: $color-primary;
+  }
+
+  &__bottom-links {
+    display: flex;
+    gap: $spacing-md;
+    flex-wrap: wrap;
+  }
+
+  &__bottom-link {
+    @include button-reset;
+    font-size: $font-size-xs;
+    color: $color-tertiary;
+    cursor: pointer;
+    @include transition(color);
+
+    &:hover {
+      color: $color-primary;
+    }
+  }
+}
+.footer__title {
+  color: $color-tertiary;
+}
+.footer__heading {
+  color: $color-tertiary;
+}
+.footer__link {
+  color: $color-tertiary;
+}
+.footer__contact-text {
+  color: $color-tertiary;
 }

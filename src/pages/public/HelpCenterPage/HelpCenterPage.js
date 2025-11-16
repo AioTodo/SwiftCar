@@ -4,8 +4,15 @@ import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
 
 const HelpCenterPage = () => {
+  const handleScrollTo = (sectionId) => {
+    const el = document.getElementById(sectionId);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
-    <div className="help-center-page">
+    <div className="help-center-page page">
       <div className="container">
         <Card>
           <Card.Header>
@@ -17,8 +24,36 @@ const HelpCenterPage = () => {
               customer, agency, or admin.
             </p>
 
+            {/* Section navigation */}
+            <div className="help-center-nav">
+              <Button
+                variant="outline"
+                size="small"
+                type="button"
+                onClick={() => handleScrollTo('help-customers')}
+              >
+                Customers
+              </Button>
+              <Button
+                variant="outline"
+                size="small"
+                type="button"
+                onClick={() => handleScrollTo('help-agencies')}
+              >
+                Agencies
+              </Button>
+              <Button
+                variant="outline"
+                size="small"
+                type="button"
+                onClick={() => handleScrollTo('help-contact')}
+              >
+                Contact &amp; Support
+              </Button>
+            </div>
+
             <div className="help-center-grid">
-              <section className="help-center-section">
+              <section id="help-customers" className="help-center-section">
                 <h2>For Customers</h2>
                 <p className="text-small text-muted">
                   Learn how to search for cars, complete a booking, manage your reservations, and leave
@@ -40,7 +75,7 @@ const HelpCenterPage = () => {
                 </Button>
               </section>
 
-              <section className="help-center-section">
+              <section id="help-agencies" className="help-center-section">
                 <h2>For Agencies</h2>
                 <p className="text-small text-muted">
                   See how to register your agency, manage your fleet and bookings, and understand
@@ -62,8 +97,8 @@ const HelpCenterPage = () => {
                 </Button>
               </section>
 
-              <section className="help-center-section">
-                <h2>Contact & Support</h2>
+              <section id="help-contact" className="help-center-section">
+                <h2>Contact &amp; Support</h2>
                 <p className="text-small text-muted">
                   Still need help? Send us a message and we will get back to you as soon as possible.
                 </p>

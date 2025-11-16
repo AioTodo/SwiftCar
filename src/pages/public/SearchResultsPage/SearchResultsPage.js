@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import { dataService } from '../../../services/dataService';
-import { DashboardIcon, DrawingPinIcon } from '@radix-ui/react-icons';
+import { Car, MapPin } from 'lucide-react';
 
 const SearchResultsPage = () => {
   const navigate = useNavigate();
@@ -276,11 +276,30 @@ const SearchResultsPage = () => {
                 </Button>
               </Card>
             ) : (
-              filteredCars.map((car) => (
+              filteredCars.map((car) => {
+                const carImage = car.photos && car.photos.length > 0 
+                  ? (car.photos[0].startsWith('http') ? car.photos[0] : `/images/cars/${car.photos[0]}`)
+                  : null;
+                
+                return (
                 <Card key={car.id} hoverable className="car-card">
                   <div className="car-card__image-wrapper">
-                    <div className="car-card__image-placeholder">
-                      <DashboardIcon aria-hidden="true" />
+                    {carImage ? (
+                      <img 
+                        src={carImage} 
+                        alt={`${car.brand} ${car.model}`}
+                        className="car-card__image"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                    ) : null}
+                    <div 
+                      className="car-card__image-placeholder"
+                      style={{ display: carImage ? 'none' : 'flex' }}
+                    >
+                      <Car size={48} aria-hidden="true" />
                     </div>
                   </div>
 
@@ -292,7 +311,7 @@ const SearchResultsPage = () => {
                       {car.year} • {car.category}
                     </p>
                     <p className="car-card__location">
-                      <DrawingPinIcon aria-hidden="true" /> {car.location}
+                      <MapPin size={16} aria-hidden="true" /> {car.location}
                     </p>
 
                     <div className="car-card__features">
@@ -319,7 +338,8 @@ const SearchResultsPage = () => {
                     </div>
                   </Card.Body>
                 </Card>
-              ))
+                );
+              })
             )}
           </div>
         </div>

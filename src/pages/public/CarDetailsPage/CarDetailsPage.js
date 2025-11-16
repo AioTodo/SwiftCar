@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useBooking } from '../../../context/BookingContext';
@@ -11,14 +11,14 @@ import agenciesData from '../../../data/agencies.json';
 import ReviewList from '../../../components/reviews/ReviewList';
 import { reviewService } from '../../../services/reviewService';
 import {
-  DashboardIcon,
-  StarFilledIcon,
-  DrawingPinIcon,
-  EnvelopeClosedIcon,
-  MobileIcon,
-  CheckIcon,
-  Cross2Icon,
-} from '@radix-ui/react-icons';
+  Star,
+  MapPin,
+  Mail,
+  Phone,
+  Check,
+  X,
+  Car,
+} from 'lucide-react';
 
 const CarDetailsPage = () => {
   const { carId } = useParams();
@@ -98,16 +98,82 @@ const CarDetailsPage = () => {
 
   const totalPrice = numberOfDays > 0 ? car.pricePerDay * numberOfDays : 0;
 
+// Get car images (normalize Unsplash page URLs -> direct image URLs)
+  const carImages = Array.isArray(car.photos) && car.photos.length > 0
+    ? car.photos.map((photo) => {
+        let src = photo;
+        if (src && src.startsWith('https://unsplash.com/photos/')) {
+          const id = src.split('/').pop();
+          src = id ? `https://source.unsplash.com/${id}/1200x800` : src;
+        }
+        if (src && !src.startsWith('http')) {
+          src = `/images/cars/${src}`;
+        }
+        return src;
+      })
+    : [];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
+  
+  const currentImage = carImages.length > 0 ? carImages[currentImageIndex] : null;
+
+  // Reset image error when switching images
+  useEffect(() => {
+    setImageError(false);
+  }, [currentImageIndex]);
+
   return (
     <div className="car-details-page">
       <div className="container">
         {/* Car Images */}
         <div className="car-details__images">
           <div className="car-details__main-image">
-            <div className="car-details__image-placeholder">
-              <DashboardIcon aria-hidden="true" />
-            </div>
+            {currentImage ? (
+              <>
+                <img 
+                  src={currentImage} 
+                  alt={`${car.brand} ${car.model}`}
+                  className="car-details__main-image-img"
+                  onError={() => setImageError(true)}
+                  style={{ display: imageError ? 'none' : 'block' }}
+                />
+                {imageError && (
+                  <div className="car-details__image-placeholder">
+                    <Car size={120} aria-hidden="true" />
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="car-details__image-placeholder">
+                <Car size={120} aria-hidden="true" />
+              </div>
+            )}
           </div>
+          
+          {/* Image Thumbnails */}
+          {carImages.length > 1 && (
+            <div className="car-details__image-thumbnails">
+              {carImages.map((image, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`car-details__thumbnail ${index === currentImageIndex ? 'car-details__thumbnail--active' : ''}`}
+                  onClick={() => {
+                    setCurrentImageIndex(index);
+                    setImageError(false);
+                  }}
+                >
+                  <img 
+                    src={image} 
+                    alt={`${car.brand} ${car.model} - View ${index + 1}`}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="car-details__layout">
@@ -125,7 +191,7 @@ const CarDetailsPage = () => {
               </div>
               <div className="car-details__rating">
                 <span className="car-details__rating-value">
-                  <StarFilledIcon aria-hidden="true" /> {car.rating}
+                  <Star size={20} fill="currentColor" aria-hidden="true" /> {car.rating}
                 </span>
                 <span className="car-details__rating-count">({car.reviewCount} reviews)</span>
               </div>
@@ -151,7 +217,7 @@ const CarDetailsPage = () => {
                   {car.features.map((feature, index) => (
                     <div key={index} className="car-details__feature">
                       <span className="car-details__feature-icon">
-                        <CheckIcon aria-hidden="true" />
+                        <Check size={16} aria-hidden="true" />
                       </span>
                       <span>{feature}</span>
                     </div>
@@ -171,18 +237,18 @@ const CarDetailsPage = () => {
                     <div>
                       <h3 className="car-details__agency-name">{agency.agencyName}</h3>
                       <p className="car-details__agency-location">
-                        <DrawingPinIcon aria-hidden="true" /> {agency.city}, {agency.country}
+                        <MapPin size={16} aria-hidden="true" /> {agency.city}, {agency.country}
                       </p>
                       <p className="car-details__agency-rating">
-                        <StarFilledIcon aria-hidden="true" /> {agency.rating} ({agency.totalBookings} bookings)
+                        <Star size={16} fill="currentColor" aria-hidden="true" /> {agency.rating} ({agency.totalBookings} bookings)
                       </p>
                     </div>
                     <div className="car-details__agency-contact">
                       <p>
-                        <EnvelopeClosedIcon aria-hidden="true" /> {agency.email}
+                        <Mail size={16} aria-hidden="true" /> {agency.email}
                       </p>
                       <p>
-                        <MobileIcon aria-hidden="true" /> {agency.phone}
+                        <Phone size={16} aria-hidden="true" /> {agency.phone}
                       </p>
                     </div>
                   </div>
@@ -206,11 +272,11 @@ const CarDetailsPage = () => {
                 <div className="booking-card__status">
                   {car.available ? (
                     <span className="booking-card__available">
-                      <CheckIcon aria-hidden="true" /> Available
+                      <Check size={16} aria-hidden="true" /> Available
                     </span>
                   ) : (
                     <span className="booking-card__unavailable">
-                      <Cross2Icon aria-hidden="true" /> Not Available
+                      <X size={16} aria-hidden="true" /> Not Available
                     </span>
                   )}
                 </div>

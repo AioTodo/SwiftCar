@@ -2,16 +2,18 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
+import { Grid } from '@mantine/core';
 import { entityStore } from '../../../services/entityStore';
 import AdminSidebar from '../../../components/layout/AdminSidebar';
 import {
-  PersonIcon,
-  HomeIcon,
-  DashboardIcon,
-  CalendarIcon,
-  TokensIcon,
-  StarFilledIcon,
-} from '@radix-ui/react-icons';
+  Users,
+  Building2,
+  Car,
+  Calendar,
+  DollarSign,
+  Star,
+} from 'lucide-react';
+import StatsGrid from '../../../components/dashboard/StatsGrid';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -96,153 +98,118 @@ const AdminDashboard = () => {
 
           {/* Main admin content */}
           <main className="admin-dashboard__main">
-            {/* Top stats */}
-            <div className="admin-dashboard__stats-grid">
-              <Card>
-                <Card.Body className="stat-card">
-                  <div className="stat-card__icon">
-                    <PersonIcon aria-hidden="true" />
-                  </div>
-                  <div className="stat-card__content">
-                    <div className="stat-card__label">Total Users</div>
-                    <div className="stat-card__value">{stats.totalUsers}</div>
-                    <div className="stat-card__meta">{stats.activeUsers} active</div>
-                  </div>
-                </Card.Body>
-              </Card>
+            <Grid>
+              {/* Top stats */}
+              <Grid.Col span={{ base: 12 }}>
+                <StatsGrid
+                  data={[
+                    {
+                      title: 'Total users',
+                      icon: Users,
+                      value: stats.totalUsers,
+                      diff: 4,
+                    },
+                    {
+                      title: 'Agencies',
+                      icon: Building2,
+                      value: stats.totalAgencies,
+                      diff: 2,
+                    },
+                    {
+                      title: 'Vehicles',
+                      icon: Car,
+                      value: stats.totalCars,
+                      diff: 6,
+                    },
+                    {
+                      title: 'Total revenue (mock)',
+                      icon: DollarSign,
+                      value: `${stats.totalRevenue} MAD`,
+                      diff: 10,
+                    },
+                  ]}
+                />
+              </Grid.Col>
 
-              <Card>
-                <Card.Body className="stat-card">
-                  <div className="stat-card__icon">
-                    <HomeIcon aria-hidden="true" />
-                  </div>
-                  <div className="stat-card__content">
-                    <div className="stat-card__label">Agencies</div>
-                    <div className="stat-card__value">{stats.totalAgencies}</div>
-                    <div className="stat-card__meta">
-                      {stats.verifiedAgencies} verified
-                      {stats.pendingAgencies > 0 && ` • ${stats.pendingAgencies} pending`}
+              {/* Secondary panels */}
+              <Grid.Col span={{ base: 12, xs: 7 }}>
+                <Card className="admin-panel">
+                  <Card.Header>
+                    <div className="card-header-with-action">
+                      <h2>Recent Bookings</h2>
+                      <Button variant="text" size="small" disabled>
+                        View all (admin view coming soon)
+                      </Button>
                     </div>
-                  </div>
-                </Card.Body>
-              </Card>
+                  </Card.Header>
+                  <Card.Body>
+                    {recentBookings.length === 0 ? (
+                      <p className="text-muted">No bookings in mock data yet.</p>
+                    ) : (
+                      <ul className="admin-list admin-list--bookings">
+                        {recentBookings.map((booking) => (
+                          <li key={booking.id} className="admin-list__item">
+                            <div className="admin-list__primary">
+                              <span className="admin-list__id">#{booking.id}</span>
+                              <span className="admin-list__dates">
+                                {booking.pickupDate}  {booking.returnDate}
+                              </span>
+                            </div>
+                            <div className="admin-list__secondary">
+                              <span className="admin-list__status">{booking.status}</span>
+                              <span className="admin-list__amount">{booking.totalPrice} MAD</span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Grid.Col>
 
-              <Card>
-                <Card.Body className="stat-card">
-                  <div className="stat-card__icon">
-                    <DashboardIcon aria-hidden="true" />
-                  </div>
-                  <div className="stat-card__content">
-                    <div className="stat-card__label">Vehicles</div>
-                    <div className="stat-card__value">{stats.totalCars}</div>
-                    <div className="stat-card__meta">Across all agencies</div>
-                  </div>
-                </Card.Body>
-              </Card>
-
-              <Card>
-                <Card.Body className="stat-card">
-                  <div className="stat-card__icon">
-                    <CalendarIcon aria-hidden="true" />
-                  </div>
-                  <div className="stat-card__content">
-                    <div className="stat-card__label">Total Bookings</div>
-                    <div className="stat-card__value">{stats.totalBookings}</div>
-                    <div className="stat-card__meta">Platform-wide</div>
-                  </div>
-                </Card.Body>
-              </Card>
-
-              <Card>
-                <Card.Body className="stat-card">
-                  <div className="stat-card__icon">
-                    <TokensIcon aria-hidden="true" />
-                  </div>
-                  <div className="stat-card__content">
-                    <div className="stat-card__label">Total Revenue (mock)</div>
-                    <div className="stat-card__value">{stats.totalRevenue} MAD</div>
-                    <div className="stat-card__meta">From all completed bookings</div>
-                  </div>
-                </Card.Body>
-              </Card>
-            </div>
-
-            {/* Secondary panels */}
-            <div className="admin-dashboard__panels">
-              <Card className="admin-panel">
-                <Card.Header>
-                  <div className="card-header-with-action">
-                    <h2>Recent Bookings</h2>
-                    <Button variant="text" size="small" disabled>
-                      View all (admin view coming soon)
-                    </Button>
-                  </div>
-                </Card.Header>
-                <Card.Body>
-                  {recentBookings.length === 0 ? (
-                    <p className="text-muted">No bookings in mock data yet.</p>
-                  ) : (
-                    <ul className="admin-list admin-list--bookings">
-                      {recentBookings.map((booking) => (
-                        <li key={booking.id} className="admin-list__item">
-                          <div className="admin-list__primary">
-                            <span className="admin-list__id">#{booking.id}</span>
-                            <span className="admin-list__dates">
-                              {booking.pickupDate} → {booking.returnDate}
-                            </span>
-                          </div>
-                          <div className="admin-list__secondary">
-                            <span className="admin-list__status">{booking.status}</span>
-                            <span className="admin-list__amount">{booking.totalPrice} MAD</span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Card.Body>
-              </Card>
-
-              <Card className="admin-panel">
-                <Card.Header>
-                  <div className="card-header-with-action">
-                    <h2>Top Agencies</h2>
-                    <Button
-                      variant="text"
-                      size="small"
-                      onClick={() => navigate('/admin/agencies')}
-                    >
-                      View agencies
-                    </Button>
-                  </div>
-                </Card.Header>
-                <Card.Body>
-                  {topAgencies.length === 0 ? (
-                    <p className="text-muted">No agencies in mock data yet.</p>
-                  ) : (
-                    <ul className="admin-list admin-list--agencies">
-                      {topAgencies.map((agency) => (
-                        <li key={agency.id} className="admin-list__item">
-                          <div className="admin-list__primary">
-                            <span className="admin-list__name">{agency.agencyName}</span>
-                            <span className="admin-list__location">
-                              {agency.city}, {agency.country}
-                            </span>
-                          </div>
-                          <div className="admin-list__secondary">
-                            <span className="admin-list__metric">
-                              {agency.totalBookings} bookings
-                            </span>
-                            <span className="admin-list__rating">
-                              <StarFilledIcon aria-hidden="true" /> {agency.rating}
-                            </span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Card.Body>
-              </Card>
-            </div>
+              <Grid.Col span={{ base: 12, xs: 5 }}>
+                <Card className="admin-panel">
+                  <Card.Header>
+                    <div className="card-header-with-action">
+                      <h2>Top Agencies</h2>
+                      <Button
+                        variant="text"
+                        size="small"
+                        onClick={() => navigate('/admin/agencies')}
+                      >
+                        View agencies
+                      </Button>
+                    </div>
+                  </Card.Header>
+                  <Card.Body>
+                    {topAgencies.length === 0 ? (
+                      <p className="text-muted">No agencies in mock data yet.</p>
+                    ) : (
+                      <ul className="admin-list admin-list--agencies">
+                        {topAgencies.map((agency) => (
+                          <li key={agency.id} className="admin-list__item">
+                            <div className="admin-list__primary">
+                              <span className="admin-list__name">{agency.agencyName}</span>
+                              <span className="admin-list__location">
+                                {agency.city}, {agency.country}
+                              </span>
+                            </div>
+                            <div className="admin-list__secondary">
+                              <span className="admin-list__metric">
+                                {agency.totalBookings} bookings
+                              </span>
+                              <span className="admin-list__rating">
+                                <Star size={16} fill="currentColor" aria-hidden="true" /> {agency.rating}
+                              </span>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Grid.Col>
+            </Grid>
           </main>
         </div>
       </div>

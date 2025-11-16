@@ -42,23 +42,54 @@ const ContactPage = () => {
   };
 
   return (
-    <div className="contact-page">
-      <div className="container">
+    <div className="contact-page page">
+      <div className="container container--narrow">
         <Card>
           <Card.Header>
             <h1>Contact Us</h1>
           </Card.Header>
           <Card.Body>
+            <p className="text-muted text-small">
+              Send us a short message and we’ll get back to you as soon as possible.
+            </p>
             <form onSubmit={onSubmit} className="form">
-              <Input label="Name" name="name" value={form.name} onChange={onChange} error={errors.name} required fullWidth />
-              <Input label="Email" name="email" type="email" value={form.email} onChange={onChange} error={errors.email} required fullWidth />
+              <Input
+                label="Name"
+                name="name"
+                value={form.name}
+                onChange={onChange}
+                error={errors.name}
+                required
+                fullWidth
+              />
+              <Input
+                label="Email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={onChange}
+                error={errors.email}
+                required
+                fullWidth
+              />
               <div className="form__group">
-                <label className="form__label" htmlFor="message">Message</label>
-                <textarea id="message" className="input__field" rows="6" name="message" value={form.message} onChange={onChange} />
+                <label className="form__label" htmlFor="message">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  className="input__field"
+                  rows="5"
+                  name="message"
+                  value={form.message}
+                  onChange={onChange}
+                />
                 {errors.message && <span className="input__error">{errors.message}</span>}
               </div>
               <div className="form__actions">
-                <Button type="submit" variant="primary">Send Message</Button>
+                <Button type="submit" variant="primary">
+                  Send Message
+                </Button>
               </div>
             </form>
           </Card.Body>

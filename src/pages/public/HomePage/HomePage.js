@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
+import Input from '../../../components/common/Input';
 import carsData from '../../../data/cars.json';
-import { DashboardIcon, MagnifyingGlassIcon, CheckIcon } from '@radix-ui/react-icons';
+import { Car, Search, Check, ArrowRight } from 'lucide-react';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -42,42 +43,39 @@ const HomePage = () => {
             <form onSubmit={handleSearch} className="search-form">
               <div className="search-form__grid">
                 <div className="search-form__field">
-                  <label htmlFor="location" className="search-form__label">Location</label>
-                  <input
+                  <Input
+                    label="Location"
                     type="text"
-                    id="location"
                     name="location"
                     placeholder="Where do you need a car?"
                     value={searchData.location}
                     onChange={handleSearchChange}
-                    className="search-form__input"
                     required
+                    fullWidth
                   />
                 </div>
                 
                 <div className="search-form__field">
-                  <label htmlFor="pickupDate" className="search-form__label">Pickup Date</label>
-                  <input
+                  <Input
+                    label="Pickup Date"
                     type="date"
-                    id="pickupDate"
                     name="pickupDate"
                     value={searchData.pickupDate}
                     onChange={handleSearchChange}
-                    className="search-form__input"
                     required
+                    fullWidth
                   />
                 </div>
                 
                 <div className="search-form__field">
-                  <label htmlFor="returnDate" className="search-form__label">Return Date</label>
-                  <input
+                  <Input
+                    label="Return Date"
                     type="date"
-                    id="returnDate"
                     name="returnDate"
                     value={searchData.returnDate}
                     onChange={handleSearchChange}
-                    className="search-form__input"
                     required
+                    fullWidth
                   />
                 </div>
               </div>
@@ -99,11 +97,30 @@ const HomePage = () => {
           </p>
           
           <div className="featured-grid">
-            {featuredCars.map((car) => (
+            {featuredCars.map((car) => {
+              const carImage = car.photos && car.photos.length > 0 
+                ? (car.photos[0].startsWith('http') ? car.photos[0] : `/images/cars/${car.photos[0]}`)
+                : null;
+              
+              return (
               <Card key={car.id} hoverable className="car-card">
                 <div className="car-card__image-wrapper">
-                  <div className="car-card__image-placeholder">
-                    <DashboardIcon aria-hidden="true" />
+                  {carImage ? (
+                    <img 
+                      src={carImage} 
+                      alt={`${car.brand} ${car.model}`}
+                      className="car-card__image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                  ) : null}
+                  <div 
+                    className="car-card__image-placeholder"
+                    style={{ display: carImage ? 'none' : 'flex' }}
+                  >
+                    <Car size={48} aria-hidden="true" />
                   </div>
                 </div>
                 
@@ -139,7 +156,8 @@ const HomePage = () => {
                   </div>
                 </Card.Body>
               </Card>
-            ))}
+            );
+            })}
           </div>
           
           <div className="featured-section__cta">
@@ -158,7 +176,7 @@ const HomePage = () => {
           <div className="how-it-works__grid">
             <div className="how-it-works__step">
               <div className="how-it-works__icon">
-                <MagnifyingGlassIcon aria-hidden="true" />
+                <Search size={32} aria-hidden="true" />
               </div>
               <h3 className="how-it-works__step-title">1. Search</h3>
               <p className="how-it-works__step-desc">
@@ -168,7 +186,7 @@ const HomePage = () => {
             
             <div className="how-it-works__step">
               <div className="how-it-works__icon">
-                <CheckIcon aria-hidden="true" />
+                <Check size={32} aria-hidden="true" />
               </div>
               <h3 className="how-it-works__step-title">2. Book</h3>
               <p className="how-it-works__step-desc">
@@ -178,7 +196,7 @@ const HomePage = () => {
             
             <div className="how-it-works__step">
               <div className="how-it-works__icon">
-                <DashboardIcon aria-hidden="true" />
+                <Car size={32} aria-hidden="true" />
               </div>
               <h3 className="how-it-works__step-title">3. Drive</h3>
               <p className="how-it-works__step-desc">

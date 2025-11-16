@@ -45,10 +45,11 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: $spacing-lg;
+    gap: $spacing-xl;
 
     @include mobile-only {
       grid-template-columns: 1fr;
+      gap: $spacing-lg;
     }
   }
 
@@ -70,13 +71,50 @@
   position: sticky;
   top: 80px;
   height: fit-content;
+  max-height: calc(100vh - 100px);
+  overflow-y: hidden;
+  padding-right: $spacing-xs;
+
+  &:hover {
+    overflow-y: auto;
+  }
+
+  // Custom scrollbar for filters sidebar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $color-gray-300;
+    border-radius: $border-radius-sm;
+
+    &:hover {
+      background: $color-gray-400;
+    }
+  }
 
   @include tablet-only {
     position: static;
+    width: 100%;
+    top: auto;
+    bottom: auto;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
   }
 
   @include mobile-only {
     position: static;
+    width: 100%;
+    top: auto;
+    bottom: auto;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
   }
 }
 
@@ -112,8 +150,41 @@
 }
 
 // Car Card (additional styles for search page)
-.car-card__location {
-  color: $text-muted;
-  font-size: $font-size-small;
-  margin-bottom: $spacing-sm;
+.car-card {
+  &__image-wrapper {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: $color-gray-100;
+    border-radius: $border-radius-md;
+    overflow: hidden;
+    margin-bottom: $spacing-md;
+    position: relative;
+  }
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__image-placeholder {
+    width: 100%;
+    height: 100%;
+    @include flex-center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $color-gray-100;
+    color: $color-gray-400;
+  }
+  
+  &__location {
+    color: $text-muted;
+    font-size: $font-size-small;
+    margin-bottom: $spacing-sm;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
 }

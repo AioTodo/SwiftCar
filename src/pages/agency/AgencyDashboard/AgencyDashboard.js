@@ -6,6 +6,7 @@ import { bookingsAPI, carsAPI } from '../../../services/api';
 import { reviewService } from '../../../services/reviewService';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
+import { Grid } from '@mantine/core';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
 import {
   DashboardIcon,
@@ -112,163 +113,169 @@ const AgencyDashboard = () => {
               )}
             </div>
 
-            {/* Stats Grid */}
-            <div className="dashboard__stats">
-          <Card>
-            <div className="stat-card">
-              <div className="stat-card__icon">
-                <DashboardIcon aria-hidden="true" />
-              </div>
-              <div className="stat-card__content">
-                <h3 className="stat-card__value">{agencyCars.length}</h3>
-                <p className="stat-card__label">Total Vehicles</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="stat-card">
-              <div className="stat-card__icon">
-                <CheckIcon aria-hidden="true" />
-              </div>
-              <div className="stat-card__content">
-                <h3 className="stat-card__value">{availableCars}</h3>
-                <p className="stat-card__label">Available Now</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="stat-card">
-              <div className="stat-card__icon">
-                <CalendarIcon aria-hidden="true" />
-              </div>
-              <div className="stat-card__content">
-                <h3 className="stat-card__value">{activeBookings.length}</h3>
-                <p className="stat-card__label">Active Bookings</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="stat-card">
-              <div className="stat-card__icon">
-                <TokensIcon aria-hidden="true" />
-              </div>
-              <div className="stat-card__content">
-                <h3 className="stat-card__value">{totalRevenue} MAD</h3>
-                <p className="stat-card__label">Total Earnings</p>
-              </div>
-            </div>
-          </Card>
-
-          <Card>
-            <div className="stat-card">
-              <div className="stat-card__icon">
-                <CheckIcon aria-hidden="true" />
-              </div>
-              <div className="stat-card__content">
-                <h3 className="stat-card__value">
-                  {reviewStats.averageRating} / 5
-                </h3>
-                <p className="stat-card__label">
-                  Based on {reviewStats.totalReviews} review{reviewStats.totalReviews === 1 ? '' : 's'}
-                </p>
-              </div>
-            </div>
-          </Card>
-            </div>
-
-            <div className="dashboard__grid">
-          {/* Recent Bookings */}
-          <Card>
-            <Card.Header>
-              <div className="card-header-with-action">
-                <h2>Recent Bookings</h2>
-                <Button variant="text" size="small" onClick={() => navigate('/agency/bookings')}>
-                  View All
-                </Button>
-              </div>
-            </Card.Header>
-            <Card.Body>
-              {agencyBookings.length === 0 ? (
-                <div className="dashboard__empty">
-                  <p>No bookings yet</p>
-                </div>
-              ) : (
-                <div className="booking-list">
-                  {agencyBookings.slice(0, 3).map((booking) => {
-                    const car = agencyCars.find((c) => c.id === booking.carId);
-                    return (
-                      <div key={booking.id} className="booking-item">
-                        <div className="booking-item__icon">
-                          <DashboardIcon aria-hidden="true" />
-                        </div>
-                        <div className="booking-item__details">
-                          <h4 className="booking-item__title">
-                            {car ? `${car.brand} ${car.model}` : 'Car'}
-                          </h4>
-                          <p className="booking-item__dates">
-                            {booking.pickupDate} to {booking.returnDate}
-                          </p>
-                        </div>
-                        <div className="booking-item__price">
-                          {booking.totalPrice - booking.commissionAmount} MAD
-                        </div>
-                        <span className={`booking-status status--${booking.status}`}>
-                          {booking.status}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </Card.Body>
-          </Card>
-
-          {/* Fleet Overview */}
-          <Card>
-            <Card.Header>
-              <div className="card-header-with-action">
-                <h2>Your Fleet</h2>
-                <Button variant="text" size="small" onClick={() => navigate('/agency/manage-cars')}>
-                  Manage
-                </Button>
-              </div>
-            </Card.Header>
-            <Card.Body>
-              {agencyCars.length === 0 ? (
-                <div className="dashboard__empty">
-                  <p>No vehicles added yet</p>
-                  <Button variant="primary" onClick={() => navigate('/agency/add-car')}>
-                    Add Your First Car
-                  </Button>
-                </div>
-              ) : (
-                <div className="fleet-list">
-                  {agencyCars.slice(0, 3).map((car) => (
-                    <div key={car.id} className="fleet-item">
-                      <div className="fleet-item__icon">
+            <Grid>
+              {/* Stats Grid */}
+              <Grid.Col span={{ base: 12 }}>
+                <div className="dashboard__stats">
+                  <Card>
+                    <div className="stat-card">
+                      <div className="stat-card__icon">
                         <DashboardIcon aria-hidden="true" />
                       </div>
-                      <div className="fleet-item__details">
-                        <h4 className="fleet-item__title">
-                          {car.brand} {car.model}
-                        </h4>
-                        <p className="fleet-item__info">
-                          {car.year} • {car.pricePerDay} MAD/day
+                      <div className="stat-card__content">
+                        <h3 className="stat-card__value">{agencyCars.length}</h3>
+                        <p className="stat-card__label">Total Vehicles</p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card>
+                    <div className="stat-card">
+                      <div className="stat-card__icon">
+                        <CheckIcon aria-hidden="true" />
+                      </div>
+                      <div className="stat-card__content">
+                        <h3 className="stat-card__value">{availableCars}</h3>
+                        <p className="stat-card__label">Available Now</p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card>
+                    <div className="stat-card">
+                      <div className="stat-card__icon">
+                        <CalendarIcon aria-hidden="true" />
+                      </div>
+                      <div className="stat-card__content">
+                        <h3 className="stat-card__value">{activeBookings.length}</h3>
+                        <p className="stat-card__label">Active Bookings</p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card>
+                    <div className="stat-card">
+                      <div className="stat-card__icon">
+                        <TokensIcon aria-hidden="true" />
+                      </div>
+                      <div className="stat-card__content">
+                        <h3 className="stat-card__value">{totalRevenue} MAD</h3>
+                        <p className="stat-card__label">Total Earnings</p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card>
+                    <div className="stat-card">
+                      <div className="stat-card__icon">
+                        <CheckIcon aria-hidden="true" />
+                      </div>
+                      <div className="stat-card__content">
+                        <h3 className="stat-card__value">
+                          {reviewStats.averageRating} / 5
+                        </h3>
+                        <p className="stat-card__label">
+                          Based on {reviewStats.totalReviews} review{reviewStats.totalReviews === 1 ? '' : 's'}
                         </p>
                       </div>
-                      <span className={`availability-badge ${car.available ? 'availability-badge--available' : 'availability-badge--unavailable'}`}>
-                        {car.available ? 'Available' : 'Rented'}
-                      </span>
                     </div>
-                  ))}
+                  </Card>
                 </div>
-              )}
-            </Card.Body>
-          </Card>
-        </div>
+              </Grid.Col>
+
+              {/* Recent Bookings */}
+              <Grid.Col span={{ base: 12, xs: 7 }}>
+                <Card>
+                  <Card.Header>
+                    <div className="card-header-with-action">
+                      <h2>Recent Bookings</h2>
+                      <Button variant="text" size="small" onClick={() => navigate('/agency/bookings')}>
+                        View All
+                      </Button>
+                    </div>
+                  </Card.Header>
+                  <Card.Body>
+                    {agencyBookings.length === 0 ? (
+                      <div className="dashboard__empty">
+                        <p>No bookings yet</p>
+                      </div>
+                    ) : (
+                      <div className="booking-list">
+                        {agencyBookings.slice(0, 3).map((booking) => {
+                          const car = agencyCars.find((c) => c.id === booking.carId);
+                          return (
+                            <div key={booking.id} className="booking-item">
+                              <div className="booking-item__icon">
+                                <DashboardIcon aria-hidden="true" />
+                              </div>
+                              <div className="booking-item__details">
+                                <h4 className="booking-item__title">
+                                  {car ? `${car.brand} ${car.model}` : 'Car'}
+                                </h4>
+                                <p className="booking-item__dates">
+                                  {booking.pickupDate} to {booking.returnDate}
+                                </p>
+                              </div>
+                              <div className="booking-item__price">
+                                {booking.totalPrice - booking.commissionAmount} MAD
+                              </div>
+                              <span className={`booking-status status--${booking.status}`}>
+                                {booking.status}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Grid.Col>
+
+              {/* Fleet Overview */}
+              <Grid.Col span={{ base: 12, xs: 5 }}>
+                <Card>
+                  <Card.Header>
+                    <div className="card-header-with-action">
+                      <h2>Your Fleet</h2>
+                      <Button variant="text" size="small" onClick={() => navigate('/agency/manage-cars')}>
+                        Manage
+                      </Button>
+                    </div>
+                  </Card.Header>
+                  <Card.Body>
+                    {agencyCars.length === 0 ? (
+                      <div className="dashboard__empty">
+                        <p>No vehicles added yet</p>
+                        <Button variant="primary" onClick={() => navigate('/agency/add-car')}>
+                          Add Your First Car
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="fleet-list">
+                        {agencyCars.slice(0, 3).map((car) => (
+                          <div key={car.id} className="fleet-item">
+                            <div className="fleet-item__icon">
+                              <DashboardIcon aria-hidden="true" />
+                            </div>
+                            <div className="fleet-item__details">
+                              <h4 className="fleet-item__title">
+                                {car.brand} {car.model}
+                              </h4>
+                              <p className="fleet-item__info">
+                                {car.year} • {car.pricePerDay} MAD/day
+                              </p>
+                            </div>
+                            <span className={`availability-badge ${car.available ? 'availability-badge--available' : 'availability-badge--unavailable'}`}>
+                              {car.available ? 'Available' : 'Rented'}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </Card.Body>
+                </Card>
+              </Grid.Col>
+            </Grid>
 
             {/* Quick Actions */}
             <div className="dashboard__actions">

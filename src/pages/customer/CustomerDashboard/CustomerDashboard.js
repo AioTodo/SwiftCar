@@ -5,14 +5,13 @@ import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import { bookingsAPI, carsAPI } from '../../../services/api';
 import {
-  CalendarIcon,
-  CheckIcon,
-  TokensIcon,
-  DashboardIcon,
-  MagnifyingGlassIcon,
-  ClipboardIcon,
-  PersonIcon,
-} from '@radix-ui/react-icons';
+  Calendar,
+  CheckCircle,
+  DollarSign,
+  Search,
+  ClipboardList,
+  User,
+} from 'lucide-react';
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
@@ -78,7 +77,7 @@ const CustomerDashboard = () => {
           <Card>
             <div className="stat-card">
               <div className="stat-card__icon">
-                <CalendarIcon aria-hidden="true" />
+                <Calendar size={32} aria-hidden="true" />
               </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{upcomingBookings.length}</h3>
@@ -90,7 +89,7 @@ const CustomerDashboard = () => {
           <Card>
             <div className="stat-card">
               <div className="stat-card__icon">
-                <CheckIcon aria-hidden="true" />
+                <CheckCircle size={32} aria-hidden="true" />
               </div>
               <div className="stat-card__content">
                 <h3 className="stat-card__value">{pastBookings.length}</h3>
@@ -102,10 +101,10 @@ const CustomerDashboard = () => {
           <Card>
             <div className="stat-card">
               <div className="stat-card__icon">
-                <TokensIcon aria-hidden="true" />
+                <DollarSign size={32} aria-hidden="true" />
               </div>
               <div className="stat-card__content">
-                <h3 className="stat-card__value">{totalSpent} MAD</h3>
+                <h3 className="stat-card__value">{totalSpent.toFixed(0)} MAD</h3>
                 <p className="stat-card__label">Total Spent</p>
               </div>
             </div>
@@ -141,7 +140,7 @@ const CustomerDashboard = () => {
                   return (
                     <div key={booking.id} className="booking-item">
                       <div className="booking-item__icon">
-                        <DashboardIcon aria-hidden="true" />
+                        <Calendar size={24} aria-hidden="true" />
                       </div>
                       <div className="booking-item__details">
                         <h4 className="booking-item__title">
@@ -174,7 +173,7 @@ const CustomerDashboard = () => {
           <Card hoverable onClick={() => navigate('/search')}>
             <div className="action-card">
               <div className="action-card__icon">
-                <MagnifyingGlassIcon aria-hidden="true" />
+                <Search size={48} aria-hidden="true" />
               </div>
               <h3 className="action-card__title">Search Cars</h3>
               <p className="action-card__desc">Find your perfect rental</p>
@@ -184,7 +183,7 @@ const CustomerDashboard = () => {
           <Card hoverable onClick={() => navigate('/customer/bookings')}>
             <div className="action-card">
               <div className="action-card__icon">
-                <ClipboardIcon aria-hidden="true" />
+                <ClipboardList size={48} aria-hidden="true" />
               </div>
               <h3 className="action-card__title">My Bookings</h3>
               <p className="action-card__desc">View all your reservations</p>
@@ -194,7 +193,7 @@ const CustomerDashboard = () => {
           <Card hoverable onClick={() => navigate('/customer/profile')}>
             <div className="action-card">
               <div className="action-card__icon">
-                <PersonIcon aria-hidden="true" />
+                <User size={48} aria-hidden="true" />
               </div>
               <h3 className="action-card__title">Profile</h3>
               <p className="action-card__desc">Manage your account</p>

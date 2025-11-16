@@ -1,8 +1,27 @@
 # SwiftCar – Car Rental Platform
 
-SwiftCar is a React-based car rental booking platform that connects travelers with local car rental agencies. This repository contains the **frontend UI** built with Create React App, using **React 19**, **React Router v6**, **Sass**, and a small set of utilities and mock services.
+SwiftCar is a modern, full-featured car rental booking platform that connects travelers with local car rental agencies. This repository contains the **frontend UI** built with Create React App, featuring a comprehensive multi-role system with dedicated interfaces for customers, agencies, and administrators.
 
 **Status:** Customer + Agency flows are functionally complete for a demo; Admin and analytics features are partially scaffolded.
+
+## 🎯 Project Goal
+
+SwiftCar aims to revolutionize the car rental industry by creating a seamless, transparent, and user-friendly platform that:
+
+- **Empowers Travelers**: Provides customers with easy access to a wide selection of rental vehicles with transparent pricing, detailed information, and verified reviews
+- **Supports Local Agencies**: Enables car rental agencies to reach more customers, manage their fleet efficiently, and grow their business with powerful management tools
+- **Ensures Quality**: Maintains platform integrity through admin oversight, agency verification, and content moderation
+- **Delivers Excellence**: Offers a modern, responsive, and accessible user experience across all devices
+
+The platform serves as a marketplace that benefits all stakeholders: customers get reliable rental options, agencies gain visibility and booking management tools, and administrators maintain quality standards.
+
+## 📖 Quick Navigation
+
+- **New to SwiftCar?** → Start with [Quick Start](#-quick-start) below
+- **Want to explore features?** → See [Features](#-features) section
+- **Need help navigating the platform?** → Check **[USER_GUIDE.md](USER_GUIDE.md)** for complete walkthrough
+- **Looking for technical docs?** → Jump to [Additional Documentation](#-additional-documentation)
+- **Setting up development?** → Follow [Quick Start](#-quick-start) and [Tech Stack](#️-tech-stack)
 
 ---
 
@@ -154,14 +173,22 @@ swiftcar/
 
 ## 📚 Additional Documentation
 
-This README is a high-level overview. For deep technical and product documentation, see:
+This README is a high-level overview. For comprehensive documentation, see:
 
+### User Documentation
+- **`USER_GUIDE.md`** — **Complete navigation guide for clients** - Step-by-step walkthrough of all features, pages, and user flows for customers, agencies, and administrators
+
+### Technical Documentation
 - `docs/new/Features.md` — Detailed feature breakdown (Customer, Agency, Admin, Technical)
 - `docs/new/docs.md` — Full UI/UX and frontend architecture documentation
 - `docs/new/roadmap.md` / `docs/new/detailed-roadmap.md` — Implementation roadmap
 - `docs/new/PRD.md`, `docs/new/Product Description.md`, `docs/new/Target Audience.md` — Product-spec documents
-- `UPDATES_2025-11-10.md` — Update log, Node/tooling guidance, and recently added utilities
-- `TESTS_README.md` / `TEST_SUMMARY.md` — Testing notes and coverage summary (where applicable)
+
+### Development Documentation
+- `UPDATES_2025-11-10.md`, `UPDATES_2025-11-14.md`, `UPDATES_2025-11-16.md` — Update logs, Node/tooling guidance, and recently added utilities
+- `TESTS_README.md` / `TEST_SUMMARY.md` — Testing notes and coverage summary
+- `WARP.md` — Backend integration documentation
+- `mantine-warp-rule.md` — Mantine UI component guidelines
 
 ---
 

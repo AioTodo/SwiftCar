@@ -27,3 +27,9 @@
     margin: 0 auto;
   }
 }
+.help-center-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  margin: $spacing-md 0 $spacing-lg;
+}

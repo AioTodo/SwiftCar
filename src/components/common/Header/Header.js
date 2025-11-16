@@ -1,64 +1,89 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
-import { settingsService } from '../../../services/settingsService';
+import { IconChevronDown } from '@tabler/icons-react';
+import { Burger, Center, Container, Group, Menu } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { MantineLogo } from '@mantinex/mantine-logo';
+import classes from './HeaderMenu.module.css';
 
-const Header = () => {
-  const { isAuthenticated, user, logout } = useAuth();
-  const settings = settingsService.getSettings();
-  const showMaintenance = settings?.maintenanceMode;
+const links = [
+  { link: '/about', label: 'Features' },
+  {
+    link: '#1',
+    label: 'Learn',
+    links: [
+      { link: '/docs', label: 'Documentation' },
+      { link: '/resources', label: 'Resources' },
+      { link: '/community', label: 'Community' },
+      { link: '/blog', label: 'Blog' },
+    ],
+  },
+  { link: '/about', label: 'About' },
+  { link: '/pricing', label: 'Pricing' },
+  {
+    link: '#2',
+    label: 'Support',
+    links: [
+      { link: '/faq', label: 'FAQ' },
+      { link: '/demo', label: 'Book a demo' },
+      { link: '/forums', label: 'Forums' },
+    ],
+  },
+];
+
+export function HeaderMenu() {
+  const [opened, { toggle }] = useDisclosure(false);
+
+  const items = links.map((link) => {
+    const menuItems = link.links?.map((item) => (
+      <Menu.Item key={item.link}>{item.label}</Menu.Item>
+    ));
+
+    if (menuItems) {
+      return (
+        <Menu
+          key={link.label}
+          trigger="hover"
+          transitionProps={{ exitDuration: 0 }}
+          withinPortal
+        >
+          <Menu.Target>
+            <a
+              href={link.link}
+              className={classes.link}
+              onClick={(event) => event.preventDefault()}
+            >
+              <Center>
+                <span className={classes.linkLabel}>{link.label}</span>
+                <IconChevronDown size={14} stroke={1.5} />
+              </Center>
+            </a>
+          </Menu.Target>
+          <Menu.Dropdown>{menuItems}</Menu.Dropdown>
+        </Menu>
+      );
+    }
+
+    return (
+      <Link key={link.label} to={link.link} className={classes.link}>
+        {link.label}
+      </Link>
+    );
+  });
 
   return (
-    <header className="header">
-      <div className="header__container">
-        <Link to="/" className="header__logo">
-          <h1 className="header__brand">SwiftCar</h1>
-        </Link>
-
-        <nav className="header__nav">
-          <Link to="/" className="header__link">Home</Link>
-          <Link to="/search" className="header__link">Search Cars</Link>
-          <Link to="/about" className="header__link">About</Link>
-          <Link to="/faq" className="header__link">FAQ</Link>
-          <Link to="/help" className="header__link">Help Center</Link>
-          <Link to="/contact" className="header__link">Contact</Link>
-          <Link to="/agency/register" className="header__link">Become a Provider</Link>
-          
-          {!isAuthenticated ? (
-            <>
-              <Link to="/login" className="header__link">Login</Link>
-            </>
-          ) : (
-            <>
-              {user?.role === 'customer' && (
-                <Link to="/customer/dashboard" className="header__link">Dashboard</Link>
-              )}
-              {user?.role === 'agency' && (
-                <Link to="/agency/dashboard" className="header__link">Agency Dashboard</Link>
-              )}
-              {user?.role === 'admin' && (
-                <Link to="/admin/dashboard" className="header__link">Admin</Link>
-              )}
-              <button onClick={logout} className="header__link header__link--button">
-                Logout
-              </button>
-            </>
-          )}
-        </nav>
-      </div>
-
-      {showMaintenance && (
-        <div className="header__maintenance-banner">
-          <div className="header__maintenance-inner">
-            <span className="header__maintenance-label">Maintenance</span>
-            <span className="header__maintenance-text">
-              {settings.maintenanceMessage}
-            </span>
-          </div>
+    <header className={classes.header}>
+      <Container size="md">
+        <div className={classes.inner}>
+          <MantineLogo size={28} />
+          <Group gap={5} visibleFrom="sm">
+            {items}
+          </Group>
+          <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="sm" />
         </div>
-      )}
+      </Container>
     </header>
   );
-};
+}
 
-export default Header;
+export default HeaderMenu;

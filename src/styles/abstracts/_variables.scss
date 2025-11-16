@@ -30,8 +30,11 @@ $text-secondary: $color-gray-700;
 $text-muted: $color-gray-500;
 $text-disabled: $color-gray-400;
 
-// Typography (Turo-style)
-$font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+// Typography
+$font-family-avantt: 'Avantt', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-family-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$font-family-logo: 'Brown Sugar', cursive;
+$font-family-base: $font-family-avantt; // General text and headers use Avantt
 $font-size-base: 16px;
 $font-size-small: 14px;
 $font-size-xs: 12px;

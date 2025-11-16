@@ -122,11 +122,12 @@
 .featured-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: $spacing-lg;
-  margin-bottom: $spacing-lg;
+  gap: $spacing-xl;
+  margin-bottom: $spacing-xl;
 
   @include mobile-only {
     grid-template-columns: 1fr;
+    gap: $spacing-lg;
   }
 }
 
@@ -139,6 +140,14 @@
     border-radius: $border-radius-md;
     overflow: hidden;
     margin-bottom: $spacing-md;
+    position: relative;
+  }
+  
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
   &__image-placeholder {
@@ -146,6 +155,11 @@
     height: 100%;
     @include flex-center;
     font-size: 80px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $color-gray-100;
+    color: $color-gray-400;
   }
 
   &__title {

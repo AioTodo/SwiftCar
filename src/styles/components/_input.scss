@@ -1,4 +1,30 @@
-// Legacy BEM input styles have been deprecated in favor of Mantine-based
-// TextInput and related components (see src/components/common/Input/Input.js).
-// Keep this file empty unless you add very targeted layout helpers that
-// do not fight Mantine's own field styling.
+// Text area styles
+textarea {
+  font-family: $font-family-inter;
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  line-height: 1.6;
+  color: $text-primary;
+  background-color: $color-white;
+  border: 2px solid $color-gray-300;
+  border-radius: $border-radius-md;
+  resize: vertical;
+  min-height: 120px;
+  @include transition(border-color);
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
+
+  &:disabled {
+    background-color: $color-gray-100;
+    color: $text-disabled;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: $text-muted;
+  }
+}

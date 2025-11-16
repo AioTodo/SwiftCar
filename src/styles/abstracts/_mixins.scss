@@ -48,6 +48,16 @@
 }
 
 // Transition
-@mixin transition($property: all) {
-  transition: $property $transition-base;
+@mixin transition($properties...) {
+  @if length($properties) == 0 {
+    transition: all $transition-base;
+  } @else if length($properties) == 1 {
+    transition: nth($properties, 1) $transition-base;
+  } @else {
+    $transitions: ();
+    @each $property in $properties {
+      $transitions: append($transitions, $property $transition-base, comma);
+    }
+    transition: $transitions;
+  }
 }
