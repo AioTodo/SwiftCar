@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { entityStore } from '../../services/entityStore';
+import AgencySidebar from '../../components/layout/AgencySidebar';
 
 const emptyCar = {
   brand: '',
@@ -35,16 +36,23 @@ const AddCarPage = () => {
   };
 
   return (
-    <div className="container">
-      <h2 className="heading heading--h2">Add New Car</h2>
-      <form onSubmit={onSubmit} className="form">
-        <input className="input mb-1" name="brand" placeholder="Brand" value={car.brand} onChange={handleChange} />
-        <input className="input mb-1" name="model" placeholder="Model" value={car.model} onChange={handleChange} />
-        <input className="input mb-1" name="year" type="number" placeholder="Year" value={car.year} onChange={handleChange} />
-        <input className="input mb-1" name="pricePerDay" type="number" placeholder="Price per day" value={car.pricePerDay} onChange={handleChange} />
-        <input className="input mb-1" name="location" placeholder="Location" value={car.location} onChange={handleChange} />
-        <button className="button button--primary" type="submit">Save</button>
-      </form>
+    <div className="agency-add-car-page">
+      <div className="container">
+        <div className="agency-layout">
+          <AgencySidebar />
+          <main className="agency-layout__main">
+            <h2 className="heading heading--h2">Add New Car</h2>
+            <form onSubmit={onSubmit} className="form">
+              <input className="input mb-1" name="brand" placeholder="Brand" value={car.brand} onChange={handleChange} />
+              <input className="input mb-1" name="model" placeholder="Model" value={car.model} onChange={handleChange} />
+              <input className="input mb-1" name="year" type="number" placeholder="Year" value={car.year} onChange={handleChange} />
+              <input className="input mb-1" name="pricePerDay" type="number" placeholder="Price per day" value={car.pricePerDay} onChange={handleChange} />
+              <input className="input mb-1" name="location" placeholder="Location" value={car.location} onChange={handleChange} />
+              <button className="button button--primary" type="submit">Save</button>
+            </form>
+          </main>
+        </div>
+      </div>
     </div>
   );
 };

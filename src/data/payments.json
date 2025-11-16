@@ -1,1 +1,24 @@
-[]
+[
+  {
+    "paymentId": 1,
+    "bookingId": "booking-1",
+    "userId": "user-1",
+    "agencyId": "agency-1",
+    "amount": 1150,
+    "currency": "MAD",
+    "method": "card",
+    "status": "succeeded",
+    "paymentDate": "2024-10-15T10:15:00Z"
+  },
+  {
+    "paymentId": 2,
+    "bookingId": "booking-2",
+    "userId": "user-1",
+    "agencyId": "agency-1",
+    "amount": 2700,
+    "currency": "MAD",
+    "method": "card",
+    "status": "succeeded",
+    "paymentDate": "2024-09-20T14:30:00Z"
+  }
+]

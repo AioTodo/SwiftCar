@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import cars from '../../data/cars.json';
+import { DashboardIcon, MagnifyingGlassIcon, CalendarIcon } from '@radix-ui/react-icons';
 const HomePage = () => {
   return (
     <div className="home-page">
@@ -52,7 +53,9 @@ const HomePage = () => {
           {cars.slice(0, 8).map((car) => (
             <article key={car.carId} className="card car-card">
               <div className="car-card__image-wrapper">
-                <div className="car-card__image-placeholder">🚗</div>
+                <div className="car-card__image-placeholder">
+                  <DashboardIcon aria-hidden="true" />
+                </div>
               </div>
               <h3 className="car-card__title">{car.brand} {car.model}</h3>
               <p className="car-card__subtitle">{car.year} • {car.location}</p>
@@ -81,17 +84,23 @@ const HomePage = () => {
         <h2 className="how-it-works__title">How it works</h2>
         <div className="how-it-works__grid container">
           <div className="how-it-works__step">
-            <div className="how-it-works__icon">🔎</div>
+            <div className="how-it-works__icon">
+              <MagnifyingGlassIcon aria-hidden="true" />
+            </div>
             <h3 className="how-it-works__step-title">Search</h3>
             <p className="how-it-works__step-desc">Find the car that fits your trip and budget.</p>
           </div>
           <div className="how-it-works__step">
-            <div className="how-it-works__icon">📅</div>
+            <div className="how-it-works__icon">
+              <CalendarIcon aria-hidden="true" />
+            </div>
             <h3 className="how-it-works__step-title">Book</h3>
             <p className="how-it-works__step-desc">Pick dates, add extras, and confirm.</p>
           </div>
           <div className="how-it-works__step">
-            <div className="how-it-works__icon">🚗</div>
+            <div className="how-it-works__icon">
+              <DashboardIcon aria-hidden="true" />
+            </div>
             <h3 className="how-it-works__step-title">Drive</h3>
             <p className="how-it-works__step-desc">Pick up or get it delivered—enjoy the ride.</p>
           </div>

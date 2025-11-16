@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useNotification } from '../../../context/NotificationContext';
+import { useAuth } from '../../../context/AuthContext';
+import { entityStore } from '../../../services/entityStore';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
+import { CheckIcon } from '@radix-ui/react-icons';
 
 const RegisterAgencyPage = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotification();
+  const { user } = useAuth();
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     // Step 1: Business Information
     agencyName: '',
@@ -96,18 +101,65 @@ const RegisterAgencyPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Simulate API call
-    showNotification({
-      type: 'success',
-      message: 'Agency registration submitted! We will review your application.',
-    });
-    
-    setTimeout(() => {
-      navigate('/');
-    }, 2000);
+    if (!user) {
+      showNotification({
+        type: 'error',
+        message: 'You must be logged in to register an agency.',
+      });
+      navigate('/login');
+      return;
+    }
+
+    // Basic final validation: ensure previous steps are valid before submit
+    const allStepsValid = [1, 2, 3].every((step) => validateStep(step));
+    if (!allStepsValid || !formData.licenseDocument || !formData.insuranceDocument) {
+      showNotification({
+        type: 'error',
+        message: 'Please complete all required fields before submitting.',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const now = new Date().toISOString().slice(0, 10);
+      await entityStore.create('agencies', {
+        ownerId: user.id,
+        agencyName: formData.agencyName,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        country: formData.country,
+        businessLicense: formData.businessLicense,
+        verificationStatus: 'pending',
+        registrationDate: now,
+        verificationDate: null,
+        commissionRate: 0.06,
+        isActive: false,
+        description: '',
+        rating: null,
+        totalBookings: 0,
+      });
+
+      showNotification({
+        type: 'success',
+        message: 'Agency registration submitted! We will review your application.',
+      });
+
+      navigate('/agency/verification');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Failed to register agency', error);
+      showNotification({
+        type: 'error',
+        message: 'Could not submit your application. Please try again.',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -121,17 +173,23 @@ const RegisterAgencyPage = () => {
         {/* Progress Steps */}
         <div className="registration-steps">
           <div className={`registration-step ${currentStep >= 1 ? 'registration-step--active' : ''} ${currentStep > 1 ? 'registration-step--completed' : ''}`}>
-            <div className="registration-step__number">{currentStep > 1 ? '✓' : '1'}</div>
+            <div className="registration-step__number">
+              {currentStep > 1 ? <CheckIcon aria-hidden="true" /> : '1'}
+            </div>
             <div className="registration-step__label">Business Info</div>
           </div>
           <div className="registration-step__line"></div>
           <div className={`registration-step ${currentStep >= 2 ? 'registration-step--active' : ''} ${currentStep > 2 ? 'registration-step--completed' : ''}`}>
-            <div className="registration-step__number">{currentStep > 2 ? '✓' : '2'}</div>
+            <div className="registration-step__number">
+              {currentStep > 2 ? <CheckIcon aria-hidden="true" /> : '2'}
+            </div>
             <div className="registration-step__label">Address</div>
           </div>
           <div className="registration-step__line"></div>
           <div className={`registration-step ${currentStep >= 3 ? 'registration-step--active' : ''} ${currentStep > 3 ? 'registration-step--completed' : ''}`}>
-            <div className="registration-step__number">{currentStep > 3 ? '✓' : '3'}</div>
+            <div className="registration-step__number">
+              {currentStep > 3 ? <CheckIcon aria-hidden="true" /> : '3'}
+            </div>
             <div className="registration-step__label">Owner Info</div>
           </div>
           <div className="registration-step__line"></div>
@@ -402,8 +460,8 @@ const RegisterAgencyPage = () => {
                   Next
                 </Button>
               ) : (
-                <Button type="submit" variant="primary">
-                  Submit Application
+                <Button type="submit" variant="primary" disabled={isSubmitting}>
+                  {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </Button>
               )}
             </div>

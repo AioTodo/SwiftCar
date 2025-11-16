@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { entityStore } from '../../services/entityStore';
+import AgencySidebar from '../../components/layout/AgencySidebar';
 
 const ManageCarsPage = () => {
   const [cars, setCars] = useState([]);
@@ -48,13 +49,17 @@ const ManageCarsPage = () => {
   const total = useMemo(() => cars.length, [cars]);
 
   return (
-    <div className="container">
-      <h2 className="heading heading--h2">Manage Cars</h2>
-      <p className="text--muted mb-2">Total cars: {total}</p>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <div className="table table--cars">
+    <div className="agency-manage-cars-page">
+      <div className="container">
+        <div className="agency-layout">
+          <AgencySidebar />
+          <main className="agency-layout__main">
+            <h2 className="heading heading--h2">Manage Cars</h2>
+            <p className="text--muted mb-2">Total cars: {total}</p>
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <div className="table table--cars">
           <div className="table__row table__row--head">
             <div>Brand</div>
             <div>Model</div>
@@ -111,8 +116,11 @@ const ManageCarsPage = () => {
               </div>
             );
           })}
+              </div>
+            )}
+          </main>
         </div>
-      )}
+      </div>
     </div>
   );
 };

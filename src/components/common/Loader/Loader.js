@@ -1,17 +1,27 @@
 import React from 'react';
+import { Loader as MantineLoader, Center, Stack, Text } from '@mantine/core';
 
+// Mantine-based Loader wrapper. Uses theme-based spinner and optional full-screen mode.
 const Loader = ({ size = 'medium', fullScreen = false, text = '' }) => {
-  const loaderClass = ['loader', `loader--${size}`].filter(Boolean).join(' ');
+  const mantineSize = size === 'small' ? 'sm' : size === 'large' ? 'lg' : 'md';
 
   const content = (
-    <div className={loaderClass}>
-      <div className="loader__spinner"></div>
-      {text && <p className="loader__text">{text}</p>}
-    </div>
+    <Stack align="center" gap="xs">
+      <MantineLoader size={mantineSize} />
+      {text && (
+        <Text size="sm" c="dimmed">
+          {text}
+        </Text>
+      )}
+    </Stack>
   );
 
   if (fullScreen) {
-    return <div className="loader-container loader-container--fullscreen">{content}</div>;
+    return (
+      <Center style={{ minHeight: '60vh' }}>
+        {content}
+      </Center>
+    );
   }
 
   return content;

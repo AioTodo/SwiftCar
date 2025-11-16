@@ -13,14 +13,15 @@ SwiftCar is a car rental booking platform that connects travelers with local car
 
 
 ## TECHNOLOGY STACK
------------------
+------------------
 - **React** (Create React App - NOT Vite, NOT Next.js)
 - **React Router DOM** for navigation
-- **Sass/SCSS** for styling (with BEM methodology)
+- **Mantine UI** (`@mantine/core`, `@mantine/hooks`) as the **primary UI component library** for buttons, cards, modals, loaders, badges, and layout primitives.
+- **Sass/SCSS** for **design tokens and layout** (colors, spacing, typography, grid) and **minimal overrides only** – not a separate, full BEM-based component system.
 - **JSON files** for mock data (no backend)
 - **State Management:** useState, useContext (or Redux if preferred)
 - **File Extension:** .js (NOT .jsx)
-- **Styling:** All styles in one folder (src/styles/)
+- **Styling:** Centralized in `src/styles/` for tokens/layout; prefer Mantine props & theming over new component-specific SCSS.
 
 
 ## MAIN USER TYPES (ROLES)
@@ -500,6 +501,8 @@ SwiftCar is a car rental booking platform that connects travelers with local car
 
 ## SHARED COMPONENTS TO CREATE
 ----------------------------
+
+> **Implementation note:** In this codebase, shared primitives such as Button, Card, Modal, Loader, StatusBadge, and Notification are built on top of **Mantine** components (e.g., `@mantine/core` Button, Card, Modal, Loader, Badge). SCSS in `src/styles/` provides global tokens and layout helpers; prefer Mantine props and theming over adding new component-specific BEM classes.
 
 ### 1. Header/Navbar Component
 - Logo (clickable, links to home)
@@ -1417,6 +1420,8 @@ Use React Context API for global state (or Redux if preferred):
 
 ## STYLING GUIDELINES
 -------------------
+
+> **Mantine + SCSS:** Mantine UI (`@mantine/core`, `@mantine/hooks`) is the primary UI library for components (buttons, cards, modals, loaders, badges). SCSS is used mainly for design tokens (colors, spacing, typography), global/layout styles (e.g., dashboards), and minimal overrides where Mantine cannot cover a use case. Avoid building a separate, parallel design system purely in SCSS when a Mantine component can express the same UI.
 
 ### Color Palette (src/styles/abstracts/_variables.scss)
 ```scss

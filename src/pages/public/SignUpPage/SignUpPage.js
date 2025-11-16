@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { usersAPI } from '../../../services/api';
+import { useAuth } from '../../../context/AuthContext';
 import Button from '../../../components/common/Button';
 import Input from '../../../components/common/Input';
 
@@ -16,6 +17,7 @@ const initialForm = {
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -49,10 +51,22 @@ const SignUpPage = () => {
         role: form.role,
       };
       await usersAPI.create(payload);
+
+      // Automatically log the user in with the chosen role so protected routes work immediately
+      login({
+        email: payload.email,
+        role: payload.role,
+        firstName: payload.firstName,
+        lastName: payload.lastName,
+        phone: payload.phone,
+      });
+
       if (form.role === 'agency') {
+        // Agency owners go straight to the agency registration flow
         navigate('/agency/register');
       } else {
-        navigate('/login');
+        // Customers go directly to their dashboard after sign-up
+        navigate('/customer/dashboard');
       }
     } catch (err) {
       setError(err?.message || 'Failed to create account');

@@ -1,5 +1,8 @@
 import React from 'react';
+import { Button as MantineButton } from '@mantine/core';
 
+// Mantine-based Button wrapper that preserves the existing Button API
+// while delegating visual styling to the Mantine theme.
 const Button = ({
   children,
   variant = 'primary',
@@ -13,29 +16,38 @@ const Button = ({
   ...rest
 }) => {
   const isDisabled = disabled || loading;
-  const buttonClass = [
-    'button',
-    `button--${variant}`,
-    `button--${size}`,
-    fullWidth && 'button--full-width',
-    isDisabled && 'button--disabled',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
 
-  // Strip non-DOM props from being spread to the button element
+  // Map legacy variants to Mantine variants/colors
+  let mantineVariant = 'filled';
+  let color = 'brand';
+
+  if (variant === 'outline') {
+    mantineVariant = 'outline';
+  } else if (variant === 'text') {
+    mantineVariant = 'subtle';
+  } else if (variant === 'danger') {
+    color = 'red';
+  } else if (variant === 'accent') {
+    mantineVariant = 'light';
+  }
+
+  const mantineSize = size === 'small' ? 'sm' : size === 'large' ? 'lg' : 'md';
 
   return (
-    <button
+    <MantineButton
       type={type}
-      className={buttonClass}
-      onClick={onClick}
+      variant={mantineVariant}
+      size={mantineSize}
+      color={color}
+      fullWidth={fullWidth}
       disabled={isDisabled}
-      aria-busy={loading || undefined}
+      loading={loading}
+      onClick={onClick}
+      className={className}
+      {...rest}
     >
       {children}
-    </button>
+    </MantineButton>
   );
 };
 

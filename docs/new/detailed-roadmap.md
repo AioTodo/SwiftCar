@@ -38,7 +38,7 @@ Create a solid foundation for the SwiftCar platform with proper project structur
 #### Tasks:
 - [ ] Create React app using Create React App
 - [ ] Install and configure React Router DOM
-- [ ] Install and configure Sass
+- [ ] Install and configure Mantine (`@mantine/core`, `@mantine/hooks`) following `mantine-warp-rule.md`
 - [ ] Set up ESLint configuration
 - [ ] Set up Prettier configuration
 - [ ] Configure .gitignore file
@@ -63,24 +63,18 @@ Create a solid foundation for the SwiftCar platform with proper project structur
 **So that** I can maintain consistent styling across the application
 
 #### Tasks:
-- [ ] Create Sass folder structure (abstracts, base, layout, components)
-- [ ] Define color palette variables
-- [ ] Define typography variables (fonts, sizes, weights)
-- [ ] Define spacing system (8-point grid)
-- [ ] Define breakpoint variables
-- [ ] Create mixins for media queries
-- [ ] Create mixins for transitions and animations
-- [ ] Define shadow and elevation system
-- [ ] Define border radius system
-- [ ] Create utility classes
-- [ ] Create CSS reset file
-- [ ] Create typography base styles
-- [ ] Document design system in style guide
+- [ ] Configure a Mantine theme in `MantineProvider` (colors, typography, spacing, radius) following `mantine-warp-rule.md`
+- [ ] Define primary color palette and semantic colors in the Mantine theme
+- [ ] Define typography (base font family, heading fonts, sizes, weights) in the Mantine theme
+- [ ] Define spacing scale in the Mantine theme
+- [ ] Configure default radius and shadow system using Mantine theme/radius and CSS variables
+- [ ] Create any global CSS variables overrides only where needed (e.g., shadows) as documented in `mantine-warp-rule.md`
+- [ ] Document design system and theme usage in a style guide
 
 #### Acceptance Criteria:
-- All design tokens defined as SCSS variables
-- Mixins created and tested
-- Utility classes working
+- All design tokens defined via Mantine theme configuration
+- Theme values (colors, typography, spacing, radius) are used consistently in components
+- Legacy styles are aligned with Mantine where there are conflicts
 - Design system documented
 - Consistent styling across components
 
@@ -93,21 +87,21 @@ Create a solid foundation for the SwiftCar platform with proper project structur
 
 #### Tasks:
 - [ ] Create common components folder structure
-- [ ] Create Button component (variants, sizes)
-- [ ] Create Input component (text, email, password, etc.)
-- [ ] Create Card component
-- [ ] Create Modal component
-- [ ] Create Loader component
-- [ ] Create Notification/Toast component
-- [ ] Create StatusBadge component
-- [ ] Create Layout components (Header, Footer, Sidebar)
-- [ ] Implement BEM methodology for all components
+- [ ] Create Button component using Mantine `<Button>` with project-specific variants and sizes
+- [ ] Create Input components (TextInput, PasswordInput, NumberInput, etc.) using Mantine form elements
+- [ ] Create Card component using Mantine `<Card>`
+- [ ] Create Modal component using Mantine `<Modal>`
+- [ ] Create Loader component using Mantine `<Loader>` or similar
+- [ ] Create Notification/Toast component using Mantine notifications package (if installed)
+- [ ] Create StatusBadge component using Mantine `<Badge>`
+- [ ] Create Layout components (Header, Footer, Sidebar) using Mantine layout primitives (Container, Grid, Stack, Group)
+- [ ] Follow Mantine theming and styling rules from `mantine-warp-rule.md` instead of custom BEM SCSS
 - [ ] Write component documentation
 - [ ] Create component examples/storybook (optional)
 
 #### Acceptance Criteria:
-- All common components created and styled
-- Components follow BEM naming convention
+- All common components created and styled with Mantine
+- Components consume Mantine theme tokens (colors, spacing, radius, typography)
 - Components are reusable and configurable
 - Components are responsive
 - Components are accessible (WCAG compliant)

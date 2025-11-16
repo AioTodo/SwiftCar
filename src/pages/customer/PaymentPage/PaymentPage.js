@@ -2,15 +2,25 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../../../context/BookingContext';
 import { useNotification } from '../../../context/NotificationContext';
+import { useAuth } from '../../../context/AuthContext';
+import { bookingsAPI } from '../../../services/api';
+import { priceCalculator } from '../../../utils/priceCalculator';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
 import Loader from '../../../components/common/Loader';
+import {
+  LockClosedIcon,
+  CheckIcon,
+  EnvelopeClosedIcon,
+  DashboardIcon,
+} from '@radix-ui/react-icons';
 
 const PaymentPage = () => {
   const navigate = useNavigate();
   const { state, resetBooking } = useBooking();
   const { showNotification } = useNotification();
+  const { user } = useAuth();
   
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentData, setPaymentData] = useState({
@@ -68,24 +78,45 @@ const PaymentPage = () => {
     
     setIsProcessing(true);
     
-    // Simulate payment processing
-    setTimeout(() => {
-      setIsProcessing(false);
-      
-      showNotification({
-        type: 'success',
-        message: 'Booking confirmed! Check your email for details.',
-      });
-      
-      resetBooking();
-      navigate('/customer/dashboard');
+    // Simulate payment processing and then create a booking record
+    setTimeout(async () => {
+      try {
+        // Build a minimal booking payload; fall back to demo values if context is incomplete
+        const car = state.selectedCar;
+        const bookingPayload = {
+          userId: user?.id || 'demo-user',
+          agencyId: (car && car.agencyId) || 'agency-demo',
+          carId: car?.id || 'car-demo',
+          pickup: state.pickupDate || '2025-01-10',
+          dropoff: state.returnDate || '2025-01-11',
+          pricePerDay: car?.pricePerDay || 100,
+          extras: state.extras || {},
+        };
+
+        const booking = await bookingsAPI.create(bookingPayload);
+
+        showNotification({
+          type: 'success',
+          message: 'Booking confirmed! Check your email for details.',
+        });
+
+        resetBooking();
+        navigate(`/booking/confirmation/${booking.id}`);
+      } finally {
+        setIsProcessing(false);
+      }
     }, 2500);
   };
 
-  // Mock pricing calculation
-  const basePrice = 1500;
-  const extrasPrice = 200;
-  const totalPrice = basePrice + extrasPrice;
+  // Pricing calculation based on booking context; fall back to demo values if missing
+  const pickup = state.pickupDate || '2025-01-10';
+  const dropoff = state.returnDate || '2025-01-11';
+  const extras = state.extras || {};
+  const pricePerDay = car?.pricePerDay || 100;
+
+  const basePrice = priceCalculator.basePrice(pricePerDay, pickup, dropoff);
+  const extrasPrice = priceCalculator.extrasCost(extras);
+  const totalPrice = priceCalculator.totalPrice(pricePerDay, pickup, dropoff, extras);
 
   return (
     <div className="payment-page">
@@ -101,6 +132,13 @@ const PaymentPage = () => {
               
               <Card.Body>
                 <form onSubmit={handleSubmit} className="payment-form">
+                  {/* Global error region for screen readers */}
+                  {Object.values(errors).some(Boolean) && (
+                    <div className="form-error" role="alert" aria-live="assertive">
+                      {errors.cardNumber || errors.cardName || errors.expiryDate || errors.cvv}
+                    </div>
+                  )}
+
                   <Input
                     label="Card Number"
                     type="text"
@@ -179,21 +217,27 @@ const PaymentPage = () => {
             {/* Security Info */}
             <Card className="security-info">
               <div className="security-item">
-                <span className="security-item__icon">🔒</span>
+                <span className="security-item__icon">
+                  <LockClosedIcon aria-hidden="true" />
+                </span>
                 <div>
                   <h4>Secure Payment</h4>
                   <p className="text-small text-muted">Your payment information is encrypted and secure</p>
                 </div>
               </div>
               <div className="security-item">
-                <span className="security-item__icon">✓</span>
+                <span className="security-item__icon">
+                  <CheckIcon aria-hidden="true" />
+                </span>
                 <div>
                   <h4>Instant Confirmation</h4>
                   <p className="text-small text-muted">Receive booking confirmation immediately</p>
                 </div>
               </div>
               <div className="security-item">
-                <span className="security-item__icon">📧</span>
+                <span className="security-item__icon">
+                  <EnvelopeClosedIcon aria-hidden="true" />
+                </span>
                 <div>
                   <h4>Email Receipt</h4>
                   <p className="text-small text-muted">Booking details sent to your email</p>
@@ -210,7 +254,9 @@ const PaymentPage = () => {
               </Card.Header>
               <Card.Body>
                 <div className="summary-car">
-                  <div className="summary-car__image">🚗</div>
+                  <div className="summary-car__image">
+                    <DashboardIcon aria-hidden="true" />
+                  </div>
                   <div>
                     <h4>{car.brand} {car.model}</h4>
                     <p className="text-small text-muted">{car.year} • {car.category}</p>

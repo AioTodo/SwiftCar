@@ -34,8 +34,14 @@ SwiftCar is a car rental booking platform designed to connect travelers with loc
 ### Core Technologies
 - **React 18.x** - UI library (Create React App)
 - **React Router DOM 6.x** - Client-side routing
-- **Sass/SCSS** - CSS preprocessor
+- **Mantine UI** (`@mantine/core`, `@mantine/hooks`) - **primary UI component library** and theming
+- **Sass/SCSS** - CSS preprocessor for **global tokens and layouts**, plus minimal overrides where Mantine cannot express the desired behavior
 - **CSS Grid & Flexbox** - Layout systems
+- **Chart.js + react-chartjs-2** - analytics and dashboard charts
+- **react-table** - data tables for dashboards and management views
+- **lucide-react** - icon library for navigation and UI accents
+
+> **Official UI/data libraries (current implementation):** Mantine for core components; Chart.js + react-chartjs-2 for charts; react-table for tables; lucide-react for icons. New components should be built with Mantine primitives first, using SCSS only for tokens/layout or targeted overrides.
 
 ### Development Tools
 - **Node.js 18+** - JavaScript runtime
@@ -647,7 +653,9 @@ $transition-base: all $duration-normal $ease-in-out;
 
 ### 6.2 Component Template
 
-**Button Component Example:**
+> **Implementation note (SwiftCar repo):** Core UI primitives like Button, Card, Modal, Loader, StatusBadge, and Notification are implemented as thin wrappers around Mantine components in `src/components/common/`. SCSS is used primarily for global tokens and layout; avoid creating new, fully custom BEM button/card styles when Mantine props/theme can cover the use case.
+
+**Button Component Example (generic pattern):**
 
 **Button.jsx:**
 ```javascript

@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useNotification } from '../../../context/NotificationContext';
+import { entityStore } from '../../../services/entityStore';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
-import carsData from '../../../data/cars.json';
-import agenciesData from '../../../data/agencies.json';
+import Modal from '../../../components/common/Modal';
+import CarForm from '../../../components/cars/CarForm/CarForm';
+import { carsAPI } from '../../../services/api';
+import { DashboardIcon, StarFilledIcon } from '@radix-ui/react-icons';
 
 const ManageCarsPage = () => {
   const navigate = useNavigate();
@@ -13,31 +16,63 @@ const ManageCarsPage = () => {
   const { showNotification } = useNotification();
   
   const [filter, setFilter] = useState('all'); // all, available, rented
+  const [cars, setCars] = useState([]);
+  const [agency, setAgency] = useState(null);
+  const [showCreate, setShowCreate] = useState(false);
+  const [showEdit, setShowEdit] = useState({ open: false, car: null });
+
+  React.useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      const agencies = await entityStore.getAll('agencies');
+      if (cancelled) return;
+      let current = null;
+      if (user?.id) {
+        current = agencies.find((a) => a.ownerId === user.id) || null;
+      }
+      if (!current && agencies && agencies.length > 0) {
+        current = agencies[0];
+      }
+      setAgency(current);
+      const list = await Promise.resolve(carsAPI.list());
+      if (cancelled) return;
+      const onlyAgency = current ? list.filter((c) => c.agencyId === current.id) : list;
+      setCars(onlyAgency);
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
   
-  // Mock: Get agency cars
-  const agency = agenciesData.find((a) => a.ownerId === user?.id) || agenciesData[0];
-  const agencyCars = carsData.filter((c) => c.agencyId === agency?.id);
-  
+  const agencyCars = cars;
   const filteredCars = filter === 'all' 
     ? agencyCars
     : filter === 'available'
     ? agencyCars.filter((c) => c.available)
     : agencyCars.filter((c) => !c.available);
 
-  const handleToggleAvailability = (carId) => {
-    showNotification({
-      type: 'success',
-      message: 'Car availability updated!',
-    });
+  const handleToggleAvailability = async (carId) => {
+    const car = cars.find((c) => c.id === carId);
+    if (!car) return;
+    const updated = await carsAPI.update(carId, { available: !car.available });
+    setCars((prev) => prev.map((c) => (c.id === carId ? updated : c)));
+    showNotification({ type: 'success', message: 'Car availability updated!' });
   };
 
-  const handleDeleteCar = (carId) => {
+  const handleDeleteCar = async (carId) => {
     if (window.confirm('Are you sure you want to delete this car?')) {
-      showNotification({
-        type: 'success',
-        message: 'Car deleted successfully!',
-      });
+      await carsAPI.remove(carId);
+      setCars((prev) => prev.filter((c) => c.id !== carId));
+      showNotification({ type: 'success', message: 'Car deleted successfully!' });
     }
+  };
+
+  const handleCreateCar = async (payload) => {
+    const created = await carsAPI.create({ ...payload, agencyId: agency?.id || null });
+    setCars((prev) => [created, ...prev]);
+    setShowCreate(false);
+    showNotification({ type: 'success', message: 'Car added successfully!' });
   };
 
   return (
@@ -48,7 +83,7 @@ const ManageCarsPage = () => {
             <h1>Manage Fleet</h1>
             <p className="text-muted">{agencyCars.length} total vehicle{agencyCars.length !== 1 ? 's' : ''}</p>
           </div>
-          <Button variant="primary" onClick={() => navigate('/agency/add-car')}>
+          <Button variant="primary" onClick={() => setShowCreate(true)}>
             Add New Car
           </Button>
         </div>
@@ -99,7 +134,9 @@ const ManageCarsPage = () => {
             {filteredCars.map((car) => (
               <Card key={car.id} className="car-manage-card">
                 <div className="car-manage-card__image">
-                  <div className="car-manage-card__image-placeholder">🚗</div>
+                  <div className="car-manage-card__image-placeholder">
+                    <DashboardIcon aria-hidden="true" />
+                  </div>
                   <span className={`availability-badge ${car.available ? 'availability-badge--available' : 'availability-badge--unavailable'}`}>
                     {car.available ? 'Available' : 'Rented'}
                   </span>
@@ -128,7 +165,9 @@ const ManageCarsPage = () => {
                     </div>
                     <div className="detail-item">
                       <span className="detail-item__label">Rating:</span>
-                      <span className="detail-item__value">⭐ {car.rating} ({car.reviewCount})</span>
+                      <span className="detail-item__value">
+                        <StarFilledIcon aria-hidden="true" /> {car.rating} ({car.reviewCount})
+                      </span>
                     </div>
                   </div>
 
@@ -149,7 +188,9 @@ const ManageCarsPage = () => {
                     <Button
                       variant="outline"
                       size="small"
-                      onClick={() => navigate(`/agency/edit-car/${car.id}`)}
+                      onClick={() => {
+                        setShowEdit({ open: true, car });
+                      }}
                     >
                       Edit
                     </Button>
@@ -174,6 +215,38 @@ const ManageCarsPage = () => {
           </div>
         )}
       </div>
+      {/* Create Car Modal */}
+      <Modal isOpen={showCreate} onClose={() => setShowCreate(false)} title="Add New Car">
+        <CarForm onSubmit={handleCreateCar} onCancel={() => setShowCreate(false)} />
+      </Modal>
+
+      <Modal
+        isOpen={showEdit.open}
+        onClose={() => setShowEdit({ open: false, car: null })}
+        title="Edit Car"
+      >
+        {showEdit.car && (
+          <CarForm
+            defaultValues={{
+              title: showEdit.car.title || `${showEdit.car.brand} ${showEdit.car.model}`,
+              brand: showEdit.car.brand,
+              model: showEdit.car.model,
+              pricePerDay: showEdit.car.pricePerDay,
+              location: showEdit.car.location || '',
+              features: showEdit.car.features || [],
+              images: showEdit.car.images || [],
+              available: showEdit.car.available,
+            }}
+            onSubmit={async (payload) => {
+              const updated = await carsAPI.update(showEdit.car.id, payload);
+              setCars((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
+              setShowEdit({ open: false, car: null });
+              showNotification({ type: 'success', message: 'Car updated successfully!' });
+            }}
+            onCancel={() => setShowEdit({ open: false, car: null })}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

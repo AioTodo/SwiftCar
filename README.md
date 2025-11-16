@@ -1,16 +1,19 @@
-# SwiftCar - Car Rental Platform
+# SwiftCar – Car Rental Platform
 
-A modern React-based car rental booking platform connecting travelers with local car rental agencies.
+SwiftCar is a React-based car rental booking platform that connects travelers with local car rental agencies. This repository contains the **frontend UI** built with Create React App, using **React 19**, **React Router v6**, **Sass**, and a small set of utilities and mock services.
 
-**Status:** 75% Complete ✅ | **Development In Progress**
+**Status:** Customer + Agency flows are functionally complete for a demo; Admin and analytics features are partially scaffolded.
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js **20.x** (recommended)
+- npm (or yarn equivalent)
+
+> ⚠️ `react-scripts@5` and the Babel toolchain used here are **not** compatible with Node 22+.
+> If you see obscure Babel errors, switch to Node 20 (see `UPDATES_2025-11-10.md`).
 
 ### Installation & Running
 
@@ -18,118 +21,171 @@ A modern React-based car rental booking platform connecting travelers with local
 # Navigate to project
 cd swiftcar
 
-# Install dependencies (if needed)
+# Install dependencies
 npm install
 
 # Start development server
 npm start
 ```
 
-The app will open at `http://localhost:3000`
+By default the app runs at `http://localhost:3000`.
+
+If you are also running the (optional) backend server documented in `UPDATES_2025-11-10.md` / `WARP.md`, use the combined dev script instead:
+
+```bash
+npm run dev
+```
 
 ---
 
 ## 🎯 Features
 
-### ✅ Implemented
-**Customer Features:**
-- Authentication System - Login with role-based access
-- Search & Browse - Find cars by location and dates
-- Car Details - View specifications and book cars
-- Customer Dashboard - Stats, bookings, and quick actions
-- Complete Booking Flow - 3-step wizard with validation
-- Payment Processing - Card payment with security
-- Booking Management - View, filter, and cancel bookings
-- Profile Management - Edit personal info and settings
+### ✅ Implemented (UI / Frontend)
 
-**Agency Features:**
-- Agency Registration - 4-step onboarding with document upload
-- Agency Dashboard - Fleet stats, bookings, and earnings
-- Vehicle Management - Add, edit, delete cars (full CRUD)
-- Fleet Overview - View and manage all vehicles
-- Availability Control - Toggle car availability
+**Public / Marketing:**
+- Home page with hero, feature highlights, and CTAs
+- Search results page for browsing cars
+- Car details page with specifications and pricing breakdown
+- About, FAQ, and Contact pages
 
-**Platform Features:**
-- Responsive Design - Mobile, tablet, desktop support
-- Toast Notifications - User feedback system
-- Protected Routes - Role-based page access
-- Modern UI - Professional design with BEM methodology
+**Authentication & Access Control:**
+- Login and sign-up pages, including role selection (customer / agency)
+- Role-based protected routes using `ProtectedRoute` and `AuthContext`
+- Basic notification system for success/error feedback
 
-### ⏳ In Progress
-- Agency booking management
-- Admin panel and agency verification
-- Earnings dashboard
-- Review system
+**Customer Experience:**
+- Customer dashboard with quick access to bookings
+- Multi-step booking flow (date selection, extras, summary)
+- Payment step UI (card details form, summary, validation)
+- "My Bookings" page for viewing existing reservations
+- Profile page for editing customer information
+- Write Review page for submitting reviews after a completed booking (stored locally via `storageService`)
+
+**Agency Experience:**
+- Agency registration page (post sign-up flow)
+- Agency dashboard with high-level stats and quick links
+- Add Car and Manage Cars pages based on `CarForm` and related components
+- Booking requests page UI for handling incoming bookings
+
+**Technical / Cross-cutting:**
+- Global layout with `Header`, `Footer`, and app-level `Notification`
+- Centralized routing in `src/routes/AppRoutes.js` using React Router v6
+- Reusable UI components (Button, Input, Card, Modal, Loader, Notification)
+- Shared utility layer (`src/utils/*`) for dates, validation, formatting, and pricing
+- Mock data and services (`src/data/*`, `src/services/*`) for offline/demo flows
+
+### ⏳ In Progress / Planned
+
+As described in `docs/new/Features.md` and `docs/new/docs.md`, the following areas are either partially implemented or planned for future iterations:
+
+- Deeper agency booking management workflows (status changes, messaging, etc.)
+- Admin console for agency verification, content moderation, and platform configuration
+- Earnings and analytics dashboards for agencies and admins
+- Full review and rating system persisted to a backend instead of localStorage
+- Multi-language support and more advanced accessibility coverage
 
 ---
 
-## 🔐 Demo Credentials
+## 🔐 Demo / Test Accounts
 
-**Customer Account:**
+This project ships with **mocked data and services** rather than a full production authentication backend. If you wire it to a backend server, align credentials with your server configuration.
+
+For local demos using a simple mock or dev server, typical patterns are:
+
+**Customer Account (example):**
 - Email: `customer@example.com`
 - Password: `password123`
 
-**Agency Account:**
+**Agency Account (example):**
 - Email: `agency@example.com`
 - Password: `password123`
 
-**Admin Account:**
+**Admin Account (example):**
 - Email: `admin@swiftcar.com`
 - Password: `admin123`
 
+> Treat these strictly as **example credentials**; they may live in mock JSON or seed data, not in a production identity system.
+
 ---
 
-## 📁 Project Structure
+## 📁 Project Structure (Frontend)
+
+High-level structure (actual files may vary slightly from the full architecture described in `docs/new/docs.md`):
 
 ```
 swiftcar/
+├── public/                       # CRA static assets (HTML, favicon, manifest, images)
 ├── src/
-│   ├── components/     # Reusable UI components
-│   ├── pages/          # Page components
-│   ├── context/        # React Context providers
-│   ├── routes/         # Routing configuration
-│   ├── styles/         # SCSS stylesheets
-│   ├── data/           # Mock JSON data
-│   └── utils/          # Utility functions
-└── public/             # Static assets
+│   ├── App.js                    # Root component (Header, Footer, Notification, routes)
+│   ├── App.css                   # Global styles
+│   ├── components/
+│   │   ├── booking/              # Booking flow components (DateRangePicker, Extras, Summary)
+│   │   ├── cars/                 # CarForm, car-related UI
+│   │   └── common/               # Button, Card, Header, Footer, Input, Loader, Modal, Notification
+│   ├── context/                  # Auth/Notification/etc. contexts (e.g., `AuthContext` used by ProtectedRoute)
+│   ├── data/                     # Mock JSON data (cars, bookings, reviews, commissions, payments)
+│   ├── pages/
+│   │   ├── public/               # Home, SearchResults, CarDetails, Login, SignUp, About, FAQ, Contact
+│   │   ├── customer/             # Dashboard, BookingProcess, Payment, MyBookings, Profile, WriteReview
+│   │   ├── agency/               # Dashboard, RegisterAgency, AddCar, ManageCars, BookingRequests
+│   │   └── admin/                # AdminDashboard and related admin views
+│   ├── routes/                   # AppRoutes + ProtectedRoute
+│   ├── services/                 # storageService, dataService, mockAPI
+│   ├── styles/                   # SCSS design system (variables, mixins, layout, typography)
+│   ├── theme/                    # Mantine theme configuration (if used)
+│   └── utils/                    # dateHelpers, validators, formatters, priceCalculator, constants
+├── docs/
+│   └── new/                      # Product docs, UX guidelines, feature specs, and roadmap
+├── README.md
+└── UPDATES_2025-11-10.md         # Recent changes and Node/tooling guidance
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **React 19** - UI framework
-- **React Router DOM** - Navigation
-- **Sass/SCSS** - Styling with BEM methodology
-- **Context API** - State management
-- **Mock Data** - JSON files for demo
+- **React `^19.2.0`** – UI library (Create React App)
+- **React Router DOM `^6.30.1`** – Client-side routing
+- **Sass/SCSS** – Styling with BEM methodology and a documented design system
+- **Context API** – Authentication and app-level state (optionally extendable to Redux as per `docs/new/docs.md`)
+- **Mock Data & Services** – JSON files and helper services for demo and offline flows
+- **Mantine UI (core/hooks)** – Optional component primitives/themeing where used
 
 ---
 
-## 📚 Documentation
+## 📚 Additional Documentation
 
-- **PROJECT_STATUS.md** - Current status and immediate next steps
-- **DEVELOPMENT_GUIDE.md** - Complete phase-by-phase roadmap
-- **COMPLETION_SUMMARY.md** - Detailed list of completed features
-- **docs/new/instructions.md** - Comprehensive specifications
+This README is a high-level overview. For deep technical and product documentation, see:
+
+- `docs/new/Features.md` — Detailed feature breakdown (Customer, Agency, Admin, Technical)
+- `docs/new/docs.md` — Full UI/UX and frontend architecture documentation
+- `docs/new/roadmap.md` / `docs/new/detailed-roadmap.md` — Implementation roadmap
+- `docs/new/PRD.md`, `docs/new/Product Description.md`, `docs/new/Target Audience.md` — Product-spec documents
+- `UPDATES_2025-11-10.md` — Update log, Node/tooling guidance, and recently added utilities
+- `TESTS_README.md` / `TEST_SUMMARY.md` — Testing notes and coverage summary (where applicable)
 
 ---
 
-## 🎨 Design System
+## 🎨 Design System (Summary)
+
+The full design system (colors, typography, spacing, elevation, etc.) is documented in `docs/new/docs.md`. At a glance:
 
 ### Colors
-- Primary: Navy Blue (#213555)
-- Secondary: Slate Blue (#3E5879)
-- Accent: Gold (#E1C884)
-- Background: Light Cream (#F5EFE7)
+- Primary: Navy Blue (`#213555`)
+- Secondary: Slate Blue (`#3E5879`)
+- Accent: Gold (`#E1C884`)
+- Background: Light Cream (`#F5EFE7`)
+- Semantic success/warning/error/info colors for status and feedback
 
-### Components
-- Button (6 variants, 3 sizes)
-- Input (with validation)
-- Card (with subcomponents)
-- Modal (4 sizes)
-- Loader (3 sizes)
-- Notification (4 types)
+### Core UI Components
+- Button (primary, secondary, outline, ghost, danger; multiple sizes)
+- Input (with validation states)
+- Card (with header/body/footer subcomponents)
+- Modal (different sizes and accessibility-friendly behavior)
+- Loader (inline and full-screen variants)
+- Notification / status messages (success, error, info, warning)
+
+These components follow **BEM naming** and are designed to be responsive, accessible, and easy to extend.
 
 ---
 

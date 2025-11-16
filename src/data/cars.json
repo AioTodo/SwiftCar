@@ -10,6 +10,9 @@
     "pricePerDay": 250,
     "location": "Agadir",
     "available": true,
+    "transmission": "automatic",
+    "fuelType": "petrol",
+    "seats": 5,
     "features": ["GPS", "Automatic", "A/C", "Bluetooth"],
     "photos": [
       "/images/cars/toyota-corolla-1.jpg",
@@ -32,6 +35,9 @@
     "pricePerDay": 350,
     "location": "Agadir",
     "available": true,
+    "transmission": "manual",
+    "fuelType": "diesel",
+    "seats": 5,
     "features": ["GPS", "Manual", "A/C", "4WD"],
     "photos": [
       "/images/cars/dacia-duster-1.jpg"
@@ -53,6 +59,9 @@
     "pricePerDay": 800,
     "location": "Marrakech",
     "available": true,
+    "transmission": "automatic",
+    "fuelType": "petrol",
+    "seats": 5,
     "features": ["GPS", "Automatic", "A/C", "Leather Seats", "Sunroof"],
     "photos": [
       "/images/cars/mercedes-eclass-1.jpg"

@@ -29,8 +29,14 @@ All commands are intended to be run from the project root (`swiftcar/`). This is
   - Mock data schemas for `src/data/*.json` and how the frontend should simulate backend behavior.
   - Styling system (colors, typography, SCSS structure, BEM usage).
   - Phased implementation roadmap and testing journeys.
+<<<<<<< HEAD
 
 When implementing new features, align behavior and naming with `docs/new/instructions.md` and then fit them into the existing code structure described below.
+=======
+- `mantine-warp-rule.md` — **canonical Mantine integration and styling rules**. When Mantine is used, this file defines how components should be themed and how legacy styling should be migrated.
+
+When implementing new features, align behavior and naming with `docs/new/instructions.md` and styling decisions with `mantine-warp-rule.md`, then fit them into the existing code structure described below.
+>>>>>>> admin-update
 
 ## High-level architecture
 
@@ -90,12 +96,21 @@ This is a **frontend-only** project. All "backend" behavior is simulated using J
 
 - Shared UI components live under `src/components/`, with `common/` containing cross-cutting building blocks (header, footer, notifications, etc.).
 - The **full intended component taxonomy** (e.g., cards, search/filter UI, rating, modals, stats cards, timelines) is defined in detail in `docs/new/instructions.md` under "Shared Components". The codebase currently implements only a subset of that list.
+<<<<<<< HEAD
+=======
+- Official UI libraries used in this project:
+  - **Mantine UI** (`@mantine/core`, `@mantine/hooks`) for components, layout primitives, and theming.
+  - **Chart.js + react-chartjs-2** for analytics and dashboard charts.
+  - **react-table** for rich data tables in admin/agency/customer dashboards.
+  - **lucide-react** for iconography in sidebars and key UI elements.
+>>>>>>> admin-update
 - When adding new UI pieces:
   - Place re-usable building blocks under `components/common/` or a suitable subfolder (`search/`, `car/`, `booking/`, etc.), matching the structure described in `instructions.md`.
   - Keep page-level layout and composition logic in `src/pages/*`, and delegate display logic into smaller components.
 
 ### Styling system
 
+<<<<<<< HEAD
 - All styling is SCSS-based and centralized under `src/styles/`:
   - `abstracts/` — tokens and helpers, including `_variables.scss` (color palette, spacing, typography), `_mixins.scss`, and `_breakpoints.scss`.
   - `base/` — global resets, typography, and low-level utilities.
@@ -104,6 +119,22 @@ This is a **frontend-only** project. All "backend" behavior is simulated using J
   - `pages/` — page-specific styles for each major screen/domain (home, search, dashboard, booking, payment, etc.).
   - `main.scss` — central SCSS entry that imports the rest.
 - React components should use class names consistent with the BEM structure and rely on these SCSS modules rather than inlined styles.
+=======
+- **Mantine is the primary UI layer** for interactive components (buttons, cards, modals, badges, layout primitives) and should be the first choice when building new UI.
+- SCSS is centralized under `src/styles/` and is used for:
+  - `abstracts/` — tokens and helpers, including `_variables.scss` (color palette, spacing, typography), `_mixins.scss`, and `_breakpoints.scss`.
+  - `base/` — global resets, typography, and low-level utilities.
+  - `layout/` — grid/container/layout rules (e.g., dashboard layouts).
+  - `components/` and `pages/` — **minimal overrides** and legacy BEM styles where Mantine does not yet cover the use case.
+  - `main.scss` — central SCSS entry that imports the rest.
+- For new work, prefer Mantine props/theming over adding new BEM classes; only fall back to SCSS when Mantine cannot express the required behavior.
+
+### Mantine styling rules
+
+- Treat the Mantine theme defined in `mantine-warp-rule.md` as the **source of truth** for colors, typography, spacing, and radius.
+- When existing SCSS/CSS conflicts with Mantine, update the implementation to align with the Mantine theme and gradually refactor legacy styles instead of maintaining parallel design systems.
+- Keep UX and layout behaviors consistent while updating visuals, and prefer Mantine theming APIs over ad-hoc custom CSS.
+>>>>>>> admin-update
 
 ### Testing
 

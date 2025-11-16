@@ -2,9 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useBooking } from '../../../context/BookingContext';
 import { useNotification } from '../../../context/NotificationContext';
+import { bookingsAPI } from '../../../services/api';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
+import DateRangePicker from '../../../components/booking/DateRangePicker/DateRangePicker';
+import ExtrasSelector from '../../../components/booking/ExtrasSelector/ExtrasSelector';
+import BookingSummary from '../../../components/booking/BookingSummary/BookingSummary';
+import { CheckIcon, DashboardIcon } from '@radix-ui/react-icons';
 
 const BookingProcessPage = () => {
   const navigate = useNavigate();
@@ -12,6 +17,8 @@ const BookingProcessPage = () => {
   const { showNotification } = useNotification();
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [stepError, setStepError] = useState('');
+  const [existingBookings, setExistingBookings] = useState([]);
   const [bookingData, setBookingData] = useState({
     pickupLocation: '',
     returnLocation: '',
@@ -21,6 +28,22 @@ const BookingProcessPage = () => {
   });
 
   const car = state.selectedCar;
+
+  React.useEffect(() => {
+    if (!car?.id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const list = await bookingsAPI.listByCar(car.id);
+        if (!cancelled) setExistingBookings(list || []);
+      } catch {
+        if (!cancelled) setExistingBookings([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [car]);
 
   if (!car) {
     return (
@@ -53,18 +76,53 @@ const BookingProcessPage = () => {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep === 1) {
-      if (!bookingData.pickupLocation || !bookingData.returnLocation || 
-          !bookingData.pickupDate || !bookingData.returnDate) {
+      if (
+        !bookingData.pickupLocation ||
+        !bookingData.returnLocation ||
+        !bookingData.pickupDate ||
+        !bookingData.returnDate
+      ) {
+        const msg = 'Please fill in pickup/return locations and dates.';
+        setStepError(msg);
         showNotification({
           type: 'error',
-          message: 'Please fill in all required fields',
+          message: msg,
         });
         return;
       }
+
+      // Date-based availability check using existing bookings that were preloaded
+      const existing = Array.isArray(existingBookings) ? existingBookings : [];
+      const pickup = new Date(bookingData.pickupDate);
+      const dropoff = new Date(bookingData.returnDate);
+
+      try {
+        const overlaps = existing.some((b) => {
+          const start = new Date(b.pickup || b.pickupDate);
+          const end = new Date(b.dropoff || b.returnDate);
+          if (!start || !end) return false;
+          // Overlap if [pickup, dropoff) intersects [start, end)
+          return pickup < end && start < dropoff;
+        });
+
+        if (overlaps) {
+          const msg = 'Selected dates are not available for this car. Please choose different dates.';
+          setStepError(msg);
+          showNotification({ type: 'error', message: msg });
+          return;
+        }
+      } catch (e) {
+        // If for some reason availability check fails, fail closed with a generic error
+        const msg = 'Unable to verify availability. Please try again.';
+        setStepError(msg);
+        showNotification({ type: 'error', message: msg });
+        return;
+      }
     }
-    
+
+    setStepError('');
     updateBookingDetails(bookingData);
     
     if (currentStep < 3) {
@@ -109,12 +167,16 @@ const BookingProcessPage = () => {
             {/* Progress Steps */}
             <div className="booking-steps">
               <div className={`booking-step ${currentStep >= 1 ? 'booking-step--active' : ''} ${currentStep > 1 ? 'booking-step--completed' : ''}`}>
-                <div className="booking-step__number">{currentStep > 1 ? '✓' : '1'}</div>
+                <div className="booking-step__number">
+                  {currentStep > 1 ? <CheckIcon aria-hidden="true" /> : '1'}
+                </div>
                 <div className="booking-step__label">Dates & Location</div>
               </div>
               <div className="booking-step__line"></div>
               <div className={`booking-step ${currentStep >= 2 ? 'booking-step--active' : ''} ${currentStep > 2 ? 'booking-step--completed' : ''}`}>
-                <div className="booking-step__number">{currentStep > 2 ? '✓' : '2'}</div>
+                <div className="booking-step__number">
+                  {currentStep > 2 ? <CheckIcon aria-hidden="true" /> : '2'}
+                </div>
                 <div className="booking-step__label">Extras</div>
               </div>
               <div className="booking-step__line"></div>
@@ -138,6 +200,11 @@ const BookingProcessPage = () => {
                 {/* Step 1: Dates & Locations */}
                 {currentStep === 1 && (
                   <div className="booking-form">
+                    {stepError && (
+                      <p className="form-error" role="alert" aria-live="assertive">
+                        {stepError}
+                      </p>
+                    )}
                     <div className="booking-form__row">
                       <Input
                         label="Pickup Location"
@@ -160,23 +227,14 @@ const BookingProcessPage = () => {
                     </div>
                     
                     <div className="booking-form__row">
-                      <Input
-                        label="Pickup Date"
-                        type="date"
-                        name="pickupDate"
-                        value={bookingData.pickupDate}
+                      <DateRangePicker
+                        pickupDate={bookingData.pickupDate}
+                        returnDate={bookingData.returnDate}
                         onChange={handleChange}
-                        min={new Date().toISOString().split('T')[0]}
-                        required
-                      />
-                      <Input
-                        label="Return Date"
-                        type="date"
-                        name="returnDate"
-                        value={bookingData.returnDate}
-                        onChange={handleChange}
-                        min={bookingData.pickupDate || new Date().toISOString().split('T')[0]}
-                        required
+                        unavailableRanges={existingBookings.map((b) => ({
+                          start: b.pickup || b.pickupDate,
+                          end: b.dropoff || b.returnDate,
+                        }))}
                       />
                     </div>
                   </div>
@@ -185,73 +243,10 @@ const BookingProcessPage = () => {
                 {/* Step 2: Extras */}
                 {currentStep === 2 && (
                   <div className="booking-extras">
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="insurance"
-                          checked={bookingData.extras.insurance}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">Full Insurance Coverage</h4>
-                          <p className="extra-item__desc">Complete protection with zero excess</p>
-                        </div>
-                        <div className="extra-item__price">+50 MAD/day</div>
-                      </label>
-                    </div>
-
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="gps"
-                          checked={bookingData.extras.gps}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">GPS Navigation</h4>
-                          <p className="extra-item__desc">Latest maps and real-time traffic</p>
-                        </div>
-                        <div className="extra-item__price">+20 MAD/day</div>
-                      </label>
-                    </div>
-
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="childSeat"
-                          checked={bookingData.extras.childSeat}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">Child Seat</h4>
-                          <p className="extra-item__desc">Safety-certified child seat</p>
-                        </div>
-                        <div className="extra-item__price">+15 MAD/day</div>
-                      </label>
-                    </div>
-
-                    <div className="extra-item">
-                      <label className="extra-item__label">
-                        <input
-                          type="checkbox"
-                          name="additionalDriver"
-                          checked={bookingData.extras.additionalDriver}
-                          onChange={handleChange}
-                          className="extra-item__checkbox"
-                        />
-                        <div className="extra-item__content">
-                          <h4 className="extra-item__title">Additional Driver</h4>
-                          <p className="extra-item__desc">Add another licensed driver</p>
-                        </div>
-                        <div className="extra-item__price">+30 MAD/day</div>
-                      </label>
-                    </div>
+                    <ExtrasSelector
+                      extras={bookingData.extras}
+                      onToggle={(key, val) => handleChange({ target: { type: 'checkbox', name: key, checked: val } })}
+                    />
                   </div>
                 )}
 
@@ -285,6 +280,18 @@ const BookingProcessPage = () => {
                         <span className="review-item__value">{numberOfDays} day{numberOfDays > 1 ? 's' : ''}</span>
                       </div>
                     </div>
+
+                    <BookingSummary
+                      pricePerDay={car.pricePerDay}
+                      pickup={bookingData.pickupDate}
+                      dropoff={bookingData.returnDate}
+                      extras={{
+                        insurance: bookingData.extras.insurance,
+                        gps: bookingData.extras.gps,
+                        childSeat: bookingData.extras.childSeat,
+                        additionalDriver: bookingData.extras.additionalDriver,
+                      }}
+                    />
 
                     {totalExtras > 0 && (
                       <div className="review-section">
@@ -371,7 +378,9 @@ const BookingProcessPage = () => {
 
             {/* Car Info */}
             <Card className="car-summary">
-              <div className="car-summary__image">🚗</div>
+              <div className="car-summary__image">
+                <DashboardIcon aria-hidden="true" />
+              </div>
               <div className="car-summary__details">
                 <h4>{car.brand} {car.model}</h4>
                 <p>{car.year} • {car.category}</p>

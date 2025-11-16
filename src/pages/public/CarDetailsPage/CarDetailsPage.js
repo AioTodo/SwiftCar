@@ -8,6 +8,17 @@ import Card from '../../../components/common/Card';
 import Modal from '../../../components/common/Modal';
 import carsData from '../../../data/cars.json';
 import agenciesData from '../../../data/agencies.json';
+import ReviewList from '../../../components/reviews/ReviewList';
+import { reviewService } from '../../../services/reviewService';
+import {
+  DashboardIcon,
+  StarFilledIcon,
+  DrawingPinIcon,
+  EnvelopeClosedIcon,
+  MobileIcon,
+  CheckIcon,
+  Cross2Icon,
+} from '@radix-ui/react-icons';
 
 const CarDetailsPage = () => {
   const { carId } = useParams();
@@ -93,7 +104,9 @@ const CarDetailsPage = () => {
         {/* Car Images */}
         <div className="car-details__images">
           <div className="car-details__main-image">
-            <div className="car-details__image-placeholder">🚗</div>
+            <div className="car-details__image-placeholder">
+              <DashboardIcon aria-hidden="true" />
+            </div>
           </div>
         </div>
 
@@ -111,7 +124,9 @@ const CarDetailsPage = () => {
                 </p>
               </div>
               <div className="car-details__rating">
-                <span className="car-details__rating-value">⭐ {car.rating}</span>
+                <span className="car-details__rating-value">
+                  <StarFilledIcon aria-hidden="true" /> {car.rating}
+                </span>
                 <span className="car-details__rating-count">({car.reviewCount} reviews)</span>
               </div>
             </div>
@@ -135,7 +150,9 @@ const CarDetailsPage = () => {
                 <div className="car-details__features-grid">
                   {car.features.map((feature, index) => (
                     <div key={index} className="car-details__feature">
-                      <span className="car-details__feature-icon">✓</span>
+                      <span className="car-details__feature-icon">
+                        <CheckIcon aria-hidden="true" />
+                      </span>
                       <span>{feature}</span>
                     </div>
                   ))}
@@ -153,17 +170,28 @@ const CarDetailsPage = () => {
                   <div className="car-details__agency">
                     <div>
                       <h3 className="car-details__agency-name">{agency.agencyName}</h3>
-                      <p className="car-details__agency-location">📍 {agency.city}, {agency.country}</p>
-                      <p className="car-details__agency-rating">⭐ {agency.rating} ({agency.totalBookings} bookings)</p>
+                      <p className="car-details__agency-location">
+                        <DrawingPinIcon aria-hidden="true" /> {agency.city}, {agency.country}
+                      </p>
+                      <p className="car-details__agency-rating">
+                        <StarFilledIcon aria-hidden="true" /> {agency.rating} ({agency.totalBookings} bookings)
+                      </p>
                     </div>
                     <div className="car-details__agency-contact">
-                      <p>📧 {agency.email}</p>
-                      <p>📞 {agency.phone}</p>
+                      <p>
+                        <EnvelopeClosedIcon aria-hidden="true" /> {agency.email}
+                      </p>
+                      <p>
+                        <MobileIcon aria-hidden="true" /> {agency.phone}
+                      </p>
                     </div>
                   </div>
                 </Card.Body>
               </Card>
             )}
+
+            {/* Reviews */}
+            <CarReviews carId={car.id} />
           </div>
 
           {/* Booking Sidebar */}
@@ -177,9 +205,13 @@ const CarDetailsPage = () => {
 
                 <div className="booking-card__status">
                   {car.available ? (
-                    <span className="booking-card__available">✓ Available</span>
+                    <span className="booking-card__available">
+                      <CheckIcon aria-hidden="true" /> Available
+                    </span>
                   ) : (
-                    <span className="booking-card__unavailable">✕ Not Available</span>
+                    <span className="booking-card__unavailable">
+                      <Cross2Icon aria-hidden="true" /> Not Available
+                    </span>
                   )}
                 </div>
 
@@ -268,6 +300,20 @@ const CarDetailsPage = () => {
         </div>
       </Modal>
     </div>
+  );
+};
+
+const CarReviews = ({ carId }) => {
+  const { items, average, count } = reviewService.getByCarId(carId);
+  return (
+    <Card>
+      <Card.Header>
+        <h2>Customer Reviews</h2>
+      </Card.Header>
+      <Card.Body>
+        <ReviewList items={items} average={average} count={count} />
+      </Card.Body>
+    </Card>
   );
 };
 

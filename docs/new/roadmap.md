@@ -6,7 +6,7 @@
 **Version:** 1.0  
 **Date:** November 2025  
 **Status:** Active Development  
-**Technology Stack:** React (Create React App), React Router DOM, Sass, JSON Mock Data
+**Technology Stack:** React (Create React App), React Router DOM, Mantine UI (`@mantine/core`, `@mantine/hooks`), JSON Mock Data
 
 ---
 
@@ -23,7 +23,7 @@
 - Deliver a production-ready MVP within 12-16 weeks
 - Ensure mobile-first responsive design with WCAG accessibility compliance
 - Support multiple state management approaches (Redux, Context API, Props)
-- Create scalable component architecture using BEM methodology and Sass
+- Create scalable component architecture using Mantine components and theming rules from `mantine-warp-rule.md`
 - Implement comprehensive mock data system for development and testing
 
 ### Success Criteria
@@ -50,10 +50,10 @@
 
 **Acceptance Criteria:**
 - React app created and configured
-- Sass architecture with BEM methodology implemented
+- Mantine UI installed and configured with a shared theme (see `mantine-warp-rule.md`)
 - Basic routing structure in place
 - Mock data files created for users, agencies, cars, bookings
-- Design system variables and mixins defined
+- Design system/theme variables defined via Mantine theme configuration
 
 ---
 
@@ -219,7 +219,7 @@
 #### Core Technologies
 - **React 18.x** - UI library (Create React App)
 - **React Router DOM 6.x** - Client-side routing
-- **Sass/SCSS** - CSS preprocessor
+- **Mantine UI** (`@mantine/core`, `@mantine/hooks`) - component library and styling system (see `mantine-warp-rule.md`)
 - **Node.js 18+** - JavaScript runtime
 - **npm/yarn** - Package manager
 
@@ -266,8 +266,8 @@
 #### Required Skills
 - React fundamentals and hooks
 - React Router for navigation
-- Sass/SCSS for styling
-- BEM methodology
+- Mantine UI for styling and component composition
+- Understanding of theming and design tokens (as per `mantine-warp-rule.md`)
 - Responsive design principles
 - Accessibility (WCAG 2.1)
 - Git version control
