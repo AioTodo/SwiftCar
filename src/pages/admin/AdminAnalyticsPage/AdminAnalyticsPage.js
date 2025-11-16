@@ -1,8 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Card from '../../../components/common/Card';
-import bookings from '../../../data/bookings.json';
-import agencies from '../../../data/agencies.json';
-import cars from '../../../data/cars.json';
+import { entityStore } from '../../../services/entityStore';
 import AdminSidebar from '../../../components/layout/AdminSidebar';
 import { CalendarIcon, TokensIcon } from '@radix-ui/react-icons';
 import { useTable } from 'react-table';
@@ -29,6 +27,29 @@ const groupBy = (list, getKey) => {
 };
 
 const AdminAnalyticsPage = () => {
+  const [bookings, setBookings] = useState([]);
+  const [agencies, setAgencies] = useState([]);
+  const [cars, setCars] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      const [bookingsList, agenciesList, carsList] = await Promise.all([
+        entityStore.getAll('bookings'),
+        entityStore.getAll('agencies'),
+        entityStore.getAll('cars'),
+      ]);
+      if (cancelled) return;
+      setBookings(bookingsList || []);
+      setAgencies(agenciesList || []);
+      setCars(carsList || []);
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const metrics = useMemo(() => {
     const totalBookings = bookings.length;
     const totalRevenue = bookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
@@ -78,7 +99,7 @@ const AdminAnalyticsPage = () => {
       agencySummaries,
       fleetSummary,
     };
-  }, []);
+  }, [bookings, agencies, cars]);
 
   const bookingsByStatusData = useMemo(() => {
     const labels = Object.keys(metrics.bookingsByStatus || {});

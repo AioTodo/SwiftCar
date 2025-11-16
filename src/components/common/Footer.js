@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Text, Group, Anchor } from '@mantine/core';
 
 const Footer = () => {
@@ -21,10 +22,19 @@ const Footer = () => {
             <Text fw={600} fz="sm" className="footer__heading">
               Company
             </Text>
-            <Anchor component="button" type="button" c="gray.3" className="footer__link">
-              About
+            <Anchor component={Link} to="/" c="gray.3" className="footer__link">
+              Home
             </Anchor>
-            <Anchor component="button" type="button" c="gray.3" className="footer__link">
+            <Anchor component={Link} to="/search" c="gray.3" className="footer__link">
+              Search Cars
+            </Anchor>
+            <Anchor component={Link} to="/about" c="gray.3" className="footer__link">
+              About Us
+            </Anchor>
+            <Anchor component={Link} to="/help" c="gray.3" className="footer__link">
+              Help Center
+            </Anchor>
+            <Anchor component={Link} to="/contact" c="gray.3" className="footer__link">
               Contact
             </Anchor>
           </div>

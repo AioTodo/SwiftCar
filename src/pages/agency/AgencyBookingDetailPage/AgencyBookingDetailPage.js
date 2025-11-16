@@ -4,7 +4,6 @@ import { useNotification } from '../../../context/NotificationContext';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
 import { bookingsAPI, carsAPI } from '../../../services/api';
-import agencies from '../../../data/agencies.json';
 import users from '../../../data/users.json';
 
 const AgencyBookingDetailPage = () => {
@@ -17,18 +16,8 @@ const AgencyBookingDetailPage = () => {
   const [customer, setCustomer] = useState(null);
 
   useEffect(() => {
-    // bookingsAPI currently has listByAgency/updateStatus, so we fetch all and find the one we need
     const load = async () => {
-      // In a real API we would call bookingsAPI.getById; for now, reuse listByAgency + data seeds.
-      // For simplicity, read from localStorage via listByAgency for all agencies and find matching id.
-      // To avoid extra complexity, we'll just scan listByAgency for each agency in mock data.
-      const all = [];
-      for (const agency of agencies) {
-        // eslint-disable-next-line no-await-in-loop
-        const list = await bookingsAPI.listByAgency(agency.id);
-        all.push(...list);
-      }
-      const found = all.find((b) => String(b.id) === String(bookingId));
+      const found = await bookingsAPI.getById(bookingId);
       if (!found) return;
       setBooking(found);
 

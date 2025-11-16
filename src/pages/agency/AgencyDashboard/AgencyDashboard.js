@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
+import { entityStore } from '../../../services/entityStore';
+import { bookingsAPI, carsAPI } from '../../../services/api';
+import { reviewService } from '../../../services/reviewService';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
-import bookingsData from '../../../data/bookings.json';
-import carsData from '../../../data/cars.json';
-import agenciesData from '../../../data/agencies.json';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
 import {
   DashboardIcon,
@@ -21,14 +21,73 @@ const AgencyDashboard = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Mock: Get agency data for current user
-  const agency = agenciesData.find((a) => a.ownerId === user?.id) || agenciesData[0];
-  const agencyCars = carsData.filter((c) => c.agencyId === agency?.id);
-  const agencyBookings = bookingsData.filter((b) => b.agencyId === agency?.id);
-  
+  const [agency, setAgency] = React.useState(null);
+  const [agencyCars, setAgencyCars] = React.useState([]);
+  const [agencyBookings, setAgencyBookings] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      setLoading(true);
+      try {
+        const agencies = await entityStore.getAll('agencies');
+        if (cancelled) return;
+        let current = null;
+        if (user?.id) {
+          current = agencies.find((a) => a.ownerId === user.id) || null;
+        }
+        if (!current && agencies && agencies.length > 0) {
+          current = agencies[0];
+        }
+        setAgency(current);
+        if (!current) {
+          setAgencyCars([]);
+          setAgencyBookings([]);
+          return;
+        }
+        const [cars, bookings] = await Promise.all([
+          Promise.resolve(carsAPI.list()),
+          bookingsAPI.listByAgency(current.id),
+        ]);
+        if (cancelled) return;
+        setAgencyCars(cars.filter((c) => c.agencyId === current.id));
+        setAgencyBookings(bookings);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
+
   const activeBookings = agencyBookings.filter((b) => b.status === 'confirmed');
-  const totalRevenue = agencyBookings.reduce((sum, b) => sum + (b.totalPrice - b.commissionAmount), 0);
+  const totalRevenue = agencyBookings.reduce((sum, b) => {
+    const gross = b.totalPrice || 0;
+    const commission = b.commissionAmount || 0;
+    return sum + (gross - commission);
+  }, 0);
   const availableCars = agencyCars.filter((c) => c.available).length;
+
+  const reviewStats = React.useMemo(() => {
+    if (!agencyCars.length) {
+      return { averageRating: 0, totalReviews: 0 };
+    }
+    let totalWeightedRating = 0;
+    let totalReviews = 0;
+    agencyCars.forEach((car) => {
+      const { average, count } = reviewService.getByCarId(car.id);
+      if (count && average) {
+        totalWeightedRating += average * count;
+        totalReviews += count;
+      }
+    });
+    if (!totalReviews) return { averageRating: 0, totalReviews: 0 };
+    const averageRating = Math.round((totalWeightedRating / totalReviews) * 10) / 10;
+    return { averageRating, totalReviews };
+  }, [agencyCars]);
 
   return (
     <div className="agency-dashboard">
@@ -39,12 +98,18 @@ const AgencyDashboard = () => {
             {/* Header */}
             <div className="dashboard__header">
               <div>
-                <h1 className="dashboard__title">Welcome back, {agency?.agencyName}!</h1>
-                <p className="dashboard__subtitle">Manage your fleet and bookings</p>
+                <h1 className="dashboard__title">
+                  {agency ? `Welcome back, ${agency.agencyName}!` : 'Welcome to your agency dashboard'}
+                </h1>
+                <p className="dashboard__subtitle">
+                  {agency ? 'Manage your fleet and bookings' : 'Register your agency to start managing your fleet'}
+                </p>
               </div>
-              <Button variant="primary" onClick={() => navigate('/agency/add-car')}>
-                Add New Car
-              </Button>
+              {agency && (
+                <Button variant="primary" onClick={() => navigate('/agency/add-car')}>
+                  Add New Car
+                </Button>
+              )}
             </div>
 
             {/* Stats Grid */}
@@ -96,6 +161,22 @@ const AgencyDashboard = () => {
               </div>
             </div>
           </Card>
+
+          <Card>
+            <div className="stat-card">
+              <div className="stat-card__icon">
+                <CheckIcon aria-hidden="true" />
+              </div>
+              <div className="stat-card__content">
+                <h3 className="stat-card__value">
+                  {reviewStats.averageRating} / 5
+                </h3>
+                <p className="stat-card__label">
+                  Based on {reviewStats.totalReviews} review{reviewStats.totalReviews === 1 ? '' : 's'}
+                </p>
+              </div>
+            </div>
+          </Card>
             </div>
 
             <div className="dashboard__grid">
@@ -117,7 +198,7 @@ const AgencyDashboard = () => {
               ) : (
                 <div className="booking-list">
                   {agencyBookings.slice(0, 3).map((booking) => {
-                    const car = carsData.find((c) => c.id === booking.carId);
+                    const car = agencyCars.find((c) => c.id === booking.carId);
                     return (
                       <div key={booking.id} className="booking-item">
                         <div className="booking-item__icon">

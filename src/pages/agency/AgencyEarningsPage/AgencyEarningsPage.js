@@ -3,8 +3,8 @@ import { useAuth } from '../../../context/AuthContext';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
 import { priceCalculator } from '../../../utils/priceCalculator';
-import bookingsSeed from '../../../data/bookings.json';
-import agencies from '../../../data/agencies.json';
+import { bookingsAPI } from '../../../services/api';
+import { entityStore } from '../../../services/entityStore';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
 import {
   TokensIcon,
@@ -17,13 +17,31 @@ const AgencyEarningsPage = () => {
   const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
 
-  const agency = agencies.find((a) => a.ownerId === user?.id) || agencies[0];
-
   useEffect(() => {
-    // For now we use the seeded bookings JSON; in the future this can be wired to bookingsAPI/entityStore.
-    const agencyBookings = bookingsSeed.filter((b) => b.agencyId === agency?.id);
-    setBookings(agencyBookings);
-  }, [agency?.id]);
+    let cancelled = false;
+    const load = async () => {
+      const agencies = await entityStore.getAll('agencies');
+      if (cancelled) return;
+      let current = null;
+      if (user?.id) {
+        current = agencies.find((a) => a.ownerId === user.id) || null;
+      }
+      if (!current && agencies && agencies.length > 0) {
+        current = agencies[0];
+      }
+      if (!current) {
+        setBookings([]);
+        return;
+      }
+      const agencyBookings = await bookingsAPI.listByAgency(current.id);
+      if (cancelled) return;
+      setBookings(agencyBookings);
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   const summary = useMemo(() => {
     if (!bookings.length) {
@@ -144,9 +162,9 @@ const AgencyEarningsPage = () => {
                       return (
                         <tr key={b.id}>
                           <td>{b.id}</td>
-                          <td>
+                      <td>
                             <div className="text-small">
-                              {b.pickupDate} → {b.returnDate}
+                              {(b.pickup || b.pickupDate)} → {(b.dropoff || b.returnDate)}
                             </div>
                           </td>
                           <td>{b.status}</td>

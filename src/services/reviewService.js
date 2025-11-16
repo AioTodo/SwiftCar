@@ -24,4 +24,15 @@ export const reviewService = {
 
     return { items: filtered, average: avg, count: filtered.length };
   },
+
+  getByBookingId(bookingId) {
+    const reviews = storage.get(REVIEWS_KEY, []);
+    if (!Array.isArray(reviews)) return null;
+    const match = reviews.find((r) => {
+      if (r.bookingId !== bookingId) return false;
+      const moderationStatus = r.moderationStatus || 'approved';
+      return moderationStatus !== 'removed';
+    });
+    return match || null;
+  },
 };

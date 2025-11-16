@@ -11,8 +11,9 @@ const AboutPage = () => {
           </Card.Header>
           <Card.Body>
             <p>
-              SwiftCar is a prototype car rental marketplace that connects customers with local agencies.
-              This demo focuses on clear UX, transparent pricing, and realistic flows (search, booking, reviews).
+              SwiftCar is a prototype car rental marketplace that connects customers with local car rental agencies.
+              This demo focuses on clear UX, transparent pricing, and realistic end-to-end flows across customers,
+              agencies, and administrators.
             </p>
             <h2>Our Mission</h2>
             <p>
@@ -20,9 +21,10 @@ const AboutPage = () => {
             </p>
             <h2>What you’ll find in this demo</h2>
             <ul>
-              <li>Customer booking flow (dates, extras, summary, payment mock)</li>
-              <li>Agency fleet management and booking requests</li>
-              <li>Reviews and ratings on car details</li>
+              <li>Customer journey: search, filters, car details, multi-step booking, payment, confirmation, and reviews.</li>
+              <li>Agency tools: registration & verification, fleet management, booking requests, and earnings overview.</li>
+              <li>Admin console: agency verification, user management, content moderation, and analytics dashboards.</li>
+              <li>Support experience: FAQ, Help Center, contact form, and an admin support inbox.</li>
             </ul>
           </Card.Body>
         </Card>

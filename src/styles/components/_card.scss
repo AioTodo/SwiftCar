@@ -1,50 +1,16 @@
+// Legacy card chrome has been replaced by Mantine Card in
+// src/components/common/Card/Card.js. We keep only minimal structure
+// hooks for Card.Header / Card.Body / Card.Footer so page-level styles
+// can target them if needed.
+
 .card {
-  background: $color-white;
-  border-radius: $border-radius-lg;
-  box-shadow: $shadow-md;
-  padding: $spacing-lg;
-  @include transition(all);
-  border: 2px solid rgba(0, 0, 0, 0.382);
-
-  &--default {
-    background-color: $color-white;
-  }
-
-  &--elevated {
-    box-shadow: $shadow-lg;
-  }
-
-  &--flat {
-    box-shadow: none;
-    border: 1px solid $color-gray-200;
-  }
-
-  &--hoverable {
-    &:hover {
-      box-shadow: $shadow-hover;
-      transform: translateY(-4px);
-      border-color: rgba(0, 0, 0, 0.08);
-    }
-  }
-
-  &--clickable {
-    cursor: pointer;
-  }
-
   &__header {
     padding-bottom: $spacing-sm;
     border-bottom: 1px solid $color-gray-200;
     margin-bottom: $spacing-sm;
-
-    &:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
   }
 
   &__body {
-    // Main content area
     flex: 1;
   }
 
@@ -52,11 +18,5 @@
     padding-top: $spacing-sm;
     border-top: 1px solid $color-gray-200;
     margin-top: $spacing-sm;
-
-    &:first-child {
-      border-top: none;
-      margin-top: 0;
-      padding-top: 0;
-    }
   }
 }

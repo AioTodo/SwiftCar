@@ -5,6 +5,7 @@ import { useNotification } from '../../../context/NotificationContext';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import { bookingsAPI, carsAPI } from '../../../services/api';
+import { reviewService } from '../../../services/reviewService';
 import { DashboardIcon, CalendarIcon } from '@radix-ui/react-icons';
 
 const MyBookingsPage = () => {
@@ -15,10 +16,22 @@ const MyBookingsPage = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [bookings, setBookings] = useState([]);
   const [cars, setCars] = useState([]);
+  const [reviewsByBooking, setReviewsByBooking] = useState({});
 
   React.useEffect(() => {
     if (!user?.id) return;
-    Promise.resolve(bookingsAPI.listByUser(user.id)).then((list) => setBookings(list));
+    Promise.resolve(bookingsAPI.listByUser(user.id)).then((list) => {
+      setBookings(list);
+      // Build a quick lookup of reviews keyed by bookingId so we can show review status
+      const map = {};
+      list.forEach((bk) => {
+        const review = reviewService.getByBookingId(bk.id);
+        if (review) {
+          map[bk.id] = review;
+        }
+      });
+      setReviewsByBooking(map);
+    });
     Promise.resolve(carsAPI.list()).then((list) => setCars(list));
   }, [user?.id]);
 
@@ -104,6 +117,7 @@ const MyBookingsPage = () => {
           ) : (
             filteredBookings.map((booking) => {
               const car = cars.find((c) => c.id === booking.carId);
+              const review = reviewsByBooking[booking.id];
               
               return (
                 <Card key={booking.id} className="booking-card-item">
@@ -163,6 +177,11 @@ const MyBookingsPage = () => {
                   </div>
 
                   <div className="booking-card-item__footer">
+                    {review && (
+                      <span className="booking-card-item__review text-small text-muted">
+                        Rated {review.rating}/5
+                      </span>
+                    )}
                     <Button
                       variant="outline"
                       size="small"
@@ -181,7 +200,7 @@ const MyBookingsPage = () => {
                       </Button>
                     )}
                     
-                    {booking.status === 'completed' && (
+                    {booking.status === 'completed' && !review && (
                       <Button
                         variant="primary"
                         size="small"

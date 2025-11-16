@@ -3,6 +3,8 @@
 
 import { storage } from './storageService';
 import { priceCalculator } from '../utils/priceCalculator';
+import carsSeed from '../data/cars.json';
+import bookingsSeed from '../data/bookings.json';
 
 const generateUniqueId = (prefix, existingItems) => {
   const now = Date.now();
@@ -59,13 +61,22 @@ export const usersAPI = {
 
 const CARS_KEY = 'cars';
 
+const ensureCars = () => {
+  let items = storage.get(CARS_KEY);
+  if (!items || items.length === 0) {
+    items = Array.isArray(carsSeed) ? carsSeed : [];
+    storage.set(CARS_KEY, items);
+  }
+  return items;
+};
+
 export const carsAPI = {
   async list() {
-    return storage.get(CARS_KEY, []);
+    return ensureCars();
   },
 
   async getById(id) {
-    const items = storage.get(CARS_KEY, []);
+    const items = ensureCars();
     return items.find((c) => c.id === id) || null;
   },
 
@@ -74,7 +85,7 @@ export const carsAPI = {
     const missing = required.filter((k) => !payload || payload[k] === undefined || payload[k] === '');
     if (missing.length) throw new Error('Missing required fields');
 
-    const itemsBefore = storage.get(CARS_KEY, []);
+    const itemsBefore = ensureCars();
     const id = generateUniqueId('car', itemsBefore);
     const now = Date.now();
     const timestamp = new Date(now).toISOString();
@@ -94,14 +105,14 @@ export const carsAPI = {
       updatedAt: timestamp,
     };
 
-    const items = storage.get(CARS_KEY, []);
+    const items = ensureCars();
     const next = [newCar, ...items];
     storage.set(CARS_KEY, next);
     return newCar;
   },
 
   async update(id, patch) {
-    const items = storage.get(CARS_KEY, []);
+    const items = ensureCars();
     const idx = items.findIndex((c) => c.id === id);
     if (idx === -1) throw new Error('Car not found');
     const updated = {
@@ -116,7 +127,7 @@ export const carsAPI = {
   },
 
   async remove(id) {
-    const items = storage.get(CARS_KEY, []);
+    const items = ensureCars();
     const next = items.filter((c) => c.id !== id);
     storage.set(CARS_KEY, next);
     return true;
@@ -125,13 +136,22 @@ export const carsAPI = {
 
 const BOOKINGS_KEY = 'bookings';
 
+const ensureBookings = () => {
+  let items = storage.get(BOOKINGS_KEY);
+  if (!items || items.length === 0) {
+    items = Array.isArray(bookingsSeed) ? bookingsSeed : [];
+    storage.set(BOOKINGS_KEY, items);
+  }
+  return items;
+};
+
 export const bookingsAPI = {
   async create(payload) {
     const required = ['userId', 'agencyId', 'carId', 'pickup', 'dropoff', 'pricePerDay'];
     const missing = required.filter((k) => !payload || payload[k] === undefined || payload[k] === '');
     if (missing.length) throw new Error('Missing required fields');
 
-    const itemsBefore = storage.get(BOOKINGS_KEY, []);
+    const itemsBefore = ensureBookings();
     const id = generateUniqueId('booking', itemsBefore);
 
     const totalPrice = priceCalculator.totalPrice(
@@ -165,22 +185,27 @@ export const bookingsAPI = {
   },
 
   async listByUser(userId) {
-    const items = storage.get(BOOKINGS_KEY, []);
+    const items = ensureBookings();
     return items.filter((b) => b.userId === userId);
   },
 
   async getById(id) {
-    const items = storage.get(BOOKINGS_KEY, []);
+    const items = ensureBookings();
     return items.find((b) => b.id === id) || null;
   },
 
   async listByAgency(agencyId) {
-    const items = storage.get(BOOKINGS_KEY, []);
+    const items = ensureBookings();
     return items.filter((b) => b.agencyId === agencyId);
   },
 
+  async listByCar(carId) {
+    const items = ensureBookings();
+    return items.filter((b) => b.carId === carId && b.status !== 'cancelled');
+  },
+
   async updateStatus(id, status) {
-    const items = storage.get(BOOKINGS_KEY, []);
+    const items = ensureBookings();
     const idx = items.findIndex((b) => b.id === id);
     if (idx === -1) throw new Error('Booking not found');
     const updated = { ...items[idx], status, updatedAt: new Date(Date.now()).toISOString() };

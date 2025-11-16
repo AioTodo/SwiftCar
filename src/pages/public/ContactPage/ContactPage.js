@@ -31,7 +31,11 @@ const ContactPage = () => {
     e.preventDefault();
     if (!validate()) return;
     const list = storage.get(CONTACT_KEY, []);
-    const entry = { id: `msg-${Date.now()}`, ...form };
+    const entry = {
+      id: `msg-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      ...form,
+    };
     storage.set(CONTACT_KEY, [entry, ...list]);
     showNotification({ type: 'success', message: 'Thanks! We will get back to you soon.' });
     setForm({ name: '', email: '', message: '' });

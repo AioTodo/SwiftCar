@@ -1,11 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
-import users from '../../../data/users.json';
-import agencies from '../../../data/agencies.json';
-import bookings from '../../../data/bookings.json';
-import cars from '../../../data/cars.json';
+import { entityStore } from '../../../services/entityStore';
 import AdminSidebar from '../../../components/layout/AdminSidebar';
 import {
   PersonIcon,
@@ -19,6 +16,32 @@ import {
 const AdminDashboard = () => {
   const navigate = useNavigate();
 
+  const [users, setUsers] = useState([]);
+  const [agencies, setAgencies] = useState([]);
+  const [bookings, setBookings] = useState([]);
+  const [cars, setCars] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      const [usersList, agenciesList, bookingsList, carsList] = await Promise.all([
+        entityStore.getAll('users'),
+        entityStore.getAll('agencies'),
+        entityStore.getAll('bookings'),
+        entityStore.getAll('cars'),
+      ]);
+      if (cancelled) return;
+      setUsers(usersList || []);
+      setAgencies(agenciesList || []);
+      setBookings(bookingsList || []);
+      setCars(carsList || []);
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const stats = useMemo(() => {
     const totalUsers = users.length;
     const totalAgencies = agencies.length;
@@ -26,7 +49,7 @@ const AdminDashboard = () => {
     const totalBookings = bookings.length;
     const totalRevenue = bookings.reduce((sum, b) => sum + (b.totalPrice || 0), 0);
 
-    const activeUsers = users.filter((u) => u.accountStatus === 'active').length;
+    const activeUsers = users.filter((u) => (u.accountStatus || 'active') === 'active').length;
     const verifiedAgencies = agencies.filter((a) => a.verificationStatus === 'verified').length;
     const pendingAgencies = agencies.filter((a) => a.verificationStatus !== 'verified').length;
 
@@ -40,11 +63,11 @@ const AdminDashboard = () => {
       verifiedAgencies,
       pendingAgencies,
     };
-  }, []);
+  }, [users, agencies, cars, bookings]);
 
   const recentBookings = useMemo(
-    () => bookings.slice(0, 5),
-    []
+    () => (bookings || []).slice(0, 5),
+    [bookings]
   );
 
   const topAgencies = useMemo(
@@ -52,7 +75,7 @@ const AdminDashboard = () => {
       [...agencies]
         .sort((a, b) => (b.totalBookings || 0) - (a.totalBookings || 0))
         .slice(0, 5),
-    []
+    [agencies]
   );
 
   return (

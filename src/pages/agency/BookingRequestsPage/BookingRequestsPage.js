@@ -2,7 +2,7 @@ import React from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useNotification } from '../../../context/NotificationContext';
 import { bookingsAPI, carsAPI } from '../../../services/api';
-import agencies from '../../../data/agencies.json';
+import { entityStore } from '../../../services/entityStore';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
@@ -14,15 +14,36 @@ const BookingRequestsPage = () => {
   const [requests, setRequests] = React.useState([]);
   const [cars, setCars] = React.useState([]);
 
-  const agency = agencies.find((a) => a.ownerId === user?.id) || agencies[0];
-
   React.useEffect(() => {
-    if (!agency?.id) return;
-    Promise.resolve(bookingsAPI.listByAgency(agency.id)).then((all) => {
+    let cancelled = false;
+    const load = async () => {
+      const agencies = await entityStore.getAll('agencies');
+      if (cancelled) return;
+      let current = null;
+      if (user?.id) {
+        current = agencies.find((a) => a.ownerId === user.id) || null;
+      }
+      if (!current && agencies && agencies.length > 0) {
+        current = agencies[0];
+      }
+      if (!current) {
+        setRequests([]);
+        setCars([]);
+        return;
+      }
+      const [all, carList] = await Promise.all([
+        bookingsAPI.listByAgency(current.id),
+        Promise.resolve(carsAPI.list()),
+      ]);
+      if (cancelled) return;
       setRequests(all.filter((b) => b.status === 'pending'));
-    });
-    Promise.resolve(carsAPI.list()).then(setCars);
-  }, [agency?.id]);
+      setCars(carList);
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   const handleApprove = async (id) => {
     await bookingsAPI.updateStatus(id, 'confirmed');

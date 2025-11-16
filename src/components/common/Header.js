@@ -50,6 +50,21 @@ const Header = () => {
             <Anchor component={Link} to="/search" c="dimmed" fw={500} className="header__link">
               Search Cars
             </Anchor>
+            <Anchor component={Link} to="/about" c="dimmed" fw={500} className="header__link">
+              About
+            </Anchor>
+            <Anchor component={Link} to="/faq" c="dimmed" fw={500} className="header__link">
+              FAQ
+            </Anchor>
+            <Anchor component={Link} to="/help" c="dimmed" fw={500} className="header__link">
+              Help Center
+            </Anchor>
+            <Anchor component={Link} to="/contact" c="dimmed" fw={500} className="header__link">
+              Contact
+            </Anchor>
+            <Anchor component={Link} to="/agency/register" c="dimmed" fw={500} className="header__link">
+              Become a Provider
+            </Anchor>
 
             {!isAuthenticated && (
               <Button

@@ -5,7 +5,7 @@ import { useNotification } from '../../../context/NotificationContext';
 import Card from '../../../components/common/Card';
 import Button from '../../../components/common/Button';
 import { bookingsAPI, carsAPI } from '../../../services/api';
-import agencies from '../../../data/agencies.json';
+import { entityStore } from '../../../services/entityStore';
 import AgencySidebar from '../../../components/layout/AgencySidebar';
 import { DashboardIcon } from '@radix-ui/react-icons';
 
@@ -17,14 +17,39 @@ const AgencyBookingsPage = () => {
   const [statusFilter, setStatusFilter] = useState('all'); // all, pending, confirmed, completed, cancelled, declined
   const [bookings, setBookings] = useState([]);
   const [cars, setCars] = useState([]);
-
-  const agency = agencies.find((a) => a.ownerId === user?.id) || agencies[0];
+  const [agency, setAgency] = useState(null);
 
   useEffect(() => {
-    if (!agency?.id) return;
-    Promise.resolve(bookingsAPI.listByAgency(agency.id)).then(setBookings);
-    Promise.resolve(carsAPI.list()).then(setCars);
-  }, [agency?.id]);
+    let cancelled = false;
+    const load = async () => {
+      const agencies = await entityStore.getAll('agencies');
+      if (cancelled) return;
+      let current = null;
+      if (user?.id) {
+        current = agencies.find((a) => a.ownerId === user.id) || null;
+      }
+      if (!current && agencies && agencies.length > 0) {
+        current = agencies[0];
+      }
+      setAgency(current);
+      if (!current) {
+        setBookings([]);
+        setCars([]);
+        return;
+      }
+      const [bks, carList] = await Promise.all([
+        bookingsAPI.listByAgency(current.id),
+        Promise.resolve(carsAPI.list()),
+      ]);
+      if (cancelled) return;
+      setBookings(bks);
+      setCars(carList);
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
 
   const filteredBookings =
     statusFilter === 'all'

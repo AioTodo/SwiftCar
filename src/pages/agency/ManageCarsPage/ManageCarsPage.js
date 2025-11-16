@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { useNotification } from '../../../context/NotificationContext';
+import { entityStore } from '../../../services/entityStore';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
-import agenciesData from '../../../data/agencies.json';
 import Modal from '../../../components/common/Modal';
 import CarForm from '../../../components/cars/CarForm/CarForm';
 import { carsAPI } from '../../../services/api';
@@ -17,18 +17,33 @@ const ManageCarsPage = () => {
   
   const [filter, setFilter] = useState('all'); // all, available, rented
   const [cars, setCars] = useState([]);
+  const [agency, setAgency] = useState(null);
   const [showCreate, setShowCreate] = useState(false);
   const [showEdit, setShowEdit] = useState({ open: false, car: null });
 
-  const agency = agenciesData.find((a) => a.ownerId === user?.id) || agenciesData[0];
-
   React.useEffect(() => {
-    const list = carsAPI.list();
-    Promise.resolve(list).then((data) => {
-      const onlyAgency = data.filter((c) => (agency ? c.agencyId === agency.id : true));
+    let cancelled = false;
+    const load = async () => {
+      const agencies = await entityStore.getAll('agencies');
+      if (cancelled) return;
+      let current = null;
+      if (user?.id) {
+        current = agencies.find((a) => a.ownerId === user.id) || null;
+      }
+      if (!current && agencies && agencies.length > 0) {
+        current = agencies[0];
+      }
+      setAgency(current);
+      const list = await Promise.resolve(carsAPI.list());
+      if (cancelled) return;
+      const onlyAgency = current ? list.filter((c) => c.agencyId === current.id) : list;
       setCars(onlyAgency);
-    });
-  }, [user]);
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id]);
   
   const agencyCars = cars;
   const filteredCars = filter === 'all' 

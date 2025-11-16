@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Container, Grid, Paper, Stack, Title, Text } from '@mantine/core';
 import { useBooking } from '../../../context/BookingContext';
 import { useNotification } from '../../../context/NotificationContext';
+import { bookingsAPI } from '../../../services/api';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
@@ -17,6 +17,8 @@ const BookingProcessPage = () => {
   const { showNotification } = useNotification();
   
   const [currentStep, setCurrentStep] = useState(1);
+  const [stepError, setStepError] = useState('');
+  const [existingBookings, setExistingBookings] = useState([]);
   const [bookingData, setBookingData] = useState({
     pickupLocation: '',
     returnLocation: '',
@@ -26,6 +28,22 @@ const BookingProcessPage = () => {
   });
 
   const car = state.selectedCar;
+
+  React.useEffect(() => {
+    if (!car?.id) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const list = await bookingsAPI.listByCar(car.id);
+        if (!cancelled) setExistingBookings(list || []);
+      } catch {
+        if (!cancelled) setExistingBookings([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [car]);
 
   if (!car) {
     return (
@@ -58,18 +76,53 @@ const BookingProcessPage = () => {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep === 1) {
-      if (!bookingData.pickupLocation || !bookingData.returnLocation || 
-          !bookingData.pickupDate || !bookingData.returnDate) {
+      if (
+        !bookingData.pickupLocation ||
+        !bookingData.returnLocation ||
+        !bookingData.pickupDate ||
+        !bookingData.returnDate
+      ) {
+        const msg = 'Please fill in pickup/return locations and dates.';
+        setStepError(msg);
         showNotification({
           type: 'error',
-          message: 'Please fill in all required fields',
+          message: msg,
         });
         return;
       }
+
+      // Date-based availability check using existing bookings that were preloaded
+      const existing = Array.isArray(existingBookings) ? existingBookings : [];
+      const pickup = new Date(bookingData.pickupDate);
+      const dropoff = new Date(bookingData.returnDate);
+
+      try {
+        const overlaps = existing.some((b) => {
+          const start = new Date(b.pickup || b.pickupDate);
+          const end = new Date(b.dropoff || b.returnDate);
+          if (!start || !end) return false;
+          // Overlap if [pickup, dropoff) intersects [start, end)
+          return pickup < end && start < dropoff;
+        });
+
+        if (overlaps) {
+          const msg = 'Selected dates are not available for this car. Please choose different dates.';
+          setStepError(msg);
+          showNotification({ type: 'error', message: msg });
+          return;
+        }
+      } catch (e) {
+        // If for some reason availability check fails, fail closed with a generic error
+        const msg = 'Unable to verify availability. Please try again.';
+        setStepError(msg);
+        showNotification({ type: 'error', message: msg });
+        return;
+      }
     }
-    
+
+    setStepError('');
     updateBookingDetails(bookingData);
     
     if (currentStep < 3) {
@@ -147,6 +200,11 @@ const BookingProcessPage = () => {
                 {/* Step 1: Dates & Locations */}
                 {currentStep === 1 && (
                   <div className="booking-form">
+                    {stepError && (
+                      <p className="form-error" role="alert" aria-live="assertive">
+                        {stepError}
+                      </p>
+                    )}
                     <div className="booking-form__row">
                       <Input
                         label="Pickup Location"
@@ -173,6 +231,10 @@ const BookingProcessPage = () => {
                         pickupDate={bookingData.pickupDate}
                         returnDate={bookingData.returnDate}
                         onChange={handleChange}
+                        unavailableRanges={existingBookings.map((b) => ({
+                          start: b.pickup || b.pickupDate,
+                          end: b.dropoff || b.returnDate,
+                        }))}
                       />
                     </div>
                   </div>

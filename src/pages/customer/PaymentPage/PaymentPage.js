@@ -4,6 +4,7 @@ import { useBooking } from '../../../context/BookingContext';
 import { useNotification } from '../../../context/NotificationContext';
 import { useAuth } from '../../../context/AuthContext';
 import { bookingsAPI } from '../../../services/api';
+import { priceCalculator } from '../../../utils/priceCalculator';
 import Button from '../../../components/common/Button';
 import Card from '../../../components/common/Card';
 import Input from '../../../components/common/Input';
@@ -107,10 +108,15 @@ const PaymentPage = () => {
     }, 2500);
   };
 
-  // Pricing calculation (fallback if booking context is incomplete)
-  const basePrice = 1500;
-  const extrasPrice = 200;
-  const totalPrice = basePrice + extrasPrice;
+  // Pricing calculation based on booking context; fall back to demo values if missing
+  const pickup = state.pickupDate || '2025-01-10';
+  const dropoff = state.returnDate || '2025-01-11';
+  const extras = state.extras || {};
+  const pricePerDay = car?.pricePerDay || 100;
+
+  const basePrice = priceCalculator.basePrice(pricePerDay, pickup, dropoff);
+  const extrasPrice = priceCalculator.extrasCost(extras);
+  const totalPrice = priceCalculator.totalPrice(pricePerDay, pickup, dropoff, extras);
 
   return (
     <div className="payment-page">
@@ -126,6 +132,13 @@ const PaymentPage = () => {
               
               <Card.Body>
                 <form onSubmit={handleSubmit} className="payment-form">
+                  {/* Global error region for screen readers */}
+                  {Object.values(errors).some(Boolean) && (
+                    <div className="form-error" role="alert" aria-live="assertive">
+                      {errors.cardNumber || errors.cardName || errors.expiryDate || errors.cvv}
+                    </div>
+                  )}
+
                   <Input
                     label="Card Number"
                     type="text"
